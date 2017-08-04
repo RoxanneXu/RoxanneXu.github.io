@@ -1,0 +1,531 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>LaTex语法介绍 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">LaTex语法介绍</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">LaTex语法介绍</h1><div class="post-meta"><a href="/2017/04/07/LaTex/#comments" class="comment-count"></a><p><span class="date">Apr 07, 2017</span><span><a href="/categories/技术文档/" class="category">技术文档</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p><strong>内容</strong>：2017年4月7日 星期五 LaTex语法。<br><strong>说明</strong>：为了在hexo中方便的插入下面这种很洋气的公式，学习一下LaTex的语法。</p>
+<p>$$\frac{\partial u}{\partial t}<br>= h^2 \left( \frac{\partial^2 u}{\partial x^2} +<br>\frac{\partial^2 u}{\partial y^2} +<br>\frac{\partial^2 u}{\partial z^2}\right)$$</p>
+<a id="more"></a>
+<p><strong>学习资料</strong></p>
+<ul>
+<li><a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference" target="_blank" rel="external">MathJax basic tutorial and quick reference</a></li>
+</ul>
+<hr>
+<h1 id="在hexo中配置MathJax"><a href="#在hexo中配置MathJax" class="headerlink" title="在hexo中配置MathJax"></a>在hexo中配置MathJax</h1><p>可以参考：<br><a href="https://github.com/akfish/hexo-math" target="_blank" rel="external">hexo-math</a></p>
+<p>我的电脑配置的时候只使用了下面这一句就直接成功了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">$ hexo math</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="使Marked-js与MathJax共存"><a href="#使Marked-js与MathJax共存" class="headerlink" title="使Marked.js与MathJax共存"></a>使Marked.js与MathJax共存</h1><p>因此我提供一个修改marked.js源码的方式来避开这些问题 </p>
+<ul>
+<li>针对下划线的问题，我决定取消<em>作为斜体转义，因为marked.js中*也是斜体的意思，所以取消掉</em>的转义并不影响我们使用markdown，只要我们习惯用*作为斜体字标记就行了。 </li>
+<li>针对marked.js与Mathjax对于个别字符二次转义的问题，我们只要不让marked.js去转义\,{,}在MathJax中有特殊用途的字符就行了。 </li>
+<li>具体修改方式，用编辑器打开marked.js（在./node_modules/marked/lib/中）</li>
+</ul>
+<p>Step 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">escape: /^\\([\\`*&#123;&#125;\[\]()# +\-.!_&gt;])/,</span>
+</pre></td></tr></table></figure>
+<p>替换成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">escape: /^\\([`*\[\]()# +\-.!_&gt;])/,</span>
+</pre></td></tr></table></figure>
+<p>这一步是在原基础上取消了对<code>\\</code>,<code>\{</code>,<code>\}</code>的转义(escape)</p>
+<p>Step 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span>
+</pre></td></tr></table></figure>
+<p>替换成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span>
+</pre></td></tr></table></figure>
+<p>这样一来MathJax就能与marked.js共存了。重启一下hexo看一下吧。</p>
+<blockquote>
+<p>这块一直没弄好，导致插入矩阵的时候换行符<code>\\</code>被当作特殊字符处理。</p>
+</blockquote>
+<hr>
+<h1 id="如何插入公式"><a href="#如何插入公式" class="headerlink" title="如何插入公式"></a>如何插入公式</h1><p>LaTeX的数学公式有两种：行中公式（inline formulas）和独立公式（displayed formulas）。行中公式放在文中与其它文字混编，独立公式单独成行。</p>
+<ul>
+<li>行中公式，输入：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">$...$</span>
+<span class="line">$\sum_&#123;i=0&#125;^n i^2 = \frac&#123;(n^2+n)(2n+1)&#125;&#123;6&#125;$</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$（行中公式）。</p>
+<ul>
+<li>独立公式，输入：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">$$...$$</span>
+<span class="line">$$\sum_&#123;i=0&#125;^n i^2 = \frac&#123;(n^2+n)(2n+1)&#125;&#123;6&#125;$$</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为<br>$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$</p>
+<hr>
+<h1 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h1><h2 id="拼写规则"><a href="#拼写规则" class="headerlink" title="拼写规则"></a>拼写规则</h2><p>直接根据拼写输入即可，小写共有22个，大写8个：大写的是小写语法首字母大写。<br>例如：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\alpha</th>
+<th style="text-align:center">\beta</th>
+<th style="text-align:center">\gamma</th>
+<th style="text-align:center">\omega</th>
+<th style="text-align:center">\phi</th>
+<th style="text-align:center">\delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">小写</td>
+<td style="text-align:center">$\alpha$</td>
+<td style="text-align:center">$\beta$</td>
+<td style="text-align:center">$\gamma$</td>
+<td style="text-align:center">$\omega$</td>
+<td style="text-align:center">$\phi$</td>
+<td style="text-align:center">$\delta$</td>
+</tr>
+<tr>
+<td style="text-align:center">输入</td>
+<td style="text-align:center">\Alpha</td>
+<td style="text-align:center">\Beta</td>
+<td style="text-align:center">\Gamma</td>
+<td style="text-align:center">\Omega</td>
+<td style="text-align:center">\Phi</td>
+<td style="text-align:center">\Delta</td>
+</tr>
+<tr>
+<td style="text-align:center">小写</td>
+<td style="text-align:center">$\Alpha$</td>
+<td style="text-align:center">$\Beta$</td>
+<td style="text-align:center">$\Gamma$</td>
+<td style="text-align:center">$\Omega$</td>
+<td style="text-align:center">$\Phi$</td>
+<td style="text-align:center">$\Delta$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="希腊字母的拼写"><a href="#希腊字母的拼写" class="headerlink" title="希腊字母的拼写"></a>希腊字母的拼写</h2><pre><code>Α α：阿尔法 Alpha 
+Β β：贝塔 Beta 
+Γ γ：伽玛 Gamma 
+Δ δ：德尔塔 Delta 
+Ε ε：艾普西龙 Epsilon 
+Ζ ζ：捷塔 Zeta 
+Ε η：依塔 Eta 
+Θ θ：西塔 Theta 
+Ι ι：艾欧塔 Iota 
+Κ κ：喀帕 Kappa 
+∧ λ：拉姆达 Lambda 
+Μ μ：缪 Mu 
+Ν ν：拗 Nu 
+Ξ ξ：克西 Xi 
+Ο ο：欧麦克轮 Omicron 
+∏ π：派 Pi 
+Ρ ρ：柔 Rho 
+∑ σ：西格玛 Sigma 
+Τ τ：套 Tau 
+Υ υ：宇普西龙 Upsilon 
+Φ φ：fai Phi 
+Χ χ：器 Chi 
+Ψ ψ：普赛 Psi 
+Ω ω：欧米伽 Omega
+</code></pre><p><strong>注意</strong>：有一些大写的希腊字母 其写法与相应的拉丁字母相同或十分相似，因而不会被使用，例如：A、B、E、H、I、K、M、N、O、P、T、X、Y、Z 。除此之外，由于小写的 ι（iota），ο（omicron）和 υ（upsilon）跟拉丁字母中的 i、o 和 u 很相似，所以也很少被使用。有时，希腊字母的字体变种在数学中有特定的意思，例如：φ（phi）、π（pi）。</p>
+<hr>
+<h1 id="上下标"><a href="#上下标" class="headerlink" title="上下标"></a>上下标</h1><ul>
+<li>上标 ^<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">x_i^2</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$x_i^2$。</p>
+<ul>
+<li>下标 _<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\log_2 x</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$\log_2 x$。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">x_i^2</th>
+<th style="text-align:center">\log_2 x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$x_i^2$</td>
+<td style="text-align:center">$\log_2 x$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="Groups"><a href="#Groups" class="headerlink" title="Groups"></a>Groups</h1><ul>
+<li>使用{…}给公式内部分组，方法如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">10^10</th>
+<th style="text-align:center">10^{10}</th>
+<th style="text-align:center">x^y^z</th>
+<th style="text-align:center">{x^y}^z</th>
+<th style="text-align:center">x^{y^z}</th>
+<th style="text-align:center">x_i^2</th>
+<th style="text-align:center">x_{i^2}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$10^10$</td>
+<td style="text-align:center">$10^{10}$</td>
+<td style="text-align:center">拼写错误</td>
+<td style="text-align:center">${x^y}^z$</td>
+<td style="text-align:center">$x^{y^z}$</td>
+<td style="text-align:center">$x_i^2$</td>
+<td style="text-align:center">$x_{i^2}$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h1><ul>
+<li>括号 ()<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">(x)</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$(x)$。</p>
+<ul>
+<li>中括号 []<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">[x]</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$[x]$。</p>
+<ul>
+<li>大括号 {}<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\lbrace x \rbrace</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$\lbrace x \rbrace$。</p>
+<ul>
+<li>绝对值 ||<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">|x|</span>
+<span class="line">\vert x \vert</span>
+<span class="line">\Vert x \Vert</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$|x|$、$\vert x \vert$、$\Vert x \Vert$。</p>
+<ul>
+<li>尖括号<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\langle x \rangle</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$\langle x \rangle$。</p>
+<ul>
+<li>取整函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">\lceil x \rceil</span>
+<span class="line">\lfloor x \rfloor</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>显示为$\lceil x \rceil$、$\lfloor x \rfloor$。</p>
+<ul>
+<li><strong>\left \right</strong></li>
+</ul>
+<p>上述所有括号都可以加上\left \right使用，比如()与\left(…\right)的对比<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">(\frac&#123;\sqrt x&#125;&#123;y^3&#125;)</span>
+<span class="line">\left(\frac&#123;\sqrt x&#125;&#123;y^3&#125;\right)</span>
+</pre></td></tr></table></figure></p>
+<p>分别为$(\frac{\sqrt x}{y^3})$和$\left(\frac{\sqrt x}{y^3}\right)$。</p>
+<hr>
+<h1 id="求和符号"><a href="#求和符号" class="headerlink" title="求和符号"></a>求和符号</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\sum</th>
+<th style="text-align:center">\int</th>
+<th style="text-align:center">\prod</th>
+<th style="text-align:center">\bigcup</th>
+<th style="text-align:center">\bigcap</th>
+<th style="text-align:center">\iint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\sum$</td>
+<td style="text-align:center">$\int$</td>
+<td style="text-align:center">$\prod$</td>
+<td style="text-align:center">$\bigcup$</td>
+<td style="text-align:center">$\bigcap$</td>
+<td style="text-align:center">$\iint$</td>
+</tr>
+</tbody>
+</table>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\sum_1^n</span>
+</pre></td></tr></table></figure></p>
+<p>为$\sum_1^n$。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\sum_&#123;i=0&#125;^\infty i^2</span>
+</pre></td></tr></table></figure></p>
+<p>为$\sum_{i=0}^\infty i^2$。</p>
+<hr>
+<h1 id="分数"><a href="#分数" class="headerlink" title="分数"></a>分数</h1><ul>
+<li>分数的书写方法为 \frac ab</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\frac 12</th>
+<th style="text-align:center">\frac 123</th>
+<th style="text-align:center">\frac 1{23}</th>
+<th style="text-align:center">\frac ab</th>
+<th style="text-align:center">\frac{a+1}{b+1}</th>
+<th style="text-align:center">{a+1\over b+1}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\frac 12$</td>
+<td style="text-align:center">$\frac 123$</td>
+<td style="text-align:center">$\frac 1{23}$</td>
+<td style="text-align:center">$\frac ab$</td>
+<td style="text-align:center">$\frac{a+1}{b+1}$</td>
+<td style="text-align:center">${a+1\over b+1}$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h1><ul>
+<li>常用的字体见下表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\mathbb or \Bbb</th>
+<th style="text-align:center">\mathbf</th>
+<th style="text-align:center">\mathtt</th>
+<th style="text-align:center">\mathrm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\mathbb {blackboard bold}$</td>
+<td style="text-align:center">$\mathbf {boldface}$</td>
+<td style="text-align:center">$\mathtt {typewriter}$</td>
+<td style="text-align:center">$\mathrm {roman font}$</td>
+</tr>
+<tr>
+<td style="text-align:center">输入</td>
+<td style="text-align:center">\mathsf</td>
+<td style="text-align:center">\mathcal</td>
+<td style="text-align:center">\mathscr</td>
+<td style="text-align:center">\mathfrak</td>
+</tr>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\mathsf {sans-serif font}$</td>
+<td style="text-align:center">$\mathcal {calligraphic}$</td>
+<td style="text-align:center">$\mathscr {script letters}$</td>
+<td style="text-align:center">$\mathfrak {Fraktur}$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="指数"><a href="#指数" class="headerlink" title="指数"></a>指数</h1><ul>
+<li>求幂 ^</li>
+<li>开根号 \sqrt</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\sqrt{x^3}</th>
+<th style="text-align:center">\sqrt[3]{\frac xy}</th>
+<th style="text-align:center">\left({\frac xy}\right)^{1/2}</th>
+<th style="text-align:center">{\left(\frac xy\right)}^{1/2}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\sqrt{x^3}$</td>
+<td style="text-align:center">$\sqrt[3]{\frac xy}$</td>
+<td style="text-align:center">$\left({\frac xy}\right)^{1/2}$</td>
+<td style="text-align:center">${\left(\frac xy\right)}^{1/2}$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="特殊函数"><a href="#特殊函数" class="headerlink" title="特殊函数"></a>特殊函数</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\lim x</th>
+<th style="text-align:center">\lim_{x\to 0}</th>
+<th style="text-align:center">\sin x</th>
+<th style="text-align:center">\cos x</th>
+<th style="text-align:center">\max x</th>
+<th style="text-align:center">\max_x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\lim x$</td>
+<td style="text-align:center">$$\lim_{x\to 0}$$</td>
+<td style="text-align:center">$\sin x$</td>
+<td style="text-align:center">$\cos x$</td>
+<td style="text-align:center">$\max x$</td>
+<td style="text-align:center">$$\max_x$$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：要写成\sin x ：$\sin x$<br>而不是sin x ：$sin x$</p>
+<hr>
+<h1 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h1><ul>
+<li>$\lt \gt \le \ge \neq$<br>表示方法为 \lt \gt \le \ge \neq<br>可以使用 \not，例如 \not\lt 表达 $\not\lt$。</li>
+<li>$\times \div \pm \mp \cdot$<br>表示方法为 \times \div \pm \mp \cdot</li>
+<li>$\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing$<br>表示方法为 \cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing</li>
+<li>${n+1 \choose 2k}$<br>表示方法为 {n+1 \choose 2k} 或 \binom{n+1}{2k}</li>
+<li>$\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto$<br>表示方法为 \to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto</li>
+<li>$\land \lor \lnot \forall \exists \top \bot \vdash \vDash$<br>表示方法为 \land \lor \lnot \forall \exists \top \bot \vdash \vDash</li>
+<li>$\star \ast \oplus \circ \bullet$<br>表示方法为 \star \ast \oplus \circ \bullet</li>
+<li>$\approx \sim \simeq \cong \equiv \prec \lhd$<br>表示方法为 \approx \sim \simeq \cong \equiv \prec \lhd</li>
+<li>$\infty \aleph_0 \nabla \partial \Im \Re$<br>表示方法为 \infty \aleph_0 \nabla \partial \Im \Re</li>
+<li>求模运算$\pmod$<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">a\equiv b\pmod n</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>$a\equiv b\pmod n$</p>
+<ul>
+<li>$\ldots \cdots$<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">a_1,a_2,\ldots,a_n</span>
+<span class="line">a_1+a_2+\cdots+a_n</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+<p>$a_1,a_2,\ldots,a_n$<br>$a_1+a_2+\cdots+a_n$</p>
+<ul>
+<li>$\epsilon \varepsilon \phi \varphi \ell$<br>表示方法为 \epsilon \varepsilon \phi \varphi \ell</li>
+</ul>
+<hr>
+<h1 id="空格"><a href="#空格" class="headerlink" title="空格"></a>空格</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">a\,b</th>
+<th style="text-align:center">a\;b</th>
+<th style="text-align:center">a\quad b</th>
+<th style="text-align:center">a\qquad b</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$a\,b$</td>
+<td style="text-align:center">$a\;b$</td>
+<td style="text-align:center">$a\quad b$</td>
+<td style="text-align:center">$a\qquad b$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="着重号-区别符号"><a href="#着重号-区别符号" class="headerlink" title="着重号 区别符号"></a>着重号 区别符号</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">输入</th>
+<th style="text-align:center">\hat</th>
+<th style="text-align:center">\widehat</th>
+<th style="text-align:center">\bar</th>
+<th style="text-align:center">\overline</th>
+<th style="text-align:center">\vec</th>
+<th style="text-align:center">\overrightarrow</th>
+<th style="text-align:center">\overleftrightarrow</th>
+<th style="text-align:center">\dot</th>
+<th style="text-align:center">\ddot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">显示</td>
+<td style="text-align:center">$\hat x$</td>
+<td style="text-align:center">$\widehat x$</td>
+<td style="text-align:center">$\bar x$</td>
+<td style="text-align:center">$\overline x$</td>
+<td style="text-align:center">$\vec x$</td>
+<td style="text-align:center">$\overrightarrow x$</td>
+<td style="text-align:center">$\overleftrightarrow x$</td>
+<td style="text-align:center">$\dot x$</td>
+<td style="text-align:center">$\ddot x$</td>
+</tr>
+</tbody>
+</table>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">&#123;\frac d&#123;dx&#125;&#125;x\dot x = \dot x^2 + x\ddot x</span>
+</pre></td></tr></table></figure></p>
+<p>${\frac d{dx}}x\dot x = {\dot x}^2 + x\ddot x$</p>
+<hr>
+<h1 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h1><p>输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">\$      \&#123;      \_      \backslash</span>
+</pre></td></tr></table></figure></p>
+<p>表示 $       {       _       \</p>
+<hr>
+<h1 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+</pre></td><td class="code"><pre><span class="line">$$</span>
+<span class="line">\begin&#123;equation&#125;</span>
+<span class="line">A=\left[</span>
+<span class="line">\begin&#123;matrix&#125;</span>
+<span class="line">1&amp;2&amp;3&amp;\\</span>
+<span class="line">3&amp;4&amp;4&amp;\\</span>
+<span class="line">5&amp;4&amp;4&amp;</span>
+<span class="line">\end&#123;matrix&#125;</span>
+<span class="line">\right]</span>
+<span class="line">\end&#123;equation&#125;</span>
+<span class="line">$$</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line">$$</span>
+<span class="line">A=\begin&#123;bmatrix&#125;</span>
+<span class="line">1&amp;3\\</span>
+<span class="line">3&amp;3</span>
+<span class="line">\end&#123;bmatrix&#125;</span>
+<span class="line">$$</span>
+</pre></td></tr></table></figure>
+<p>$$<br>\begin{equation}<br>A=\left[<br>\begin{matrix}<br>1&amp;2&amp;3&amp;\<br>3&amp;4&amp;4&amp;\<br>5&amp;4&amp;4&amp;<br>\end{matrix}<br>\right]<br>\end{equation}<br>$$</p>
+<p>$$<br>A=\begin{bmatrix}<br>1&amp;3\<br>3&amp;3<br>\end{bmatrix}<br>$$</p>
+</div><div class="tags"><a href="/tags/MathJax/">MathJax</a><a href="/tags/LaTex/">LaTex</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/04/07/Markdown/" class="pre">Markdown语法介绍</a><a href="/2017/04/06/Deep-Learning-1/" class="next">深度学习笔记1:介绍</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在hexo中配置MathJax"><span class="toc-text">在hexo中配置MathJax</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使Marked-js与MathJax共存"><span class="toc-text">使Marked.js与MathJax共存</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如何插入公式"><span class="toc-text">如何插入公式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#希腊字母"><span class="toc-text">希腊字母</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#拼写规则"><span class="toc-text">拼写规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#希腊字母的拼写"><span class="toc-text">希腊字母的拼写</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#上下标"><span class="toc-text">上下标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Groups"><span class="toc-text">Groups</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#括号"><span class="toc-text">括号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#求和符号"><span class="toc-text">求和符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分数"><span class="toc-text">分数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字体"><span class="toc-text">字体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#指数"><span class="toc-text">指数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特殊函数"><span class="toc-text">特殊函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特殊符号"><span class="toc-text">特殊符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#空格"><span class="toc-text">空格</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#着重号-区别符号"><span class="toc-text">着重号 区别符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特殊字符"><span class="toc-text">特殊字符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#矩阵"><span class="toc-text">矩阵</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>【C++】char型字符串的使用 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【C++】char型字符串的使用</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【C++】char型字符串的使用</h1><div class="post-meta"><a href="/2017/06/22/char字符串/#comments" class="comment-count"></a><p><span class="date">Jun 22, 2017</span><span><a href="/categories/C-笔记/" class="category">C++笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>C++中char型字符串的介绍与使用。<br>cin.get()与cin.getline()的使用方法。</p>
+<a id="more"></a>
+<h1 id="字符串的概念"><a href="#字符串的概念" class="headerlink" title="字符串的概念"></a>字符串的概念</h1><p>用双引号括起来的一串字符称为字符串, 例如 “abc”、”Hello, world!”。C++延续了C语言中的做法,将字符串使用字符型(char)一维数组来存放,在存放字符串时,编译器会在字符串结束的位置自动添加<code>&#39;\0&#39;</code>, <code>&#39;\0&#39;</code>是 ASCII 码值为0的转义符, 它是字符串的结束标志, 对于这种存放方式, 称它为字符数组更为合适。</p>
+<p>在字符串中, 有效字符的个数称为字符串的长度,例如字符串”abc”的长度为3,但它所占的字节数为4字节,因为编译器会在结束时自动添加一个<code>&#39;\0&#39;</code>,也就是说,定义长度为n的字符型一维数组只能存放下n-1个字符,否则将无法存放结束标识<code>&#39;\0&#39;</code>,在某些情况下将导致字符串无法正常使用, 严重时可导致一些未知的错误。</p>
+<h1 id="字符串的实现"><a href="#字符串的实现" class="headerlink" title="字符串的实现"></a>字符串的实现</h1><p>字符型一维数组的定义同普通数组一样, 只要把数组的数组类型改为<code>char</code>型即可, 例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">char a[10] ;</span>
+<span class="line">char b[20] ;</span>
+</pre></td></tr></table></figure></p>
+<p>在定义完一维字符数组时也可以对其进行初始化, 初始化分为两种方式:</p>
+<ul>
+<li><strong>逐个字符进行初始化, 例如:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">char a[6] = &#123; &apos;H&apos;, &apos;e&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;, &apos;\0&apos; &#125; ;</span>
+</pre></td></tr></table></figure>
+<p>此时a[0]中存放<code>&#39;H&#39;</code>字符, a[1]中存放<code>&#39;e&#39;</code>字符…, 这里的大括号不能省略, 同时初始化的字符个数也不能超过数组定义的长度, 不过在初始化时字符数组的元素个数声明可以省略, 这样编译器会自动计算好后面初始化中所需的数组长度, 如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">char a[] = &#123; &apos;H&apos;, &apos;e&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;, &apos;\0&apos; &#125; ;</span>
+</pre></td></tr></table></figure></p>
+<ul>
+<li><strong>使用字符串常量初始化方式, 例如:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">char a[6] = &#123;&quot;Hello&quot;&#125; ;</span>
+</pre></td></tr></table></figure>
+<p>由于编译器会自动在字符串末尾添加’\0’字符,所以字符数组a的各元素存放的内容依次为: <code>&#39;H&#39;</code>, <code>&#39;e&#39;</code>, <code>&#39;l&#39;</code>, <code>&#39;l&#39;</code>, <code>&#39;o&#39;</code>, <code>&#39;\0&#39;</code>。<br>在上述初始化形式中, 大括号可以省略,并且在初始化时数组元素的长度声明也可以省略,编译器会根据初始化值中的字符个数(包括<code>&#39;\0&#39;</code>)自动计算数组所需的元素个数,以下声明都是正确的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">char a[6] = &quot;Hello&quot; ;</span>
+<span class="line">char a[] = &quot;Hello&quot; ;</span>
+</pre></td></tr></table></figure></p>
+<h1 id="字符串的使用"><a href="#字符串的使用" class="headerlink" title="字符串的使用"></a>字符串的使用</h1><p>举例一: 定义一个字符串并输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">char a[] = &quot;Hello&quot; ;    //定义并初始化一个字符串·</span>
+<span class="line">cout&lt;&lt; a ;              //输出该一维字符数组中的字符串</span>
+</pre></td></tr></table></figure></p>
+<p>此外, 字符数组还可以进行逐个输出或者逐个替换操作。</p>
+<p>举例二: 输出其中某一个字符, 并将字符数组中的某个字符替换成其他字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">char a[] = &quot;Hello&quot; ;    //定义并初始化一个字符串·</span>
+<span class="line">a[0] = &apos;W&apos; ;            //将a[0]中的&apos;H&apos;替换成&apos;W&apos;</span>
+</pre></td></tr></table></figure>
+<h1 id="字符串的输入"><a href="#字符串的输入" class="headerlink" title="字符串的输入"></a>字符串的输入</h1><ul>
+<li><strong>使用cin进行输入, 举例:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">cin&gt;&gt;a ;        //输入字符串a</span>
+<span class="line">cout&lt;&lt;a ;       //输入后进行输出</span>
+</pre></td></tr></table></figure>
+<p>使用cin进行输入主要使用在字符串输入过程没有空白符(空格、tab)的情况下, 当存输入过程中按下空格键或tab键时cin就会默认输入结束, 当再按下回车进行时, 也只存空白符前面的内容, 例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line">hello world            &lt;-这里输入的是带有空格的 hello world</span>
+<span class="line">hello                  &lt;-可以看到, 输出时只剩下了空格前面的hello</span>
+<span class="line">Process returned 0 (0x0)   execution time : 7.578 s</span>
+<span class="line">Press any key to continue.</span>
+</pre></td></tr></table></figure></p>
+<p><strong>注意: 如果连续输入的字符数超过了49个, 则可能会引起内存错误!</strong></p>
+<ul>
+<li><strong>cin.get() 函数</strong></li>
+</ul>
+<p>如果想连空格一起输入到字符数组中可以使用 cin.get() 函数, 举例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">char a[50] ;</span>
+<span class="line">cin.get(a, 50) ;        //输入字符串a</span>
+<span class="line">cout&lt;&lt;a ;               //输入后进行输出</span>
+</pre></td></tr></table></figure></p>
+<p>在 cin.get(a, 50) ; 这行, a是要输入字符串的数组名, 后面的50为最长允许获取多少字符, 当值为50时表示只获取输入的前49个字符, 当值为10时表示只获取输入的前10个字符。</p>
+<ul>
+<li><strong>cin.getline() 函数</strong></li>
+</ul>
+<p>cin.getling() 函数也可起到输入一行并包含空格的作用, 使用举例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">char a[50] ;</span>
+<span class="line">cin.getline(a, 50) ;        //输入字符串a</span>
+<span class="line">cout&lt;&lt;a ;       //输入后进行输出</span>
+</pre></td></tr></table></figure></p>
+<ul>
+<li><strong>cin.get() 与 cin.getline() 的不同之处</strong></li>
+</ul>
+<p>虽说这两个函数都能够用来输入带有空格的字符串, 但还是有不同之处的, 两个函数都用于读入一行输入, 直至遇到换行符, 但是 getline() 函数会将换行符从输入队列中提取出来并抛弃掉, 而 get() 函数不会将换行符从输入队列中提取并抛弃掉, 这乍一看区别不大, 实际上在有连续几行的输入时这将会对输入结果产生很大的影响。举例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line">int main()</span>
+<span class="line">&#123;</span>
+<span class="line">    char a[50], b[50] ;     //定义两个字符数组</span>
+<span class="line"></span>
+<span class="line">    cout&lt;&lt;&quot;请输入字符串一:&quot; ;</span>
+<span class="line">    cin.get(a, 50) ;        //输入字符串a</span>
+<span class="line">    cout&lt;&lt;&quot;请输入字符串二:&quot; ;</span>
+<span class="line">    cin.get(b, 50) ;        //输入字符串b</span>
+<span class="line"></span>
+<span class="line">    cout&lt;&lt;a ;               //输入后进行输出</span>
+<span class="line">    cout&lt;&lt;b ;</span>
+<span class="line">    return 0 ;</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure>
+<p>运行后的输入以及输出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line">请输入字符串一:hello my name</span>
+<span class="line">请输入字符串二:hello my name</span>
+<span class="line">Process returned 0 (0x0)   execution time : 7.031 s</span>
+<span class="line">Press any key to continue.</span>
+</pre></td></tr></table></figure></p>
+<p>如果我们自己编译运行后可以发现, 当我们输入完毕第一行字符串, 还没来得及输入第二行时程序就已经运行结束了, 这就是因为 get() 函数会将换行符留在输入队列所致, 当输入完第一行时我们按下回车, get 函数获取输入的内容, 并把换行符留在了输入队列, 当执行到 cin.get(b, 50) ; 时正好他得到的第一个字符不是用户的输入, 而是遗留在上一次输入的换行符, 这样它就误认为用户输入以及结束了而自动结束输入。</p>
+<p>由于 get() 函数不会抛弃输入队列中的换行符, 因此在使用 get() 函数进行输入时可以使用一个较为完善的输入方式:<br><code>cin.get(数组名, 允许长度).get() ;</code><br>这样当第一个 get() 获取到用户输入并存放到字符数组后, 第二个 get() 会负责把换行符提取出来, 相当于抛弃掉,这样在下一行使用函数进行输入时就不会再出现还没有输入程序就已经默认为输入已经结束的情况。</p>
+<h1 id="字符串处理函数"><a href="#字符串处理函数" class="headerlink" title="字符串处理函数"></a>字符串处理函数</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th style="text-align:center">函数原型</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">取得字符串长度</td>
+<td style="text-align:center">size_t strlen(数组名)</td>
+<td style="text-align:center">不包括结束标志’\0’</td>
+</tr>
+<tr>
+<td style="text-align:center">将源字符数组中的字符串复制到目标数组</td>
+<td style="text-align:center">char *strcpy(目标数组, 源数组名)</td>
+<td style="text-align:center">目标数组的大小应不小于源字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">字符串大小比较</td>
+<td style="text-align:center">int strcmp(字符串1, 字符串2)</td>
+<td style="text-align:center">相等返回0, 字符串1大于字符串2返回正数, 否则返回一个负数</td>
+</tr>
+<tr>
+<td style="text-align:center">将两个字符串连接起来</td>
+<td style="text-align:center">char *strcat(字符串1, 字符串2)</td>
+<td style="text-align:center">将字符串2连接到字符串1后面, 字符串1必须有足够的剩余位置容纳字符串2</td>
+</tr>
+<tr>
+<td style="text-align:center">将字符串中的小写字符全部转成大写</td>
+<td style="text-align:center">char *strupr(数组名)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">将字符串中的大写字符全部转成小写</td>
+<td style="text-align:center">char *strlwr(数组名)</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div><div class="tags"><a href="/tags/字符串/">字符串</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/06/22/二维数组/" class="pre">【C++】二维数组的使用</a><a href="/2017/06/21/One-Hot-Coding/" class="next">独热编码</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的概念"><span class="toc-text">字符串的概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的实现"><span class="toc-text">字符串的实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的使用"><span class="toc-text">字符串的使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的输入"><span class="toc-text">字符串的输入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串处理函数"><span class="toc-text">字符串处理函数</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>深度学习笔记5:机器学习基础（1） | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">深度学习笔记5:机器学习基础（1）</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">深度学习笔记5:机器学习基础（1）</h1><div class="post-meta"><a href="/2017/04/23/Deep-Learning-5/#comments" class="comment-count"></a><p><span class="date">Apr 23, 2017</span><span><a href="/categories/深度学习笔记/" class="category">深度学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p><strong>内容</strong>：2017年4月23日 星期日 Deep Learning 学习笔记5。<br><strong>说明</strong>：<strong><em>Deep Learning</em></strong>是一本非常好的电子书，从机器学习到深度学习，基础知识到理论推导都有，该笔记为方便之后回顾。</p>
+<a id="more"></a>
+<p><strong>学习资料</strong></p>
+<ul>
+<li><a href="http://www.deeplearningbook.org" target="_blank" rel="external">Deep Learning</a></li>
+<li>Part I: Applied Math and Machine Learning Basics</li>
+<li>Chapter5 Machine Learning Basics</li>
+<li>第五章内容比较多，我们拆成几部分来说</li>
+<li>这部分从机器学习算法的基本构成讲起</li>
+<li>以线性回归为例，讲述正则化和权值衰减，同时引申到各种范数的理解</li>
+<li>机器学习的基本的定理（奥卡姆剃刀、没有免费的午餐）</li>
+</ul>
+<hr>
+<h1 id="学习算法"><a href="#学习算法" class="headerlink" title="学习算法"></a>学习算法</h1><p>机器学习算法是从数据中<code>学习</code>的算法。其中，学习的定义为</p>
+<blockquote>
+<p>“A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P , if its performance at tasks in T , as measured by P, improves with experience E .”</p>
+</blockquote>
+<h2 id="任务集-T"><a href="#任务集-T" class="headerlink" title="任务集 T"></a>任务集 T</h2><ul>
+<li><strong>Classiﬁcation</strong> 分类<br>$\mathcal f:\Bbb R^n \to \lbrace 1,\ldots,k\rbrace$<br>可以使用单个分类函数完成输入到输出的映射 适用于目标识别</li>
+<li><strong>Classiﬁcation with missing inputs</strong> 有缺失值的分类<br>必须使用一组分类函数，每个函数对应一种缺失值缺失的情况 适用于药物诊断<br>由于可能出现的缺失情况太多（对于有n个变量输入，需要$2^n$个分类函数）<ul>
+<li>忽略缺失值</li>
+<li>只学习一个描述联合概率分布的分类函数</li>
+</ul>
+</li>
+<li><strong>Regression</strong> 回归<br><strong>预测</strong>索赔金额(用于设定保险费)或预测证券未来的价格。</li>
+<li><strong>Transcription</strong><br>光学字符辨识 语音识别</li>
+<li><strong>Machine translation</strong> 机器翻译<br>自然语言的翻译（英语$\to$法语）</li>
+<li><strong>Structured output</strong><br>用于语法分析（以语法树的结构表示自然语言，每个节点代表一个名次、动词……） 图像字幕（计算机观察一个图片，输出用自然语言对它的描述）</li>
+<li><strong>Anomaly detection</strong> 异常检测<br>信用卡诈骗</li>
+<li><strong>Synthesis and sampling</strong> 采样<br>生成新的、与训练集相似的样本</li>
+<li><strong>Imputation of missing values</strong> 缺失值的插补</li>
+<li><strong>Denoising</strong> 去噪</li>
+<li><strong>Density estimation or probability mass function estimation</strong></li>
+</ul>
+<h2 id="性能-P"><a href="#性能-P" class="headerlink" title="性能 P"></a>性能 P</h2><p>我们通常使用精度（accuracy）、错误率（error rate）等指标，来衡量一个由训练集训练出的模型，在测试集上的性能。</p>
+<h2 id="实验-E"><a href="#实验-E" class="headerlink" title="实验 E"></a>实验 E</h2><p>机器学习算法的实验大致可以分为有监督的（supervised）和无监督的（unsupervised）两种。</p>
+<ul>
+<li>无监督学习<br>研究x的分布、分布的性质<br>适用于聚类算法、密度估计</li>
+<li>有监督学习<br>通过x预测y<br>p(y|x)<br>分类、聚类、structured output</li>
+</ul>
+<p>根据链式法则：<br>$$p(x)=\prod_{i=0}^n p(x_i|x_1,\ldots,x_i-_1) $$<br>我们可以把一个无监督问题划分成n个有监督问题。</p>
+<p>此外其他还有：</p>
+<ul>
+<li>半监督学习(semi-supervised learning)</li>
+<li>多示例学习(multi-instance learning, MIL)<br>监督型学习算法演变出的一种方法，多示例学习中，定义“包”为多个示例的集合。与其他Classification方法不同，此方法仅对“包”作标签，“包”中的示例并无标签。定义“正包”：包中至少有一个正示例；反之，当且仅当“包”中所有示例为负示例时，该“包”为“负包”。<br>多示例学习的目的<ul>
+<li>归纳出单个示例的标签类别的概念。</li>
+<li>计算机通过对这些已标注的“包”学习，尽可能准确地对新的“包”的标签做出判断。</li>
+</ul>
+</li>
+<li>增强学习(reinforcement learning)<ul>
+<li>feedback loop</li>
+</ul>
+</li>
+<li>……</li>
+</ul>
+<h2 id="例：线性回归"><a href="#例：线性回归" class="headerlink" title="例：线性回归"></a>例：线性回归</h2><p>$\mathbf x \in \Bbb R^n,y \in \Bbb R$，$\widehat y$为$y$的预测值。<br>$$\widehat y = \mathbf w^T\mathbf x$$<br>$\mathbf w$为权值，决定了每个对应的特征对预测的影响。如果某个特征的权重量级极大，说明该特征对预测结果影响极大。</p>
+<p>我们使用<strong>均方误差</strong>（mean squared error）来度量模型在测试集上的性能。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-153504.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-153707.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-153722.jpg" alt=""></p>
+<hr>
+<h1 id="Capacity-Overfitting-and-Underfitting"><a href="#Capacity-Overfitting-and-Underfitting" class="headerlink" title="Capacity, Overfitting and Underfitting"></a>Capacity, Overfitting and Underfitting</h1><p><strong>泛化</strong>（generalization）<br>通过训练集训练出模型，把其它新的数据（测试集）应用于这个模型的过程叫做泛化。<br>训练集在这个模型上的误差叫做<strong>训练误差</strong>（training error），测试集在这个模型上的误差叫做<strong>测试误差</strong>（test error）或<strong>泛化误差</strong>（generalization error）。</p>
+<p>对于上述线性回归模型，训练误差和测试误差分别表示为：<br><img src="http:// onk12tr6m.bkt.clouddn.com/2017-04-23-154421.jpg" alt=""></p>
+<p>决定一个机器学习算法性能的两个因素：</p>
+<ol>
+<li>训练误差足够小</li>
+<li>训练误差与测试误差之间的差距足够小</li>
+</ol>
+<h2 id="训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。"><a href="#训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。" class="headerlink" title="训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。"></a>训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。</h2><p>欠拟合:训练误差过大<br>过拟合:训练误差与测试误差相差过大</p>
+<p>真正发生过拟合，是数据和模型两个方面共同作用造成的：数据在抽样时可能并不能代表整体，甚至与整体有较大的差异，而足够复杂的模型在这样的数据上训练后，将会产生过拟合现象。</p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-155114.jpg" alt=""></p>
+<p>改变模型的<strong>能力（capacity）</strong>可以控制其是欠拟合、正好拟合还是过拟合。</p>
+<blockquote>
+<p>关于模型的能力，可以看另一篇文章<a href="http://xxxsss.me/2017/04/22/VC-Dimension/" target="_blank" rel="external">VC 维</a></p>
+</blockquote>
+<hr>
+<h2 id="奥卡姆剃刀原则-Occam’s-razor"><a href="#奥卡姆剃刀原则-Occam’s-razor" class="headerlink" title="奥卡姆剃刀原则(Occam’s razor)"></a>奥卡姆剃刀原则(Occam’s razor)</h2><p>这个原理称为“<strong>如无必要，勿增实体</strong>”，即“简单有效原理”。</p>
+<p><em>Numquam ponenda est pluralitas sine necessitate.（避重趋轻）<br>Pluralitas non est ponenda sine necessitate.（避繁逐简）<br>Frustra fit per plura quod potest fieri per pauciora.（以简御繁）<br>Entia non sunt multiplicanda praeter necessitatem.（避虚就实）</em></p>
+<hr>
+<p>无参数模型可能有更高的capacity，但很多难以应用到实际中。一个比较有实际应用价值的的无参数模型是最近邻回归（nearest neighbor regression）。</p>
+<p>实际中，可以通过把带有参数的学习算法封装到其他算法中。</p>
+<h2 id="贝叶斯误差-Bayes-error"><a href="#贝叶斯误差-Bayes-error" class="headerlink" title="贝叶斯误差(Bayes error)"></a>贝叶斯误差(Bayes error)</h2><p>我们根据真实的概率分布（true probability distribution）生成数据，可以得到理想的模型。但实际中，分布中可能会有一些噪音，在这种情况下根据真实的分布$p(\mathbf x, y)$来预测结果就会产生误差，这种误差就是贝叶斯误差。</p>
+<p>训练误差和泛化误差会随着训练集的大小而变化。训练集越大泛化误差越小。<br>对于非参数模型，数据越多泛化效果越好，直到达到最佳的可能误差。对于小于最佳capacity的固定参数模型，将渐近的达到一个超过贝叶斯错误的误差值。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-072647.jpg" alt=""><br>对于二次方程模型，随着数据集增大，训练误差增加，因为数据集越大越难拟合；同时，测试误差减小，因为测试集与训练集更加一致。由于二次方程没有足够的capacity去解决问题，所以其测试误差最终会趋近于一个比较大的数。</p>
+<p>对于optimal capacity的模型，测试误差趋近于Bayes error。训练误差会趋近到一个比Bayes error还小的值。</p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-072703.jpg" alt=""></p>
+<p>随着训练集的增加，optimal capacity也增加（这里指最佳多项式回归器的<strong>度</strong>）。</p>
+<hr>
+<h2 id="免费的午餐-No-Free-Lunch-Theorem"><a href="#免费的午餐-No-Free-Lunch-Theorem" class="headerlink" title="免费的午餐(No Free Lunch Theorem)"></a>免费的午餐(No Free Lunch Theorem)</h2><p>在机器学习中存在一个普适定理–没有免费的午餐(No Free Lunch Theorem，NFL定理)。NFL定理的具体描述为:</p>
+<ol>
+<li>对所有可能的的目标函数求平均，得到的所有学习算法的<em>“非训练集误差”</em>的期望值相同;</li>
+<li>对任意固定的训练集，对所有的目标函数求平均，得到的所有学习算法的<em>“非训练集误差”</em>的期望值也相同;</li>
+<li>对所有的先验知识求平均，得到的所有学习算法的的<em>“非训练集误差”</em>的期望值也相同;</li>
+<li>对任意固定的训练集，对所有的先验知识求平均，得到的所有学习算法的的<em>“非训练集误差”</em>的期望值也相同;</li>
+</ol>
+<p>NFL定理表明没有一个学习算法可以在任何领域总是产生最准确的学习器。<strong>不管采用何种学习算法，至少存在一个目标函数，能够使得随机猜测算法是更好的算法。</strong></p>
+<p>平常所说的一个学习算法比另一个算法更“优越”，效果更好，只是针对特定的问题，特定的先验信息，数据的分布，训练样本的数目，代价或奖励函数等。</p>
+<p>NFL定理可以进一步的引出一个普适的“守恒率”–对每一个可行的学习算法来说，它们的性能对所有可能的目标函数的求和结果确切地为零。即我们要想在某些问题上得到正的性能的提高，必须在一些问题上付出等量的负的性能的代价！比如时间复杂度和空间复杂度。</p>
+<hr>
+<h2 id="丑小鸭定理（Ugly-Duckling）"><a href="#丑小鸭定理（Ugly-Duckling）" class="headerlink" title="丑小鸭定理（Ugly Duckling）"></a>丑小鸭定理（Ugly Duckling）</h2><p>上个世纪60年代，模式识别研究的鼻祖之一，美籍日本学者渡边慧证明了“丑小鸭定理”。这个定理说的是“丑小鸭与白天鹅之间的区别和两只白天鹅之间的区别一样大”。这个看起来完全违背常识的定理实际上说的是：<strong>世界上不存在分类的客观标准，一切分类的标准都是主观的。</strong></p>
+<p>渡边慧举了一个鲸鱼的例子说明这个定理：按照生物学的分类方法，鲸鱼属于哺乳类的偶蹄目，和牛是一类；但是在产业界，捕鲸与捕鱼都要行船出海，鲸和鱼同属于水产业，而不属于包括牛的畜牧业。</p>
+<p><strong>分类结果取决于选择什么特征作为分类标准，而特征的选择又依存于人的目的。</strong></p>
+<p>丑小鸭是白天鹅的幼雏，在画家的眼里，丑小鸭和白天鹅的区别大于两只白天鹅的区别；但是在遗传学家的眼里，丑小鸭与其父亲或母亲的差别小于父母之间的差别。 由此引出的一个问题是，事物有没有“本质”？一个苹果，牛顿看到的是它的质量，遗传学家看到的是它的染色体中的DNA序列，美食家关心的是它的味道，画家看到的是它的颜色和形状，孔融还可能关注其大小并从中看出道德因素。</p>
+<p>这里面没有谁对谁错的问题，所以不可能知道苹果的“本质”是什么。在说到“本质”的时候，充其量说的只是<strong>“我认为最重要的特征”</strong>，只代表个人的立场，他人并没有赞同的充分理由。所以任何使用“本质”这个词汇所进行的论证都是靠不住的。如果一个哲学家说：“思维是人的本质，计算机不具备这种本质，所以机器不能思维。”这种论证只相当于说：“我认为计算机不能思维，所以计算机不能思维。”这当然不能成为有效的论证。问题就在于世界上还不存在能够判断什么是事物的本质的公认的有效方法。</p>
+<hr>
+<h2 id="权值衰减（Weight-Decay）"><a href="#权值衰减（Weight-Decay）" class="headerlink" title="权值衰减（Weight Decay）"></a>权值衰减（Weight Decay）</h2><p>对于加上权值衰减的线性回归来说，判别函数$J(\omega)$由均方误差和l2范数的平方两部分组成。</p>
+<p>$$J(\omega)=MSE_{train}+\lambda\omega^T\omega$$<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-083612.jpg" alt=""></p>
+<p><strong>weight decay（权值衰减）的目的是防止过拟合。在损失函数中，weight decay是放在正则项$\Omega(\omega)$（regularization）前面的一个系数，正则项一般指示模型的复杂度，所以weight decay的作用是调节模型复杂度对损失函数的影响，若weight decay很大，则复杂的模型损失函数的值也就大。</strong></p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-142915.jpg" alt=""></p>
+<hr>
+<p><strong><em>为什么l2范式可以使得权值衰减：</em></strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-141055.jpg?imageMogr2/thumbnail/!50p" alt=""><br>梯度下降：<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-23-141213.jpg?imageMogr2/thumbnail/!50p" alt=""><br>没有正则化时$\theta$的权重为1，现在$1-{\frac{\alpha\lambda}{m}}\lt 1$</p>
+<blockquote>
+<p>l2 norm 使得权值衰减（用最少的$\theta$去拟合）——奥卡姆剃刀</p>
+</blockquote>
+<hr>
+<p>下面讲一讲什么是规则化，以及各种不同的范数到底是什么。</p>
+<h3 id="规则化（regularizer）"><a href="#规则化（regularizer）" class="headerlink" title="规则化（regularizer）"></a>规则化（regularizer）</h3><p>监督机器学习问题无非就是“minimizeyour error while regularizing your parameters”，也就是在<strong><em>规则化参数的同时最小化误差</em></strong>。最小化误差是为了让我们的模型拟合我们的训练数据，而规则化参数是防止我们的模型过分拟合我们的训练数据。</p>
+<p>因为参数太多，会导致我们的模型复杂度上升，容易过拟合，也就是我们的训练误差会很小。但训练误差小并不是我们的最终目标，我们的目标是希望模型的测试误差小，也就是能准确的预测新的样本。<strong>所以，我们需要保证模型“简单”的基础上最小化训练误差，这样得到的参数才具有好的泛化性能（也就是测试误差也小），而模型“简单”就是通过规则函数来实现的。</strong></p>
+<p>规则化符合奥卡姆剃刀(Occam‘s razor)原理：在所有可能选择的模型中，我们应该选择<strong>能够很好地解释已知数据并且十分简单的模型</strong>。从贝叶斯估计的角度来看，规则化项对应于模型的<strong>先验概率</strong>。还有个说法就是，规则化是<strong>结构风险最小化策略</strong>的实现，是在经验风险上加一个正则化项(regularizer)或惩罚项(penalty term)。</p>
+<p>一般来说，监督学习可以看做最小化下面的目标函数：</p>
+<p>$$\omega^*=\arg\min_{\omega}\sum_iL(y_i,f(x_i;\omega))+\lambda\Omega(\omega)$$</p>
+<p>其中，第一项$L(y_i,f(x_i;\omega))$为衡量我们的模型（分类或者回归）对第i个样本的预测值$f(x_i;\omega)$和真实的标签$y_i$之前的误差。为了模型能够尽量的拟合训练数据，我们要求这一项最小。</p>
+<p>但正如上面说言，我们不仅要保证训练误差最小，我们更希望我们的模型<strong>测试误差</strong>小，所以我们需要加上第二项，也就是对参数$\omega$的规则化函数$\Omega(\omega)$去约束我们的<strong>模型尽量的简单</strong>。</p>
+<p>机器学习的大部分带参模型都和这个不但形似，而且神似。是的，其实大部分无非就是变换这两项而已。对于第一项Loss函数，如果是Square loss，那就是最小二乘；如果是Hinge Loss，那就是SVM；如果是exp-Loss，那就是Boosting；如果是log-Loss，那就是Logistic Regression……。不同的Loss函数，具有不同的拟合特性，这个也得就具体问题具体分析的。但这里，我们先不研究Loss函数的问题，我们把目光转向“规则项$\Omega(\omega)$”。</p>
+<p>规则化函数$\Omega(\omega)$也有很多种选择，一般是模型复杂度的单调递增函数，模型越复杂，规则化值就越大。比如，规则化项可以是模型参数向量的范数。然而，不同的选择对参数$\omega$的约束不同，取得的效果也不同，但我们在论文中常见的都聚集在：零范数、一范数、二范数、迹范数、Frobenius范数和核范数等等。这么多范数，到底它们表达啥意思？具有啥能力？什么时候才能用？什么时候需要用呢？不急不急，下面我们挑几个常见的娓娓道来。</p>
+<h3 id="L0范数与L1范数"><a href="#L0范数与L1范数" class="headerlink" title="L0范数与L1范数"></a>L0范数与L1范数</h3><p>L0范数$\Vert x\Vert_0$是指向量中<strong>非0的元素的个数</strong>。如果我们用L0范数来规则化一个参数矩阵W的话，就是希望W的大部分元素都是0。换句话说，就是让参数矩阵W是<strong>稀疏</strong>的。</p>
+<p>L1范数$\Vert x\Vert_1$是指向量中各个元素绝对值之和，也叫“稀疏规则算子”（Lasso regularization）。为什么L1范数会使权值稀疏？有人可能会这样给你回答“它是L0范数的最优凸近似”。实际上，还存在一个更美的回答：任何的规则化算子，如果他在Wi=0的地方不可微，并且可以分解为一个“求和”的形式，那么这个规则化算子就可以实现稀疏。也就是说，W的L1范数是绝对值，|W|在W=0处是不可微。</p>
+<p>L0范数很难优化求解（NP难问题），二是L1范数是L0范数的最优凸近似，而且它比L0范数要容易优化求解。所以，L0范数和L1范数可以实现稀疏，L1因具有比L0更好的优化求解特性而被广泛应用。</p>
+<p>好，到这里，我们大概知道了L1可以实现稀疏，但我们会想呀，为什么要稀疏？让我们的参数稀疏有什么好处呢？这里扯两点：</p>
+<ol>
+<li>特征选择(Feature Selection)：<br>大家对稀疏规则化趋之若鹜的一个关键原因在于它能实现<strong>特征的自动选择</strong>。一般来说，xi的大部分元素（也就是特征）都是和最终的输出yi没有关系，在最小化目标函数的时候考虑xi这些额外的特征，虽然可以获得更小的训练误差，但在预测新的样本时，这些没用的信息会干扰对正确yi的预测。<br>引入稀疏规则化算子，相当于把这些无用特征对应的权重置为0，从而实现了特征选择。</li>
+<li>可解释性(Interpretability)：<br>参数稀疏使<strong>模型更容易解释</strong>。例如患某种病的概率是y，然后我们收集到的数据x是1000维的，也就是我们需要寻找这1000种因素到底是怎么影响患上这种病的概率的。假设我们这个是个回归模型：<code>y=w1*x1+w2*x2+…+w1000*x1000+b</code>（当然了，为了让y限定在[0,1]的范围，一般还得加个Logistic函数）。通过学习，如果最后学习到的wi就只有很少的非零元素，例如只有5个非零的wi，那么我们就有理由相信，这些对应的特征在患病分析上面提供的信息是巨大的，决策性的。也就是说，患不患这种病只和这5个因素有关，那医生就好分析多了。</li>
+</ol>
+<h3 id="L2范数"><a href="#L2范数" class="headerlink" title="L2范数"></a>L2范数</h3><p>L2范数$\Vert x\Vert_2$,在回归里面，有人把有它的回归叫“岭回归”（Ridge Regression），有人也叫它<strong>“权值衰减weight decay”</strong>。</p>
+<p>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项$\Vert x\Vert_2$最小，可以使得W的每个元素都很小，都<strong>接近于0</strong>(不等于0)。</p>
+<p>这用的很多吧，因为它的强大功效是改善机器学习里面一个非常重要的问题：过拟合。至于过拟合是什么，上面也解释了，就是模型训练时候的误差很小，但在测试的时候误差很大，也就是我们的模型复杂到可以拟合到我们的所有训练样本了，但在实际预测新的样本的时候，糟糕的一塌糊涂。</p>
+<p>通过L2范数，我们可以实现了对模型空间的限制，从而在一定程度上避免了过拟合。</p>
+<h3 id="从函数、几何与矩阵的角度去理解范数"><a href="#从函数、几何与矩阵的角度去理解范数" class="headerlink" title="从函数、几何与矩阵的角度去理解范数"></a>从函数、几何与矩阵的角度去理解范数</h3><p>我们都知道，函数与几何图形往往是有对应的关系，这个很好想象，特别是在三维以下的空间内，<strong>函数是几何图像的数学概括，而几何图像是函数的高度形象化</strong>，比如一个函数对应几何空间上若干点组成的图形。但当函数与几何超出三维空间时，就难以获得较好的想象，于是就有了映射的概念，映射表达的就是<strong>一个集合通过某种关系转为另外一个集合</strong>。通常数学书是先说映射，然后再讨论函数，这是因为函数是映射的一个特例。为了更好的在数学上表达这种映射关系，（这里特指<strong>线性关系</strong>）于是就引进了矩阵。这里的矩阵就是表征上述空间映射的线性关系。我们通过向量来表示上述映射中所说的这个集合，而通常所说的基，就是这个集合的最一般关系。</p>
+<p><strong>于是，我们可以这样理解，一个集合（向量），通过一种映射关系（矩阵），得到另外一个集合（另外一个向量）。</strong></p>
+<p>那么向量的范数，就是表示这个原有集合的大小。</p>
+<p>而矩阵的范数，就是表示这个变化过程的大小的一个度量。那么说到具体某一范数，其不过是定义不同，一个矩阵范数往往由一个向量范数引出，我们称之为算子范数，其物理意义都如上。</p>
+<ul>
+<li>0范数，向量中非零元素的个数。</li>
+<li>1范数，为绝对值之和。</li>
+<li>2范数，就是通常意义上的模。</li>
+</ul>
+</div><div class="tags"><a href="/tags/机器学习/">机器学习</a><a href="/tags/权值衰减/">权值衰减</a><a href="/tags/范数/">范数</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/04/24/Randomized-Algorithms/" class="pre">随机算法</a><a href="/2017/04/22/hexo-pagination/" class="next">hexo中设置文章置顶</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#学习算法"><span class="toc-text">学习算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#任务集-T"><span class="toc-text">任务集 T</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能-P"><span class="toc-text">性能 P</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验-E"><span class="toc-text">实验 E</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例：线性回归"><span class="toc-text">例：线性回归</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Capacity-Overfitting-and-Underfitting"><span class="toc-text">Capacity, Overfitting and Underfitting</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。"><span class="toc-text">训练误差与泛化误差是负相关的。函数越简单泛化误差越小；越复杂训练误差越小。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#奥卡姆剃刀原则-Occam’s-razor"><span class="toc-text">奥卡姆剃刀原则(Occam’s razor)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝叶斯误差-Bayes-error"><span class="toc-text">贝叶斯误差(Bayes error)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#免费的午餐-No-Free-Lunch-Theorem"><span class="toc-text">免费的午餐(No Free Lunch Theorem)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#丑小鸭定理（Ugly-Duckling）"><span class="toc-text">丑小鸭定理（Ugly Duckling）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权值衰减（Weight-Decay）"><span class="toc-text">权值衰减（Weight Decay）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#规则化（regularizer）"><span class="toc-text">规则化（regularizer）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L0范数与L1范数"><span class="toc-text">L0范数与L1范数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L2范数"><span class="toc-text">L2范数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从函数、几何与矩阵的角度去理解范数"><span class="toc-text">从函数、几何与矩阵的角度去理解范数</span></a></li></ol></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

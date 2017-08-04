@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>【Python】通过代码学习Numpy 2 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【Python】通过代码学习Numpy 2</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【Python】通过代码学习Numpy 2</h1><div class="post-meta"><a href="/2017/05/01/Numpy2/#comments" class="comment-count"></a><p><span class="date">May 01, 2017</span><span><a href="/categories/Python/" class="category">Python</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>NumPy数据存取</p>
+<ol>
+<li>数据存取方法</li>
+<li>随机函数</li>
+<li>统计函数</li>
+<li>梯度函数</li>
+</ol>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+<span class="line">52</span>
+<span class="line">53</span>
+<span class="line">54</span>
+<span class="line">55</span>
+<span class="line">56</span>
+<span class="line">57</span>
+<span class="line">58</span>
+<span class="line">59</span>
+<span class="line">60</span>
+<span class="line">61</span>
+<span class="line">62</span>
+<span class="line">63</span>
+<span class="line">64</span>
+<span class="line">65</span>
+<span class="line">66</span>
+<span class="line">67</span>
+<span class="line">68</span>
+<span class="line">69</span>
+<span class="line">70</span>
+<span class="line">71</span>
+<span class="line">72</span>
+<span class="line">73</span>
+<span class="line">74</span>
+<span class="line">75</span>
+<span class="line">76</span>
+<span class="line">77</span>
+<span class="line">78</span>
+<span class="line">79</span>
+<span class="line">80</span>
+<span class="line">81</span>
+<span class="line">82</span>
+<span class="line">83</span>
+<span class="line">84</span>
+<span class="line">85</span>
+<span class="line">86</span>
+<span class="line">87</span>
+<span class="line">88</span>
+<span class="line">89</span>
+<span class="line">90</span>
+<span class="line">91</span>
+<span class="line">92</span>
+<span class="line">93</span>
+<span class="line">94</span>
+<span class="line">95</span>
+<span class="line">96</span>
+<span class="line">97</span>
+<span class="line">98</span>
+<span class="line">99</span>
+<span class="line">100</span>
+<span class="line">101</span>
+<span class="line">102</span>
+<span class="line">103</span>
+<span class="line">104</span>
+<span class="line">105</span>
+<span class="line">106</span>
+<span class="line">107</span>
+<span class="line">108</span>
+<span class="line">109</span>
+<span class="line">110</span>
+<span class="line">111</span>
+<span class="line">112</span>
+<span class="line">113</span>
+<span class="line">114</span>
+<span class="line">115</span>
+<span class="line">116</span>
+<span class="line">117</span>
+<span class="line">118</span>
+<span class="line">119</span>
+<span class="line">120</span>
+<span class="line">121</span>
+<span class="line">122</span>
+<span class="line">123</span>
+<span class="line">124</span>
+<span class="line">125</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">csv文件</span></span>
+<span class="line"><span class="string">np.savetxt(fname, array, fmt='%.18e', delimiter=None)</span></span>
+<span class="line"><span class="string">np.loadtxt(fname, dtype=np.float, delimiter=None, unpack=False)</span></span>
+<span class="line"><span class="string">只能有效存储一维或二维数组</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">100</span>).reshape(<span class="number">5</span>, <span class="number">20</span>)</span>
+<span class="line">np.savetxt(<span class="string">'../Data/a.csv'</span>, a, fmt=<span class="string">'%d'</span>, delimiter=<span class="string">','</span>)</span>
+<span class="line"></span>
+<span class="line">b = np.loadtxt(<span class="string">'../Data/a.csv'</span>, delimiter=<span class="string">','</span>)</span>
+<span class="line"><span class="keyword">print</span> b</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">a.tofile(fname, sep='', format='%s')</span></span>
+<span class="line"><span class="string">不指定分隔符会生成二进制文件</span></span>
+<span class="line"><span class="string">存入的只有一行数据，不会保存原数组的行列信息</span></span>
+<span class="line"><span class="string">np.fromfile(fname, dtype=float, count=-1, seq='')</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">100</span>).reshape(<span class="number">5</span>, <span class="number">10</span>, <span class="number">2</span>)</span>
+<span class="line">a.tofile(<span class="string">'../Data/b.dat'</span>, sep=<span class="string">','</span>, format=<span class="string">'%d'</span>)</span>
+<span class="line">c = np.fromfile(<span class="string">'../Data/b.dat'</span>, dtype=np.int, sep=<span class="string">','</span>)</span>
+<span class="line"><span class="keyword">print</span> c</span>
+<span class="line"></span>
+<span class="line">a.tofile(<span class="string">'../Data/b.dat'</span>, format=<span class="string">'%d'</span>)</span>
+<span class="line">c = np.fromfile(<span class="string">'../Data/b.dat'</span>, dtype=np.int).reshape(<span class="number">5</span>, <span class="number">10</span>, <span class="number">2</span>)</span>
+<span class="line"><span class="keyword">print</span> c</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">必须使用.npy的文件形式</span></span>
+<span class="line"><span class="string">操作非常便捷</span></span>
+<span class="line"><span class="string">np.save(fname, array)</span></span>
+<span class="line"><span class="string">np.load(fname)</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">100</span>).reshape(<span class="number">5</span>, <span class="number">10</span>, <span class="number">2</span>)</span>
+<span class="line">np.save(<span class="string">'../Data/a.npy'</span>, a)</span>
+<span class="line">b = np.load(<span class="string">'../Data/a.npy'</span>)</span>
+<span class="line"><span class="keyword">print</span> b</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">Numpy的随机数函数</span></span>
+<span class="line"><span class="string">random子库</span></span>
+<span class="line"><span class="string">rand(d0,d1,...dn)           创建随机数组，浮点数，[0,1)，均匀分布</span></span>
+<span class="line"><span class="string">randn(d0,d1,...dn)          正态分布</span></span>
+<span class="line"><span class="string">randint(low[,high,shape])   随机整数数组，[low,high)</span></span>
+<span class="line"><span class="string">seed(s)                     通过设置同一个随机数种子，我们可以在测试的时候产生相同的随机数值</span></span>
+<span class="line"><span class="string"></span></span>
+<span class="line"><span class="string">shuffle(a)                  根据数组a的第一轴进行随机排列，改变数组</span></span>
+<span class="line"><span class="string">permutation(a)              根据数组a的第一轴进行随机排列，不改变数组</span></span>
+<span class="line"><span class="string">choice(a[,size,replace,p])  从一维数组a中以概率p抽取元素，形成size形状的新数组，replace表示是否可以重用元素，默认False不可重复</span></span>
+<span class="line"><span class="string"></span></span>
+<span class="line"><span class="string">uniform(low, high, size)    均匀分布</span></span>
+<span class="line"><span class="string">normal(loc, scale, size)    正态分布 (均值, 标准差, 形状)</span></span>
+<span class="line"><span class="string">poisson(lam, size)          泊松分布 (随机事件发生率, 形状)</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.random.randint(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
+<span class="line">sn = np.random.randn(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
+<span class="line">b = np.random.randint(<span class="number">100</span>, <span class="number">200</span>, (<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line"><span class="keyword">print</span> b</span>
+<span class="line">np.random.seed(<span class="number">10</span>)</span>
+<span class="line">np.random.randint(<span class="number">100</span>, <span class="number">200</span>, (<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">np.random.seed(<span class="number">10</span>)</span>
+<span class="line">np.random.randint(<span class="number">100</span>, <span class="number">200</span>, (<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line"></span>
+<span class="line">b = np.random.randint(<span class="number">100</span>, <span class="number">200</span>, (<span class="number">8</span>,))</span>
+<span class="line">np.random.choice(b, (<span class="number">3</span>, <span class="number">2</span>))</span>
+<span class="line">np.random.choice(b, (<span class="number">3</span>, <span class="number">2</span>), replace=<span class="keyword">False</span>)</span>
+<span class="line">np.random.choice(b, (<span class="number">3</span>, <span class="number">2</span>), p = b*<span class="number">1.0</span>/np.sum(b))</span>
+<span class="line"></span>
+<span class="line">np.random.uniform(<span class="number">0</span>, <span class="number">10</span>, (<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">np.random.normal(<span class="number">10</span>, <span class="number">5</span>, (<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">Numpy的统计函数</span></span>
+<span class="line"><span class="string">sum(a, axis=None)                   和</span></span>
+<span class="line"><span class="string">mean(a, axis=None)                  期望</span></span>
+<span class="line"><span class="string">average(a, axis=None, weights=None) 加权平均值</span></span>
+<span class="line"><span class="string">std(a, axis=None)                   标准差</span></span>
+<span class="line"><span class="string">var(a, axis=None)                   方差</span></span>
+<span class="line"><span class="string"></span></span>
+<span class="line"><span class="string">min(a) max(a)</span></span>
+<span class="line"><span class="string">argmin(a) argmax(a)                 计算数组a中最小、最大值的降为一维后的下标</span></span>
+<span class="line"><span class="string">unravel_index(index, shape)         根据shape将一维下标转换成多维下标</span></span>
+<span class="line"><span class="string">ptp(a)                              计算数组a中最大值与最小值的差</span></span>
+<span class="line"><span class="string">median(a)                           计算数组a中元素的中位数</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">15</span>).reshape(<span class="number">3</span>,<span class="number">5</span>)</span>
+<span class="line">np.sum(a)</span>
+<span class="line">np.mean(a, axis=<span class="number">0</span>)</span>
+<span class="line">np.mean(a, axis=<span class="number">1</span>)</span>
+<span class="line">np.average(a, axis=<span class="number">0</span>, weights=[<span class="number">10</span>, <span class="number">5</span>, <span class="number">1</span>])</span>
+<span class="line">np.std(a)</span>
+<span class="line">np.var(a)</span>
+<span class="line"></span>
+<span class="line">b = np.arange(<span class="number">15</span>, <span class="number">0</span>, <span class="number">-1</span>).reshape(<span class="number">3</span>, <span class="number">5</span>)</span>
+<span class="line">np.max(b)</span>
+<span class="line">np.argmax(b)</span>
+<span class="line">np.unravel_index(np.argmax(b), b.shape)</span>
+<span class="line">np.pyp(b)</span>
+<span class="line">np.median(b)</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">Numpy的梯度函数</span></span>
+<span class="line"><span class="string">np.gradient(f)          计算数组f中元素的梯度，当f为多维时，返回每一个维度的梯度</span></span>
+<span class="line"><span class="string">梯度：连续值的变化率</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = np.random.randint(<span class="number">0</span>, <span class="number">20</span>, (<span class="number">5</span>))</span>
+<span class="line">np.gradient(a)</span>
+<span class="line">b = np.random.randint(<span class="number">0</span>, <span class="number">20</span>, (<span class="number">5</span>))</span>
+<span class="line">np.gradient(b)</span>
+<span class="line"></span>
+<span class="line">c = np.random.randint(<span class="number">0</span>, <span class="number">20</span>, (<span class="number">3</span>, <span class="number">5</span>))</span>
+<span class="line">np.gradient(c)</span>
+</pre></td></tr></table></figure></div><div class="tags"><a href="/tags/Numpy/">Numpy</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/05/01/Numpy3/" class="pre">【Python】通过代码学习Numpy 3</a><a href="/2017/05/01/Numpy/" class="next">【Python】通过代码学习Numpy 1</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

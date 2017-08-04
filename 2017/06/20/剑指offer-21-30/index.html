@@ -1,0 +1,582 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>剑指offer 21~30 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">剑指offer 21~30</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">剑指offer 21~30</h1><div class="post-meta"><a href="/2017/06/20/剑指offer-21-30/#comments" class="comment-count"></a><p><span class="date">Jun 20, 2017</span><span><a href="/categories/C-笔记/" class="category">C++笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>栈的压入、弹出序列 从上往下打印二叉树 二叉搜索树的后序遍历序列 二叉树中和为某一值的路径    复杂链表的复制<br>二叉搜索树与双向链表 字符串的排列 数组中出现次数超过一半的数字 最小的K个数 连续子数组的最大和</p>
+<a id="more"></a>
+<hr>
+<h1 id="栈的压入、弹出序列"><a href="#栈的压入、弹出序列" class="headerlink" title="栈的压入、弹出序列"></a>栈的压入、弹出序列</h1><p><strong>分类</strong><br>举例让抽象具体化<br><strong>题目</strong><br>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）<br><strong>思路</strong><br>重新定义一个数组模拟栈的过程。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    bool IsPopOrder(vector&lt;int&gt; pushV,vector&lt;int&gt; popV) &#123;</span>
+<span class="line">        vector&lt;int&gt; v;</span>
+<span class="line">        for (int i = 0, j = 0; i &lt; pushV.size();) &#123;</span>
+<span class="line">            v.push_back(pushV[i++]);</span>
+<span class="line">            while (v.size() &gt; 0 &amp;&amp; v.back() == popV[j]) &#123;</span>
+<span class="line">                v.pop_back();</span>
+<span class="line">                j ++;</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return v.empty() ? true : false;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="从上往下打印二叉树"><a href="#从上往下打印二叉树" class="headerlink" title="从上往下打印二叉树"></a>从上往下打印二叉树</h1><p><strong>分类</strong><br>举例让抽象具体化<br><strong>题目</strong><br>从上往下打印出二叉树的每个节点，同层节点从左至右打印。<br><strong>思路</strong><br>BFS，使用队列。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    vector&lt;int&gt; PrintFromTopToBottom(TreeNode* root) &#123;</span>
+<span class="line">        if (root) q.push(root);</span>
+<span class="line">        while (!q.empty()) &#123;</span>
+<span class="line">            v.push_back(q.front() -&gt; val);</span>
+<span class="line">            if (q.front() -&gt; left) q.push(q.front() -&gt; left);</span>
+<span class="line">            if (q.front() -&gt; right) q.push(q.front() -&gt; right);</span>
+<span class="line">            q.pop();</span>
+<span class="line">        &#125;</span>
+<span class="line">        return v;</span>
+<span class="line">    &#125;</span>
+<span class="line">private:</span>
+<span class="line">    vector&lt;int&gt; v;</span>
+<span class="line">    queue&lt;TreeNode*&gt; q;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="二叉搜索树的后序遍历序列"><a href="#二叉搜索树的后序遍历序列" class="headerlink" title="二叉搜索树的后序遍历序列"></a>二叉搜索树的后序遍历序列</h1><p><strong>分类</strong><br>举例让抽象具体化<br><strong>题目</strong><br>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。<br><strong>思路</strong><br>后序遍历的结果为最后一位为根，根据二叉搜索树的性质，我们可以看：是否可以用根节点将数组划分为两部分，一部分都大于根，一部分都小于根，分别为左右子树。递归的查看左右子树是否为二叉搜索树。<br>当数组为空，说明该子树为空；当数组中有一个数据，说明为叶子节点。<br>注意：开始时若数组为空，说明不存在二叉搜索树，返回false。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    bool VerifySquenceOfBST(vector&lt;int&gt; sequence) &#123;</span>
+<span class="line">        if (sequence.size() == 0 &amp;&amp; f == 0) return false;</span>
+<span class="line">        f = 1;</span>
+<span class="line">        </span>
+<span class="line">        if (sequence.size() &lt;= 1) return true;</span>
+<span class="line">        int ind = 0, len = sequence.size()-1;</span>
+<span class="line">        bool flag = sequence[len] &gt; sequence[ind];</span>
+<span class="line">        vector&lt;int&gt; v1, v2;</span>
+<span class="line">        while (((sequence[len] &gt; sequence[ind]) == flag) &amp;&amp; ind &lt; len) &#123;</span>
+<span class="line">            v1.push_back(sequence[ind ++]);</span>
+<span class="line">        &#125;</span>
+<span class="line">        while (((sequence[len] &lt; sequence[ind]) == flag) &amp;&amp; ind &lt; len) &#123;</span>
+<span class="line">            v2.push_back(sequence[ind ++]);</span>
+<span class="line">        &#125;</span>
+<span class="line">        return (ind == len) ? (VerifySquenceOfBST(v1) &amp;&amp; VerifySquenceOfBST(v2)) : false;</span>
+<span class="line">    &#125;</span>
+<span class="line">private:</span>
+<span class="line">    bool f = 0;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="二叉树中和为某一值的路径"><a href="#二叉树中和为某一值的路径" class="headerlink" title="二叉树中和为某一值的路径"></a>二叉树中和为某一值的路径</h1><p><strong>分类</strong><br>举例让抽象具体化<br><strong>题目</strong><br>输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。<br><strong>思路</strong><br>深搜，用vv记录当前路径，找到则压栈。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+</pre></td><td class="code"><pre><span class="line">/*</span>
+<span class="line">struct TreeNode &#123;</span>
+<span class="line">    int val;</span>
+<span class="line">    struct TreeNode *left;</span>
+<span class="line">    struct TreeNode *right;</span>
+<span class="line">    TreeNode(int x) :</span>
+<span class="line">            val(x), left(NULL), right(NULL) &#123;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;*/</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    vector&lt;vector&lt;int&gt; &gt; FindPath(TreeNode* root,int expectNumber) &#123;</span>
+<span class="line">        if (root) &#123;</span>
+<span class="line">            vv.push_back(root -&gt; val);</span>
+<span class="line">            fun(root, expectNumber - root -&gt; val);</span>
+<span class="line">        &#125;</span>
+<span class="line">        </span>
+<span class="line">        return v;</span>
+<span class="line">    &#125;</span>
+<span class="line">    void fun(TreeNode* root,int expectNumber) &#123;</span>
+<span class="line">        if (expectNumber &lt; 0) return;</span>
+<span class="line">        if (root -&gt; left == NULL &amp;&amp;　root -&gt; right == NULL &amp;&amp; expectNumber == 0) &#123;</span>
+<span class="line">            v.push_back(vv);</span>
+<span class="line">            return ;</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (root -&gt; left) &#123;</span>
+<span class="line">            vv.push_back(root -&gt; left -&gt; val);</span>
+<span class="line">            fun(root -&gt; left, expectNumber - root -&gt; left -&gt; val);</span>
+<span class="line">            vv.pop_back();</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (root -&gt; right) &#123;</span>
+<span class="line">            vv.push_back(root -&gt; right -&gt; val);</span>
+<span class="line">            fun(root -&gt; right, expectNumber - root -&gt; right -&gt; val);</span>
+<span class="line">            vv.pop_back();</span>
+<span class="line">        &#125;</span>
+<span class="line">        return ;</span>
+<span class="line">    &#125;</span>
+<span class="line">private:</span>
+<span class="line">    vector&lt;vector&lt;int&gt;&gt; v;</span>
+<span class="line">    vector&lt;int&gt; vv;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="复杂链表的复制"><a href="#复杂链表的复制" class="headerlink" title="复杂链表的复制"></a>复杂链表的复制</h1><p><strong>分类</strong><br>分解让复杂问题简单<br><strong>题目</strong><br>输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）<br><strong>思路</strong><br>直接递归的构建指向原位置的指针。<br>复制再拆分。在原链表中，每个节点后面加一个新的节点，为新的节点加入random，将新的部分拆出来。这种方法更符合题意。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+</pre></td><td class="code"><pre><span class="line">// AC1</span>
+<span class="line">/*</span>
+<span class="line">struct RandomListNode &#123;</span>
+<span class="line">    int label;</span>
+<span class="line">    struct RandomListNode *next, *random;</span>
+<span class="line">    RandomListNode(int x) :</span>
+<span class="line">            label(x), next(NULL), random(NULL) &#123;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+<span class="line">*/</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    RandomListNode* Clone(RandomListNode* pHead)</span>
+<span class="line">    &#123;</span>
+<span class="line">        if (pHead == NULL) return NULL;</span>
+<span class="line">        RandomListNode* p = new RandomListNode(pHead -&gt; label);</span>
+<span class="line">        p -&gt; random = pHead -&gt; random;</span>
+<span class="line">        p -&gt; next = Clone(pHead -&gt; next);</span>
+<span class="line">        </span>
+<span class="line">        return p;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+</pre></td><td class="code"><pre><span class="line">// AC2</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    RandomListNode* Clone(RandomListNode* pHead)</span>
+<span class="line">    &#123;</span>
+<span class="line">        if (pHead == NULL) return NULL;</span>
+<span class="line">        RandomListNode* cur = pHead;</span>
+<span class="line">        while (cur) &#123;</span>
+<span class="line">            RandomListNode* tmp = new RandomListNode(cur -&gt; label);</span>
+<span class="line">            tmp -&gt; next = cur -&gt; next;</span>
+<span class="line">            cur -&gt; next = tmp;</span>
+<span class="line">            cur = tmp -&gt; next;</span>
+<span class="line">        &#125;</span>
+<span class="line">        cur = pHead;</span>
+<span class="line">        while (cur) &#123;</span>
+<span class="line">            RandomListNode* tmp = cur -&gt; next;</span>
+<span class="line">            if (cur -&gt; random) tmp -&gt; random = cur -&gt; random -&gt; next;</span>
+<span class="line">            cur = tmp -&gt; next;</span>
+<span class="line">        &#125;</span>
+<span class="line"></span>
+<span class="line">        RandomListNode *pCloneHead = pHead-&gt;next;</span>
+<span class="line">        RandomListNode *tmp;</span>
+<span class="line">        cur = pHead;</span>
+<span class="line">        while(cur-&gt;next)&#123;</span>
+<span class="line">            tmp = cur-&gt;next;</span>
+<span class="line">            cur-&gt;next = tmp-&gt;next;</span>
+<span class="line">            cur = tmp;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return pCloneHead;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="二叉搜索树与双向链表"><a href="#二叉搜索树与双向链表" class="headerlink" title="二叉搜索树与双向链表"></a>二叉搜索树与双向链表</h1><p><strong>分类</strong><br>分解让复杂问题简单<br><strong>题目</strong><br>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。<br><strong>思路</strong><br>假设：树的每个节点的左儿子都比该节点小，右儿子都比该节点大。改造后希望该节点的左儿子指向小于它的最大的节点，右儿子指向大于它的最小的节点。<br>树节点从小到大排序为中根遍历的结果。<br>所以可以使用中序遍历这棵树。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+</pre></td><td class="code"><pre><span class="line">/*</span>
+<span class="line">struct TreeNode &#123;</span>
+<span class="line">    int val;</span>
+<span class="line">    struct TreeNode *left;</span>
+<span class="line">    struct TreeNode *right;</span>
+<span class="line">    TreeNode(int x) :</span>
+<span class="line">            val(x), left(NULL), right(NULL) &#123;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;*/</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    TreeNode* Convert(TreeNode* pRootOfTree)</span>
+<span class="line">    &#123;</span>
+<span class="line">        fun(pRootOfTree);</span>
+<span class="line">        return res;</span>
+<span class="line">    &#125;</span>
+<span class="line">    </span>
+<span class="line">    void fun(TreeNode* root) &#123;</span>
+<span class="line">        if (root == NULL) return;</span>
+<span class="line">        fun(root -&gt; left);</span>
+<span class="line">        if (head == NULL) &#123;</span>
+<span class="line">            head = root;</span>
+<span class="line">            res = root;</span>
+<span class="line">        &#125; else &#123;</span>
+<span class="line">            head -&gt; right = root;</span>
+<span class="line">            root -&gt; left = head;</span>
+<span class="line">            head = root;</span>
+<span class="line">        &#125;</span>
+<span class="line">        fun(root -&gt; right);</span>
+<span class="line">    &#125;</span>
+<span class="line">private:</span>
+<span class="line">    TreeNode* head = NULL;</span>
+<span class="line">    TreeNode* res = NULL;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="字符串的排列"><a href="#字符串的排列" class="headerlink" title="字符串的排列"></a>字符串的排列</h1><p><strong>分类</strong><br>分解让复杂问题简单<br><strong>题目</strong><br>输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。<br>输入描述:<br>输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。<br><strong>思路</strong><br>递归，对于长度为n的字符串来说，每次把<code>第一个字符</code>与<code>第一个字符以及其后每一个字符</code>交换位置，递归的对后n-1个字符进行全排列。过程中要注意不与重复的字符交换，使用book来记录对应的字符是否被交换过了，大小为ascii码表的长度。<br><strong>TIPS</strong><br>递归法无需在开始时对字符串进行排序，可以直接用sort()对vector进行排序。<br><code>template &lt;class RandomAccessIterator&gt;
+  void sort (RandomAccessIterator first, RandomAccessIterator last);</code><br><code>template &lt;class RandomAccessIterator, class Compare&gt;
+  void sort (RandomAccessIterator first, RandomAccessIterator last, Compare comp);</code></p>
+<p>但如果不采用递归的方法，直接进行全排列，需要将初始字符串排序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+</pre></td><td class="code"><pre><span class="line">string转换成char[]</span>
+<span class="line"></span>
+<span class="line">string str = &quot;good boy&quot;;</span>
+<span class="line">char p[20];</span>
+<span class="line">for(int i=0;i&lt;str.length();i++)</span>
+<span class="line">p[i] = str[i];</span>
+<span class="line">p[str.length()] = &apos;\0&apos;; </span>
+<span class="line"></span>
+<span class="line">或者</span>
+<span class="line"></span>
+<span class="line">string str=&quot;good boy&quot;;</span>
+<span class="line">char p[20];</span>
+<span class="line">str.copy(p,5,0); </span>
+<span class="line"></span>
+<span class="line">*(p+5)=&apos;\0&apos;;</span>
+</pre></td></tr></table></figure></p>
+<p>全排列的方法<br>一个全排列可看做一个字符串，字符串可有前缀、后缀。<br>生成给定全排列的下一个排列.所谓一个的下一个就是这一个与下一个之间没有其他的。<br>这就要求这一个与下一个有尽可能长的共同前缀，也即变化限制在尽可能短的后缀上。<br> 【例】839647521是1–9的排列。1—9的排列最前面的是123456789，最后面的987654321，从右向左扫描若都是增的，就到了987654321，也就没有下一个了。否则找出第一次出现下降的位置。<br>【例】 如何得到346987521的下一个</p>
+<ol>
+<li>从尾部往前找第一个P(i-1) &lt; P(i)的位置<br>3 4 6 &lt;- 9 &lt;- 8 &lt;- 7 &lt;- 5 &lt;- 2 &lt;- 1<br>最终找到6是第一个变小的数字，记录下6的位置i-1</li>
+<li>从i位置往后找到最后一个大于6的数<br>3 4 6 -&gt; 9 -&gt; 8 -&gt; 7 5 2 1<br>最终找到7的位置，记录位置为m</li>
+<li>交换位置i-1和m的值<br>3 4 7 9 8 6 5 2 1</li>
+<li>倒序i位置后的所有数据<br>3 4 7 1 2 5 6 8 9<br>则347125689为346987521的下一个排列</li>
+</ol>
+<p><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    vector&lt;string&gt; Permutation(string str) &#123;</span>
+<span class="line">        if(str.length() == 0) return v;</span>
+<span class="line">        fun(str, 0);</span>
+<span class="line">        sort(v.begin(), v.end());</span>
+<span class="line">        return v;</span>
+<span class="line">    &#125;</span>
+<span class="line">    void fun(string s, int cnt) &#123;</span>
+<span class="line">        if (cnt == s.length() - 1) &#123;</span>
+<span class="line">            v.push_back(s);</span>
+<span class="line">            return ;</span>
+<span class="line">        &#125;</span>
+<span class="line">        </span>
+<span class="line">        bool book[256];</span>
+<span class="line">        memset(book, false, sizeof(book));</span>
+<span class="line">        for (int i = cnt; i &lt; s.length(); i++) &#123;</span>
+<span class="line">            if (!book[s[i]]) &#123;</span>
+<span class="line">                book[s[i]] = true;</span>
+<span class="line">                swap(s[i], s[cnt]);</span>
+<span class="line">                fun(s, cnt + 1);</span>
+<span class="line">                swap(s[i], s[cnt]);</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">    &#125;</span>
+<span class="line">private:</span>
+<span class="line">    vector&lt;string&gt; v;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="数组中出现次数超过一半的数字"><a href="#数组中出现次数超过一半的数字" class="headerlink" title="数组中出现次数超过一半的数字"></a>数组中出现次数超过一半的数字</h1><p><strong>分类</strong><br>时间效率<br><strong>题目</strong><br>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。<br><strong>思路</strong><br>思路一：数组排序后，如果符合条件的数存在，则一定是数组中间那个数。（比如：1，2，2，2，3；或2，2，2，3，4；或2，3，4，4，4等等）<br>这种方法虽然容易理解，但由于涉及到快排sort，其时间复杂度为$O(nlgn)$并非最优；<br>思路二：如果有符合条件的数字，则它出现的次数比其他所有数字出现的次数和还要多。<br>在遍历数组时保存两个值：一是数组中一个数字，一是次数。遍历下一个数字时，若它与之前保存的数字相同，则次数加1，否则次数减1；若次数为0，则保存下一个数字，并将次数置为1。遍历结束后，所保存的数字即为所求。然后再判断它是否符合条件即可。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) &#123;</span>
+<span class="line">        int x, cnt = 0;</span>
+<span class="line">        for (int i = 0; i&lt; numbers.size(); i++) &#123;</span>
+<span class="line">            if (cnt == 0 || x == numbers[i]) x = numbers[i], cnt ++;</span>
+<span class="line">            else cnt --;</span>
+<span class="line">        &#125;</span>
+<span class="line">        cnt = 0;</span>
+<span class="line">        for (int i = 0; i&lt; numbers.size(); i++)</span>
+<span class="line">            if (x == numbers[i]) cnt ++;</span>
+<span class="line">        </span>
+<span class="line">        return cnt &gt; numbers.size() / 2 ? x : 0;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="最小的K个数"><a href="#最小的K个数" class="headerlink" title="最小的K个数"></a>最小的K个数</h1><p><strong>分类</strong><br>时间效率<br><strong>题目</strong><br>输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4,。<br><strong>思路</strong><br>快排<br>最小堆<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) &#123;</span>
+<span class="line">        if (k &gt; input.size()) return vector&lt;int&gt;();</span>
+<span class="line">        make_heap(input.begin(), input.end());</span>
+<span class="line">        sort_heap(input.begin(), input.end());</span>
+<span class="line">        vector&lt;int&gt; v(input.begin(), input.begin() + k);</span>
+<span class="line">        return v;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="连续子数组的最大和"><a href="#连续子数组的最大和" class="headerlink" title="连续子数组的最大和"></a>连续子数组的最大和</h1><p><strong>分类</strong><br>时间效率<br><strong>题目</strong><br>HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。你会不会被他忽悠住？(子向量的长度至少是1)<br><strong>思路</strong><br>当数组中同时存在正数和负数的时候，连续子序列的最大和必然为正。我们可以遍历数组，使用cur记录连续几个数的和，当cur<0的时候将其重置为0，使用res记录最大和，cur>0时与res比较，最终res记录最大的cur，即最大和。<br>若数组中只有正数，最大和即为数组总和，上述方法依然成立。<br>若数组中只有0或负数，最大和为数组中最大的那个数，上述过程中cur一直小于0。我们可以再另取一个变量nav来记录数组中最大的数，若最后nav&lt;=0，则nav为最终结果。<br><strong>TIPS</strong><br>本题还可以使用动态规划的思想。<br><code>dp[i]</code>表示以i为结尾的最大子串和，那么有<code>dp[i]=max(dp[i-1]+array[i], array[i])</code>。由于在遍历的过程中只用到了<code>dp[i]</code>和<code>dp[i-1]</code>，所以我们可以只用一个变量cur记录。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+</pre></td><td class="code"><pre><span class="line">// AC1</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int FindGreatestSumOfSubArray(vector&lt;int&gt; array) &#123;</span>
+<span class="line">        int cur = 0, res = 0, nav = array[0];</span>
+<span class="line">        for (int i = 0; i &lt; array.size(); i ++) &#123;</span>
+<span class="line">            if (nav &lt; array[i]) nav = array[i];</span>
+<span class="line">            if (cur &lt; 0) cur = 0;</span>
+<span class="line">            cur += array[i];</span>
+<span class="line">            if (cur &gt; res) res = cur;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return nav &lt;= 0 ? nav : res;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></0的时候将其重置为0，使用res记录最大和，cur></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line">// AC2</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int FindGreatestSumOfSubArray(vector&lt;int&gt; array) &#123;</span>
+<span class="line">        int cur = array[0], res = array[0];</span>
+<span class="line">        for (int i = 1; i &lt; array.size(); i++) &#123;</span>
+<span class="line">            cur = max(cur + array[i], array[i]);</span>
+<span class="line">            if (cur &gt; res) res = cur;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return res;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></div><div class="tags"><a href="/tags/举例让抽象具体化/">举例让抽象具体化</a><a href="/tags/分解让复杂问题简单/">分解让复杂问题简单</a><a href="/tags/时间效率/">时间效率</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/06/20/heap/" class="pre">堆</a><a href="/2017/06/16/C-知识点/" class="next">C++ 知识点</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#栈的压入、弹出序列"><span class="toc-text">栈的压入、弹出序列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从上往下打印二叉树"><span class="toc-text">从上往下打印二叉树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二叉搜索树的后序遍历序列"><span class="toc-text">二叉搜索树的后序遍历序列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二叉树中和为某一值的路径"><span class="toc-text">二叉树中和为某一值的路径</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#复杂链表的复制"><span class="toc-text">复杂链表的复制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二叉搜索树与双向链表"><span class="toc-text">二叉搜索树与双向链表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的排列"><span class="toc-text">字符串的排列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数组中出现次数超过一半的数字"><span class="toc-text">数组中出现次数超过一半的数字</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最小的K个数"><span class="toc-text">最小的K个数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#连续子数组的最大和"><span class="toc-text">连续子数组的最大和</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

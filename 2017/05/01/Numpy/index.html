@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>【Python】通过代码学习Numpy 1 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【Python】通过代码学习Numpy 1</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【Python】通过代码学习Numpy 1</h1><div class="post-meta"><a href="/2017/05/01/Numpy/#comments" class="comment-count"></a><p><span class="date">May 01, 2017</span><span><a href="/categories/Python/" class="category">Python</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>NumPy库入门</p>
+<ol>
+<li>数据维度</li>
+<li>ndarray类型属性、创建和变换</li>
+<li>数组的索引和切片</li>
+<li>数组的运算：一元函数、二元函数</li>
+</ol>
+<a id="more"></a>
+<h1 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="C-A-2-B-3"><a href="#C-A-2-B-3" class="headerlink" title="$C = A ^ 2 + B ^ 3$"></a>$C = A ^ 2 + B ^ 3$</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+</pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pySum</span><span class="params">()</span>:</span></span>
+<span class="line">    a = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span>
+<span class="line">    b = [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>]</span>
+<span class="line">    c = []</span>
+<span class="line"></span>
+<span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(a)):</span>
+<span class="line">        c.append(a[i]**<span class="number">2</span> + b[i]**<span class="number">3</span>)</span>
+<span class="line"></span>
+<span class="line">    <span class="keyword">return</span> c</span>
+<span class="line"></span>
+<span class="line">print(pySum())</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">npSum</span><span class="params">()</span>:</span></span>
+<span class="line">    a = np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span>
+<span class="line">    b = np.array([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>])</span>
+<span class="line"></span>
+<span class="line">    c = a**<span class="number">2</span> + b**<span class="number">3</span></span>
+<span class="line"></span>
+<span class="line">    <span class="keyword">return</span> c</span>
+<span class="line"></span>
+<span class="line">print(npSum())</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+</pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span>
+<span class="line">    [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>]])</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">print</span> a.ndim, a.shape, a.size, a.dtype, a.itemsize</span>
+<span class="line"></span>
+<span class="line">a = np.array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span>
+<span class="line">    [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>]])</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">print</span> a.ndim, a.shape, a.size, a.dtype, a.itemsize</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="ndarray数组创建"><a href="#ndarray数组创建" class="headerlink" title="ndarray数组创建"></a>ndarray数组创建</h1><ol>
+<li><p>从python中的列表、元组等类型元素创建<br>x = np.array([0, 1, 2, 3])<br>x = np.array((4, 5, 6, 7))<br>x = np.array([[1, 2], [9, 8], (0.1, 0.2)])</p>
+</li>
+<li><p>使用NumPy中的函数创建，如：arange(n), ones(shape), zeros(shape), full(shape,val), eye(n)</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ones_like(a), zero_like(a), full_like(a,val)</td>
+<td style="text-align:center">根据数组a的形状创建数组</td>
+</tr>
+<tr>
+<td style="text-align:center">linspace(first,last,n)</td>
+<td style="text-align:center">根据起止数据等间距的填充数据，形成数组[first, last] [first, last)</td>
+</tr>
+<tr>
+<td style="text-align:center">concatenate()</td>
+<td style="text-align:center">将两个或多个数组合并成一个新的数组</td>
+</tr>
+<tr>
+<td style="text-align:center">np.arange(10)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.ones((3,6))</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.zeros((3,6), dtype = np.int32)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.eye(5)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+</pre></td><td class="code"><pre><span class="line">x = np.ones((<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line"><span class="keyword">print</span> x.shape</span>
+<span class="line"></span>
+<span class="line">a = np.linspace(<span class="number">1</span>, <span class="number">10</span>, <span class="number">4</span>)</span>
+<span class="line"><span class="keyword">print</span> a</span>
+<span class="line"></span>
+<span class="line">b = np.linspace(<span class="number">1</span>, <span class="number">10</span>, <span class="number">4</span>, endpoint=<span class="keyword">False</span>)</span>
+<span class="line"><span class="keyword">print</span> b</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="ndarray数组的维度变换"><a href="#ndarray数组的维度变换" class="headerlink" title="ndarray数组的维度变换"></a>ndarray数组的维度变换</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">.reshape(shape)</td>
+<td style="text-align:center">不改变原数组</td>
+</tr>
+<tr>
+<td style="text-align:center">.resize(shape)</td>
+<td style="text-align:center">改变原数组</td>
+</tr>
+<tr>
+<td style="text-align:center">.swapaxes(ax1,ax2)</td>
+<td style="text-align:center">将数组n个纬度中的两个纬度进行调换</td>
+</tr>
+<tr>
+<td style="text-align:center">.flatten()</td>
+<td style="text-align:center">降维，返回折叠后的一维数组，原数组不变</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> x.flatten()</span>
+<span class="line"><span class="keyword">print</span> x</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="ndarray数组的类型变换"><a href="#ndarray数组的类型变换" class="headerlink" title="ndarray数组的类型变换"></a>ndarray数组的类型变换</h1><p>new_a = a.astype(new_type)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line">a = np.ones((<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>), dtype=np.int)</span>
+<span class="line">b = a.astype(np.float)</span>
+<span class="line"><span class="keyword">print</span> a</span>
+<span class="line"><span class="keyword">print</span> b</span>
+</pre></td></tr></table></figure>
+<hr>
+<p>#ndarray数组向列表的转换<br>ls = a.tolist()</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line">a = np.full((<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>), <span class="number">25</span>, dtype=np.int32)</span>
+<span class="line"><span class="keyword">print</span> a</span>
+<span class="line"><span class="keyword">print</span> a.tolist()</span>
+<span class="line"><span class="keyword">print</span> np.array(a.tolist())</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="数组的索引和切片"><a href="#数组的索引和切片" class="headerlink" title="数组的索引和切片"></a>数组的索引和切片</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>])</span>
+<span class="line"><span class="keyword">print</span> a[<span class="number">2</span>], a[<span class="number">1</span>: <span class="number">4</span>: <span class="number">2</span>]</span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">24</span>).reshape((<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line"><span class="keyword">print</span> a, a[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], a[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], a[<span class="number">-1</span>, <span class="number">-2</span>, <span class="number">-3</span>]</span>
+<span class="line"><span class="keyword">print</span> a[:, <span class="number">1</span>, <span class="number">-3</span>], a[:, <span class="number">1</span>:<span class="number">3</span>, :], a[:, :, ::<span class="number">2</span>]</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="ndarray数组的运算"><a href="#ndarray数组的运算" class="headerlink" title="ndarray数组的运算"></a>ndarray数组的运算</h1><ul>
+<li>数组与标量之间的运算作用于数组的每一个元素</li>
+<li>一元函数<br>对数组中每一个元素进行运算<br>不改变x</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">np.abs(x)   np.fabs(x)</td>
+<td style="text-align:center">绝对值</td>
+</tr>
+<tr>
+<td style="text-align:center">np.sqrt(x)</td>
+<td style="text-align:center">平方根</td>
+</tr>
+<tr>
+<td style="text-align:center">np.square(x)</td>
+<td style="text-align:center">平方</td>
+</tr>
+<tr>
+<td style="text-align:center">np.log(x)   np.log10(x)     np.log2(x)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.ceil(x)  np.floor(x)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.rint(x)</td>
+<td style="text-align:center">四舍五入</td>
+</tr>
+<tr>
+<td style="text-align:center">np.modf(x)</td>
+<td style="text-align:center">将数组个元素的小数和整数部分以两个独立数组形式返回</td>
+</tr>
+<tr>
+<td style="text-align:center">np.sin(x)   np.cos(x)   np.tan(x)   np.sinh(x)  np.cosh(x)  np.tanh(x)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.exp(x)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.sign(x)</td>
+<td style="text-align:center">符号值</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>二元函数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">+ - <em> / *</em></td>
+<td style="text-align:center">两个数组各元素进行对应运算</td>
+</tr>
+<tr>
+<td style="text-align:center">np.maximun(x,y) np.fmax()   np.minimun(x,y) np.fmin()</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">np.mod(x,y)</td>
+<td style="text-align:center">元素级的模运算</td>
+</tr>
+<tr>
+<td style="text-align:center">np.copysign(x,y)</td>
+<td style="text-align:center">将数组y中各元素值的符号赋值给数组x的对应元素</td>
+</tr>
+<tr>
+<td style="text-align:center">&gt; &lt; &gt;= &lt;= == !=</td>
+<td style="text-align:center">算数比较，产生布尔型数组</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+</pre></td><td class="code"><pre><span class="line">a = np.arange(<span class="number">24</span>).reshape((<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">a.mean()</span>
+<span class="line">a = a / a.mean()</span>
+<span class="line"></span>
+<span class="line">a = np.arange(<span class="number">24</span>).reshape((<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">b = np.sqrt(a)</span>
+<span class="line">np.modf(b)</span>
+<span class="line"><span class="keyword">print</span> a, <span class="string">'\n'</span>, b, <span class="string">'\n'</span>, np.maximum(a, b), <span class="string">'\n'</span>, a &gt; b</span>
+</pre></td></tr></table></figure></div><div class="tags"><a href="/tags/Numpy/">Numpy</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/05/01/Numpy2/" class="pre">【Python】通过代码学习Numpy 2</a><a href="/2017/04/24/prime-number/" class="next">质数的性质</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#头文件"><span class="toc-text">头文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#C-A-2-B-3"><span class="toc-text">$C = A ^ 2 + B ^ 3$</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据类型"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ndarray数组创建"><span class="toc-text">ndarray数组创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ndarray数组的维度变换"><span class="toc-text">ndarray数组的维度变换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ndarray数组的类型变换"><span class="toc-text">ndarray数组的类型变换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数组的索引和切片"><span class="toc-text">数组的索引和切片</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ndarray数组的运算"><span class="toc-text">ndarray数组的运算</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

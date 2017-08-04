@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>近似算法 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">近似算法</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">近似算法</h1><div class="post-meta"><a href="/2017/05/15/Approximation-Algorithm/#comments" class="comment-count"></a><p><span class="date">May 15, 2017</span><span><a href="/categories/算法学习笔记/" class="category">算法学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p><strong>内容</strong>：2017年5月15日 星期一 近似算法。<br><strong>说明</strong>：复习算法时做的一些整理工作。<br><a id="more"></a></p>
+<h1 id="近似算法概述"><a href="#近似算法概述" class="headerlink" title="近似算法概述"></a>近似算法概述</h1><h2 id="近似算法的基本思想"><a href="#近似算法的基本思想" class="headerlink" title="近似算法的基本思想"></a>近似算法的基本思想</h2><ul>
+<li>很多实际应用中问题都是NP-完全问题</li>
+<li>NP-完全问题的多项式算法是难以得到的</li>
+<li>求解NP-完全问题的方法:<ul>
+<li>如果问题的输入很小, 可以使用指数级算法圆满地解决该问题</li>
+<li>否则<strong>使用多项式算法求解问题的近似优化解</strong></li>
+</ul>
+</li>
+<li>什么是近似算法<ul>
+<li>能够给出一个问题的近似解的算法</li>
+<li>常用来解决<strong>优化问题</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="近似算法的时间复杂性"><a href="#近似算法的时间复杂性" class="headerlink" title="近似算法的时间复杂性"></a>近似算法的时间复杂性</h2><ul>
+<li>分析目标和方法与传统算法相同<ul>
+<li>近似算法解的近似度</li>
+</ul>
+</li>
+<li>本节讨论的问题是<strong>优化问题</strong><ul>
+<li>问题的每一个可能的解都具有一个正的代价</li>
+<li>问题的优化解可能具有最大或最小代价</li>
+<li>我们希望寻找问题的一个近似优化解</li>
+</ul>
+</li>
+<li>我们需要分析近似解代价与优化解代价的差距<ul>
+<li>Ratio Bound</li>
+<li>相对误差</li>
+<li>$1\pm\epsilon$-近似</li>
+</ul>
+</li>
+</ul>
+<h2 id="Ratio-Bound"><a href="#Ratio-Bound" class="headerlink" title="Ratio Bound"></a>Ratio Bound</h2><p><strong><em>定义1</em></strong>(Ratio Bound) 设A是一个优化问题的近似算法,A具有ratio bound p(n),如果<br>$$\max\left\lbrace\frac C{C^\ast},\frac{C^\ast}C\right\rbrace\le p(n)$$<br>其中n是输入大小, C是A产生的近似解的代价,C*是优化解的代价.</p>
+<blockquote>
+<ul>
+<li>如果问题是最大化问题, max{C/C<em>, C</em>/C}=C*/C</li>
+<li>如果问题是最小化问题, max{C/C<em>, C</em>/C}=C/C*</li>
+<li>Ratio Bound不会小于1</li>
+<li>Ratio Bound越大, 近似解越坏</li>
+</ul>
+</blockquote>
+<h2 id="相对误差"><a href="#相对误差" class="headerlink" title="相对误差"></a>相对误差</h2><p><strong><em>定义2</em></strong>(相对误差) 对于任意输入, 近似算法的相对误差定义为$\frac{|C-C^\ast|}{C^\ast}$, 其中C是近似解的代价, C*是优化解的代价.</p>
+<p><strong><em>定义3</em></strong>(相对误差界) 一个近似算法的相对误差界为$\epsilon(n)$, 如果$\frac{|C-C^\ast|}{C^\ast}\le\epsilon(n)$.</p>
+<hr>
+<p><strong>结论1</strong> $\epsilon(n)\le p(n)-1$.</p>
+<ul>
+<li><strong>对于最小化问题</strong><br>$\epsilon(n)=\frac{|C-C^\ast|}{C^\ast}=\frac{(C-C^\ast)}{C^\ast}=\frac C{C\ast}-1=p(n)-1$.</li>
+<li><strong>对于最大化问题</strong><br>$\epsilon(n)=\frac{|C-C^\ast|}{C^\ast}=\frac{(C^\ast-C)}{C^\ast}=\frac{\frac {C\ast}C-1}{\frac {C\ast}C}=\frac{p(n)-1}{p(n)}\le p(n)-1$.</li>
+</ul>
+<blockquote>
+<ul>
+<li>对于某些问题, $\epsilon(n)$和p(n)独立于n, 用p和$\epsilon$表示之.</li>
+<li>某些NP-完全问题的近似算法满足: <strong>当运行时间增加时，Ratio Bound和相对误差将减少.</strong></li>
+<li>结论1表示, 只要求出了Ratio Bound就求出了$\epsilon(n)$</li>
+</ul>
+</blockquote>
+<h2 id="近似模式"><a href="#近似模式" class="headerlink" title="近似模式"></a>近似模式</h2><p><strong><em>定义4</em></strong> (近似模式) 一个优化问题的近似模式是一个以问题实例I和$\epsilon$&gt;0为输入的算法族. 对于任意固定$\epsilon$, 近似模式是一个$(1\pm\epsilon)$-近似算法.</p>
+<p><strong><em>定义5</em></strong> 一个近似模式A(I,$\epsilon$)称为一个多项式时间近似模式(PTAS), 如果对于任意$\epsilon$&gt;0, A(I,$\epsilon$)的运行时间是关于输入实例大小$|I|$的多项式.</p>
+<p><strong><em>定义6</em></strong> 一个近似模式称为完全多项式时间近似模式(FPAS,FPTAS),如果它的运行时间是关于$\frac 1{\epsilon}$和输入实例大小n的多项式.</p>
+<hr>
+<h1 id="基于组合优化的近似算法"><a href="#基于组合优化的近似算法" class="headerlink" title="基于组合优化的近似算法"></a>基于组合优化的近似算法</h1><h2 id="顶点覆盖问题"><a href="#顶点覆盖问题" class="headerlink" title="顶点覆盖问题"></a>顶点覆盖问题</h2><p>问题：从图中找出最小的点集，使得图中所有的边都有顶点在该集合中。<br>思路：每次从边集中去除一条边，然后从边集中删除与该边的两顶点相连的所有边，重复该过程直至边集为空。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-122225.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-124923.jpg" alt=""></p>
+<h2 id="装箱问题"><a href="#装箱问题" class="headerlink" title="装箱问题"></a>装箱问题</h2><p>问题：将n个体积小于1的物体装入无穷个体积为1的箱子中，求怎样装箱子数最少。<br>思路：每次把物体放入第一个能装下它的箱子中。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-122510.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-125009.jpg" alt=""></p>
+<h2 id="TSP问题"><a href="#TSP问题" class="headerlink" title="TSP问题"></a>TSP问题</h2><p>问题：找出无向完全图中的最小Hamilton环。<br>思路：调用最小生成树算法将图生成为一棵最小生成树，然后先序遍历这棵树，访问顺序即为结果。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-130050.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-130135.jpg" alt=""></p>
+<h1 id="基于贪心策略的近似算法"><a href="#基于贪心策略的近似算法" class="headerlink" title="基于贪心策略的近似算法"></a>基于贪心策略的近似算法</h1><h2 id="Minimum-Makespan-Scheduling"><a href="#Minimum-Makespan-Scheduling" class="headerlink" title="Minimum Makespan Scheduling"></a>Minimum Makespan Scheduling</h2><p>问题：n个任务在m台机器上的调度问题，使得并行执行时间最短。<br>思路：每次选择具有最短任务队列的机器。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-130435.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-130516.jpg" alt=""></p>
+<h2 id="集合覆盖问题"><a href="#集合覆盖问题" class="headerlink" title="集合覆盖问题"></a>集合覆盖问题</h2><p>X——有限集<br>F——X的子集合族<br>C——能覆盖X的最小集族<br>S——X的子集<br>问题：从F中选择数量最少的子集使得这些子集能完全覆盖X。<br>思路：每次选择包含最多X中未覆盖点的子集。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-13-131845.jpg" alt=""><br><strong>近似比分析</strong><br>特别复杂，算了……最后结果是个$\ln |X| + 1$的多项式时间近似算法。</p>
+<h2 id="不相交路径问题"><a href="#不相交路径问题" class="headerlink" title="不相交路径问题"></a>不相交路径问题</h2><p>问题：找出从源点集到目标点集的所有不相交路径，使得这些路径的边数最大。<br>思路：每次找出从源点集到目标点集的与其他已确定路径不想交的最短路径。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-041501.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-042856.jpg" alt=""></p>
+<hr>
+<h1 id="基于局部搜索的近似算法"><a href="#基于局部搜索的近似算法" class="headerlink" title="基于局部搜索的近似算法"></a>基于局部搜索的近似算法</h1><h2 id="局部搜索原理"><a href="#局部搜索原理" class="headerlink" title="局部搜索原理"></a>局部搜索原理</h2><p><strong>局部搜索是解决最优化问题的一种启发式算法</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-043235.jpg" alt=""><br><strong>工作过程</strong><br>从任意可行解出发,搜索其邻域(通过对其进行局部修改)，检查是否有更优的解存在(具有更优的解代价)，如存在则移动至该解并继续执行局部搜索，反之则意味着达到了一个局部优化解，输出局部优化解作为近似解。</p>
+<ul>
+<li><strong>邻居关系的表示：可行解有向图</strong><ul>
+<li>每个顶点表示一个可行解</li>
+<li>$S_1到S_2之间存在边\Leftarrow\Rightarrow S_1由局部修改可得S_2$</li>
+</ul>
+</li>
+<li><strong>局部搜索算法关键</strong><ul>
+<li>在搜索空间中如何定义邻域，即邻居关系的选择和定义<ul>
+<li>保证每次的局部搜索在多项式时间完成</li>
+</ul>
+</li>
+<li>在每一步选择相邻解的规则<ul>
+<li>决定了算法的迭代次数，可否在有限步内找到局部最优解</li>
+</ul>
+</li>
+<li>初始可行解的选择</li>
+</ul>
+</li>
+<li><strong>局部搜索与贪心算法均属于启发式算法</strong></li>
+<li><strong>与贪心算法的共性之处：</strong><ul>
+<li>做一系列局部优化的选择</li>
+<li>但这些局部选择未必可得到全局最优解</li>
+</ul>
+</li>
+<li><strong>与贪心算法不同之处：</strong><ul>
+<li>贪心算法的解是一步步构造的，在每一步通过局部最优选择得到部分解</li>
+<li>局部搜索是<strong>从任意可行解出发</strong>, 通过对其局部、小的修改，产生新的可行解，使得代价更优<ul>
+<li>如果可行解有向图中结点度较大的话,局部搜索无法保证一定能够在多项式时间内找到局部最优解</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>简单、灵活及易于实现</li>
+<li>对于大多数难计算问题不难设计一个局部搜索算法</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>容易陷入局部最优</li>
+<li>解的质量难以保证，其与初始解和邻域的结构密切相关</li>
+</ul>
+</li>
+</ul>
+<h2 id="最大割问题"><a href="#最大割问题" class="headerlink" title="最大割问题"></a>最大割问题</h2><p>输入:加权无向图G=(V,E)，权值函数$W:E\rightarrow N$<br>输出:$S\in V 使得\sum_{u\in S,v\in V-S} W(uv)最大$<br>思路：每次在所有点中取一个代价为正的点，即要求从S进入V-S，从V-S进入S后会使总代价变大。只移动一个，只有与该点相连的部分会影响总代价，代价=该点与目标集合中哪些点有边相连-该点在原集合中与哪些点有边相连。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-044741.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-045310.jpg" alt=""><br><strong>近似比分析</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-045327.jpg" alt=""><br>$优化解\le 图中所有边的权值之和\le 2*近似解$<br>上式中，不等式右边为近似解，它分为两部分，S中的点到V-S的连线，以及V-S中的点到S的连线。</p>
+<hr>
+<h1 id="基于动态规划的近似算法"><a href="#基于动态规划的近似算法" class="headerlink" title="基于动态规划的近似算法"></a>基于动态规划的近似算法</h1><h2 id="Rounding-Data与动态规划"><a href="#Rounding-Data与动态规划" class="headerlink" title="Rounding Data与动态规划"></a>Rounding Data与动态规划</h2><ul>
+<li>动态规划算法<ul>
+<li>问题具有优化子结构</li>
+<li>重叠子问题</li>
+<li>用系统化的方法搜索优化子结构涉及的所有子问题</li>
+</ul>
+</li>
+<li>问题？<ul>
+<li>例如：伪多项式时间复杂性算法</li>
+</ul>
+</li>
+<li>解决办法<ul>
+<li><strong>以某种方式对输入数据或解空间进行Rounding(舍入)处理，使得舍入后的数据具有多项式大小</strong></li>
+<li>之后采用动态规划设计算法</li>
+</ul>
+</li>
+<li><strong>rounding策略1：</strong><ul>
+<li>原问题的实例I转换为一个特殊实例I’</li>
+<li>用动态规划方法求解实例I’</li>
+<li>将I’的解转化为I的近似解</li>
+<li>近似比取决于变形过程的性质</li>
+</ul>
+</li>
+<li><strong>rounding策略2</strong><ul>
+<li>将动态规划方法视为解空间的枚举过程</li>
+<li>仅枚举整个解空间的一个子空间，则得到一个近似解</li>
+<li>近似比取决于所枚举的子空间与整个空间之间的“间隙” 大小</li>
+</ul>
+</li>
+</ul>
+<h2 id="0-1背包问题的完全多项式近似模式"><a href="#0-1背包问题的完全多项式近似模式" class="headerlink" title="0-1背包问题的完全多项式近似模式"></a>0-1背包问题的完全多项式近似模式</h2><p>问题：给定n种物品和一个背包，物品i的重量是$w_i，价值v_i$，背包承重为C，问如何选择装入背包的物品，使装入背包中的物品的总价值最大？<br>对于每种物品只能选择完全装入或不装入，一个物品至多装入一次。<br>输入：$C&gt;0, w_i&gt;0, v_i &gt;0, 1\le i\le n$<br>输出：$(x_1,x_2,\ldots,x_n),x_i\in\lbrace 0, 1\rbrace$。</p>
+<p>满足$\sum_{1\le i\le n}w_ix_i\le C$</p>
+<p>使得$\sum_{1\le i\le n}v_ix_i$最大</p>
+<p><strong>解法一</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-070841.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-070932.jpg" alt=""><br><strong>解法二</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-070944.jpg" alt=""><br><strong>解法三</strong><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-071107.jpg" alt=""></p>
+<h2 id="子集求和问题的完全多项式近似模式"><a href="#子集求和问题的完全多项式近似模式" class="headerlink" title="子集求和问题的完全多项式近似模式"></a>子集求和问题的完全多项式近似模式</h2><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-065650.jpg" alt=""><br>$设S=\lbrace2,8,9,3,4\rbrace,\epsilon=0.5,\delta=0.1$，两种方法的过程分别为：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指数时间算法</th>
+<th style="text-align:center">修剪算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><0></0></td>
+<td style="text-align:center"><0></0></td>
+</tr>
+<tr>
+<td style="text-align:center"><0,2></0,2></td>
+<td style="text-align:center"><0,2></0,2></td>
+</tr>
+<tr>
+<td style="text-align:center"><0,2,8,10></0,2,8,10></td>
+<td style="text-align:center"><0,2,8,10></0,2,8,10></td>
+</tr>
+<tr>
+<td style="text-align:center"><0,2,8,9,10,11,17(,19)></0,2,8,9,10,11,17(,19)></td>
+<td style="text-align:center"><0,2,8,9(,10),11,17(,19)></0,2,8,9(,10),11,17(,19)></td>
+</tr>
+<tr>
+<td style="text-align:center"><0,2,3,5,8,9,10,11,12,13,14,17(,20)></0,2,3,5,8,9,10,11,12,13,14,17(,20)></td>
+<td style="text-align:center"><0,2,3,5,8,9,11(,12),14,17(,20)></0,2,3,5,8,9,11(,12),14,17(,20)></td>
+</tr>
+<tr>
+<td style="text-align:center"><0,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18(,21)></0,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18(,21)></td>
+<td style="text-align:center"><0,2,3,4,5,6,7,8,9,11,13(,14),17(,18,21)></0,2,3,4,5,6,7,8,9,11,13(,14),17(,18,21)></td>
+</tr>
+</tbody>
+</table>
+<p>两种方法的解分别为$C^\star =18和C=17，由18<em>0.9\le17\le18可知C^\star(1-\epsilon)\le z$。<br><em>*近似比分析</em></em><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-065848.jpg" alt=""></p>
+<h2 id="Bin-Packing-问题的近似模式"><a href="#Bin-Packing-问题的近似模式" class="headerlink" title="Bin-Packing 问题的近似模式"></a>Bin-Packing 问题的近似模式</h2><p>问题：将n个体积小于1的物体装入无穷个体积为1的箱子中，求怎样装箱子数最少。<br>思路：每次把物体放入第一个能装下它的箱子中。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-072154.jpg" alt=""><br>过程：<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-072252.jpg" alt=""></p>
+<hr>
+<h1 id="基于线性规划的近似算法"><a href="#基于线性规划的近似算法" class="headerlink" title="基于线性规划的近似算法"></a>基于线性规划的近似算法</h1><ul>
+<li>线性规划</li>
+<li>舍入法</li>
+<li>Primal-dual Schema</li>
+</ul>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-152836.jpg" alt=""></p>
+</div><div class="tags"><a href="/tags/近似算法/">近似算法</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/06/08/NN-and-DL/" class="pre">《神经网络和机器学习》阅读笔记1</a><a href="/2017/05/14/Greedy-Algorithm-2/" class="next">贪心算法</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#近似算法概述"><span class="toc-text">近似算法概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#近似算法的基本思想"><span class="toc-text">近似算法的基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#近似算法的时间复杂性"><span class="toc-text">近似算法的时间复杂性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ratio-Bound"><span class="toc-text">Ratio Bound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相对误差"><span class="toc-text">相对误差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#近似模式"><span class="toc-text">近似模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于组合优化的近似算法"><span class="toc-text">基于组合优化的近似算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#顶点覆盖问题"><span class="toc-text">顶点覆盖问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装箱问题"><span class="toc-text">装箱问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TSP问题"><span class="toc-text">TSP问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于贪心策略的近似算法"><span class="toc-text">基于贪心策略的近似算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Minimum-Makespan-Scheduling"><span class="toc-text">Minimum Makespan Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集合覆盖问题"><span class="toc-text">集合覆盖问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不相交路径问题"><span class="toc-text">不相交路径问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于局部搜索的近似算法"><span class="toc-text">基于局部搜索的近似算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#局部搜索原理"><span class="toc-text">局部搜索原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大割问题"><span class="toc-text">最大割问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于动态规划的近似算法"><span class="toc-text">基于动态规划的近似算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rounding-Data与动态规划"><span class="toc-text">Rounding Data与动态规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1背包问题的完全多项式近似模式"><span class="toc-text">0-1背包问题的完全多项式近似模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#子集求和问题的完全多项式近似模式"><span class="toc-text">子集求和问题的完全多项式近似模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bin-Packing-问题的近似模式"><span class="toc-text">Bin-Packing 问题的近似模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于线性规划的近似算法"><span class="toc-text">基于线性规划的近似算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>树搜索算法 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">树搜索算法</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">树搜索算法</h1><div class="post-meta"><a href="/2017/04/13/Tree-Searching/#comments" class="comment-count"></a><p><span class="date">Apr 13, 2017</span><span><a href="/categories/算法学习笔记/" class="category">算法学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p><strong>内容</strong>：2017年4月13日 星期四 搜索算法。<br><strong>说明</strong>：对树搜索算法的整理，以及几道小题的思路整理。</p>
+<a id="more"></a>
+<hr>
+<h1 id="使用树搜索的动机"><a href="#使用树搜索的动机" class="headerlink" title="使用树搜索的动机"></a>使用树搜索的动机</h1><p>很多问题可以表示成为树。于是，这些问题可以使用树搜索算法来求解。</p>
+<p>例如下面的问题:<br>– 输入:具有n个节点的连通图G=(V,E)<br>– 输出:G中是否具有Hamiltonian环<br>沿着G的n条边经过每个节点一次,并回到起始节点的环称为G的一个Hamiltonian环.</p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-085514.jpg" alt=""></p>
+<hr>
+<h1 id="基本的树搜索策略"><a href="#基本的树搜索策略" class="headerlink" title="基本的树搜索策略"></a>基本的树搜索策略</h1><h2 id="Breadth-First-Search"><a href="#Breadth-First-Search" class="headerlink" title="Breadth-First Search"></a>Breadth-First Search</h2><h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">构造由根组成的队列Q；</span>
+<span class="line">If Q 的第一个元素x是目标节点 </span>
+<span class="line">    Then 输出解，停止;</span>
+<span class="line">从Q中删除x，把x的所有子节点加入Q的末尾;</span>
+<span class="line">If Q 空 Then 失败</span>
+<span class="line">Else goto 2.</span>
+</pre></td></tr></table></figure>
+<h3 id="计算复杂性（搜索树节点为n）"><a href="#计算复杂性（搜索树节点为n）" class="headerlink" title="计算复杂性（搜索树节点为n）"></a>计算复杂性（搜索树节点为n）</h3><ul>
+<li>最好复杂性(目标节点为根)：O(1)</li>
+<li>最坏复杂性：O(n)</li>
+<li>平均复杂性：$\sum_{1\le i \le n}p_iCost(\alpha_i)$<ul>
+<li>$\alpha_i$是第i个节点，$p_i$ 是$\alpha_i$为目标节点的概率。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Depth-First-Search"><a href="#Depth-First-Search" class="headerlink" title="Depth-First Search"></a>Depth-First Search</h2><h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line">构造一个由根构成的单元素栈S;</span>
+<span class="line">If Top(S)是目标节点 </span>
+<span class="line">    Then 输出解，停止;</span>
+<span class="line">Pop(S), 把Top(S)的所有子节点压入栈顶;</span>
+<span class="line">If S 空 S Then 失败, Else goto 2.</span>
+</pre></td></tr></table></figure>
+<h3 id="计算复杂性（搜索树节点为n）-1"><a href="#计算复杂性（搜索树节点为n）-1" class="headerlink" title="计算复杂性（搜索树节点为n）"></a>计算复杂性（搜索树节点为n）</h3><ul>
+<li>最好复杂性(目标节点为根)：O(1)</li>
+<li>最坏复杂性：O(n)</li>
+<li>平均复杂性：$\sum_{1\le i \le n}p_iCost(\alpha_i)$<ul>
+<li>$\alpha_i$是第i个节点，$p_i$ 是$\alpha_i$为目标节点的概率。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="优化的树搜索策略"><a href="#优化的树搜索策略" class="headerlink" title="优化的树搜索策略"></a>优化的树搜索策略</h1><h2 id="Hill-Climbing"><a href="#Hill-Climbing" class="headerlink" title="Hill Climbing"></a>Hill Climbing</h2><h3 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h3><ul>
+<li>在深度优先搜索过程中,我们经常遇到多个节点可以扩展的情况,首先扩展哪个?</li>
+<li>爬山策略使用贪心方法确定搜索的方向,是<strong>优化的深度优先</strong>搜索策略</li>
+<li>爬山策略使用<strong>启发式测度</strong>来排序节点扩展的顺序<ul>
+<li>使用什么启发式测度与问题本身相关</li>
+</ul>
+</li>
+</ul>
+<h3 id="用8-Puzzle问题来说明爬山策略的思想"><a href="#用8-Puzzle问题来说明爬山策略的思想" class="headerlink" title="用8-Puzzle问题来说明爬山策略的思想"></a>用8-Puzzle问题来说明爬山策略的思想</h3><ul>
+<li>启发式测度函数:<ul>
+<li>f(n)=W(n), W(n)是节点n中处于错误位臵的方块数.</li>
+</ul>
+</li>
+<li>例如, 如果节点n如下：<ul>
+<li><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-090733.jpg" alt=""></li>
+<li>则f(n)=3, 因为方块1、2、8处于错误位.<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-090902.jpg" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line">构造由根组成的单元素栈S;</span>
+<span class="line">If Top(S)是目标节点 Then 停止;</span>
+<span class="line">Pop(S);</span>
+<span class="line">S的子节点按照其启发测度由大到小的顺序压入S;</span>
+<span class="line">f S空 Then 失败 Else goto 2.</span>
+</pre></td></tr></table></figure>
+<h2 id="Best-First-Search-Strategy"><a href="#Best-First-Search-Strategy" class="headerlink" title="Best-First Search Strategy"></a>Best-First Search Strategy</h2><h3 id="基本思想-1"><a href="#基本思想-1" class="headerlink" title="基本思想"></a>基本思想</h3><ul>
+<li>结合深度优先和广度优先的优点于一个方法</li>
+<li>根据一个<strong>评价函数</strong>,在目前产生的所有节点中选择具有最小评价函数值的节点进行扩展.</li>
+<li>具有<strong>全局优化</strong>观念, 而爬山策略仅具有局部优化观念.</li>
+</ul>
+<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">使用评价函数构造一个堆H,首先构造由根组成的单元素堆;</span>
+<span class="line">If H的根r是目标节点</span>
+<span class="line">    Then 停止;</span>
+<span class="line">从H中删除r,把r的子节点插入H;</span>
+<span class="line">If H空 Then 失败</span>
+<span class="line">Else goto 2.</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-091217.jpg" alt="8数码问题实例"></p>
+<h2 id="Branch-and-Bound-Strategy"><a href="#Branch-and-Bound-Strategy" class="headerlink" title="Branch-and-Bound Strategy"></a>Branch-and-Bound Strategy</h2><h3 id="基本思想-2"><a href="#基本思想-2" class="headerlink" title="基本思想"></a>基本思想</h3><ul>
+<li>上述方法很难用于求解优化问题</li>
+<li>分支界限策略可以有效地求解组合优化问题</li>
+<li><strong> 发现优化解的一个界限</strong></li>
+<li>缩小解空间,提高求解的效率</li>
+</ul>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-091417.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-091514.jpg" alt=""></p>
+<h3 id="分支界限策略的原理"><a href="#分支界限策略的原理" class="headerlink" title="分支界限策略的原理"></a>分支界限策略的原理</h3><ul>
+<li>产生分支的机制(使用前面的任意一种策略)</li>
+<li>产生一个界限(可以通过发现可能解)</li>
+<li>进行分支界限搜索,即剪除不可能产生优化解的分支.</li>
+</ul>
+<hr>
+<h1 id="人员分配问题"><a href="#人员分配问题" class="headerlink" title="人员分配问题"></a>人员分配问题</h1><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092305.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092338.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092356.jpg" alt=""></p>
+<hr>
+<h1 id="旅行商问题"><a href="#旅行商问题" class="headerlink" title="旅行商问题"></a>旅行商问题</h1><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092439.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092459.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092517.jpg" alt=""></p>
+<hr>
+<h1 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0-1背包问题"></a>0-1背包问题</h1><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092550.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092604.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-092843.jpg" alt=""></p>
+<hr>
+<h1 id="A-算法"><a href="#A-算法" class="headerlink" title="A*算法"></a>A*算法</h1><h2 id="A-算法与分支界限策略的比较"><a href="#A-算法与分支界限策略的比较" class="headerlink" title="A*算法与分支界限策略的比较"></a>A*算法与分支界限策略的比较</h2><ul>
+<li>分支界限策略是为了剪掉不能达到优化解的分支</li>
+<li>分支界限策略的关键是<strong>“界限”</strong></li>
+<li>A*算法的核心是在某些情况下, 我们一旦得到了解，就得到了优化解, 于是算法可以停止</li>
+<li>A*算法使用Best-first策略求解优化问题</li>
+</ul>
+<h2 id="A-算法关键——代价函数"><a href="#A-算法关键——代价函数" class="headerlink" title="A*算法关键——代价函数"></a>A*算法关键——代价函数</h2><ul>
+<li>对于任意节点n<ul>
+<li>g(n)＝从树根到n的代价</li>
+<li>h*(n)＝从n到目标结点的优化路径的代价</li>
+<li>f*(n)＝g(n) + h*(n)是经过结点n到达目标结点的代价</li>
+</ul>
+</li>
+<li>h*(n)＝?<ul>
+<li>不知道！</li>
+<li>于是, f*(n)也不知道</li>
+</ul>
+</li>
+<li>估计h*(n)<ul>
+<li>使用任何方法去估计h<em>(n), 用h(n)表示h</em>(n)的估计</li>
+<li><strong>h(n)$\le$h*(n)总为真</strong></li>
+<li>f(n)=g(n)+h(n)$\le$g(n)+h*(n)=f*(n)定义为<strong>n的代价</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="最短路径问题"><a href="#最短路径问题" class="headerlink" title="最短路径问题"></a>最短路径问题</h2><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-093609.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-093706.jpg" alt=""></p>
+<h2 id="8数码问题"><a href="#8数码问题" class="headerlink" title="8数码问题"></a>8数码问题</h2><h3 id="判断有无解问题"><a href="#判断有无解问题" class="headerlink" title="判断有无解问题"></a>判断有无解问题</h3><p>根据逆序数直接判断有无解，对于一个八数码，依次排列之后，每次是将空位和相邻位进行调换，有四种移动方法：<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-04-13-093914.jpg" alt=""><br>将空格向左或向右移动时，数字顺序不变，逆序数不变；<br>向上或向下移动时,逆序数的改变可能的变化为-2，0，2。<br>可以看出，每次调换，逆序数增幅都为偶数。也就是说，每次移动不改变奇偶性，所以初始和目标状态的逆序数的奇偶性相同。我们可以通过直接比较初始状态和目标状态的奇偶性来判断是否有解。</p>
+<h3 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+</pre></td><td class="code"><pre><span class="line">while Open不为空的时候，取列表第一个元素cur进行扩展</span>
+<span class="line">    遍历上下左右四个方向（检查位置合法性），得到next</span>
+<span class="line">        if 到达目标状态 return；</span>
+<span class="line">        if next in Close </span>
+<span class="line">            便利下一个方向</span>
+<span class="line">        if next in Open</span>
+<span class="line">            if next的f小于Open中的f</span>
+<span class="line">                更新Open中节点</span>
+<span class="line">        if next not in Close and Open</span>
+<span class="line">            将next插入Open</span>
+<span class="line">    将cur移除Open，并将其放入Close</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-05-15-154357.jpg" alt=""></p>
+</div><div class="tags"><a href="/tags/搜索/">搜索</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/04/19/Deep-Learning-4/" class="pre">深度学习笔记4:数值计算</a><a href="/2017/04/09/Deep-Learning-3/" class="next">深度学习笔记3:概率论</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用树搜索的动机"><span class="toc-text">使用树搜索的动机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本的树搜索策略"><span class="toc-text">基本的树搜索策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Breadth-First-Search"><span class="toc-text">Breadth-First Search</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法"><span class="toc-text">算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算复杂性（搜索树节点为n）"><span class="toc-text">计算复杂性（搜索树节点为n）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Depth-First-Search"><span class="toc-text">Depth-First Search</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法-1"><span class="toc-text">算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算复杂性（搜索树节点为n）-1"><span class="toc-text">计算复杂性（搜索树节点为n）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#优化的树搜索策略"><span class="toc-text">优化的树搜索策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hill-Climbing"><span class="toc-text">Hill Climbing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本思想"><span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用8-Puzzle问题来说明爬山策略的思想"><span class="toc-text">用8-Puzzle问题来说明爬山策略的思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法-2"><span class="toc-text">算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Best-First-Search-Strategy"><span class="toc-text">Best-First Search Strategy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本思想-1"><span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法-3"><span class="toc-text">算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Branch-and-Bound-Strategy"><span class="toc-text">Branch-and-Bound Strategy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本思想-2"><span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支界限策略的原理"><span class="toc-text">分支界限策略的原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#人员分配问题"><span class="toc-text">人员分配问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#旅行商问题"><span class="toc-text">旅行商问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0-1背包问题"><span class="toc-text">0-1背包问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#A-算法"><span class="toc-text">A*算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-算法与分支界限策略的比较"><span class="toc-text">A*算法与分支界限策略的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#A-算法关键——代价函数"><span class="toc-text">A*算法关键——代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最短路径问题"><span class="toc-text">最短路径问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8数码问题"><span class="toc-text">8数码问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#判断有无解问题"><span class="toc-text">判断有无解问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪代码"><span class="toc-text">伪代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

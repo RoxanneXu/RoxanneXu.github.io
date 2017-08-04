@@ -1,0 +1,360 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>【Python】通过代码学习Pandas 1 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【Python】通过代码学习Pandas 1</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【Python】通过代码学习Pandas 1</h1><div class="post-meta"><a href="/2017/05/04/Pandas/#comments" class="comment-count"></a><p><span class="date">May 04, 2017</span><span><a href="/categories/Python/" class="category">Python</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>Pandas库入门</p>
+<ol>
+<li>Series<br>Series = 索引 + 一维数据类型<br>一维的带标签的数组</li>
+<li>DataFrame<br>DataFrame = 行列索引 + 二维数据<br>二维的带标签的数组</li>
+<li>操作索引即操作数据</li>
+<li>重新索引、数据删除、算术运算、比较运算<br>掌握表示、清洗、统计和展示数据的能力</li>
+</ol>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+<span class="line">52</span>
+<span class="line">53</span>
+<span class="line">54</span>
+<span class="line">55</span>
+<span class="line">56</span>
+<span class="line">57</span>
+<span class="line">58</span>
+<span class="line">59</span>
+<span class="line">60</span>
+<span class="line">61</span>
+<span class="line">62</span>
+<span class="line">63</span>
+<span class="line">64</span>
+<span class="line">65</span>
+<span class="line">66</span>
+<span class="line">67</span>
+<span class="line">68</span>
+<span class="line">69</span>
+<span class="line">70</span>
+<span class="line">71</span>
+<span class="line">72</span>
+<span class="line">73</span>
+<span class="line">74</span>
+<span class="line">75</span>
+<span class="line">76</span>
+<span class="line">77</span>
+<span class="line">78</span>
+<span class="line">79</span>
+<span class="line">80</span>
+<span class="line">81</span>
+<span class="line">82</span>
+<span class="line">83</span>
+<span class="line">84</span>
+<span class="line">85</span>
+<span class="line">86</span>
+<span class="line">87</span>
+<span class="line">88</span>
+<span class="line">89</span>
+<span class="line">90</span>
+<span class="line">91</span>
+<span class="line">92</span>
+<span class="line">93</span>
+<span class="line">94</span>
+<span class="line">95</span>
+<span class="line">96</span>
+<span class="line">97</span>
+<span class="line">98</span>
+<span class="line">99</span>
+<span class="line">100</span>
+<span class="line">101</span>
+<span class="line">102</span>
+<span class="line">103</span>
+<span class="line">104</span>
+<span class="line">105</span>
+<span class="line">106</span>
+<span class="line">107</span>
+<span class="line">108</span>
+<span class="line">109</span>
+<span class="line">110</span>
+<span class="line">111</span>
+<span class="line">112</span>
+<span class="line">113</span>
+<span class="line">114</span>
+<span class="line">115</span>
+<span class="line">116</span>
+<span class="line">117</span>
+<span class="line">118</span>
+<span class="line">119</span>
+<span class="line">120</span>
+<span class="line">121</span>
+<span class="line">122</span>
+<span class="line">123</span>
+<span class="line">124</span>
+<span class="line">125</span>
+<span class="line">126</span>
+<span class="line">127</span>
+<span class="line">128</span>
+<span class="line">129</span>
+<span class="line">130</span>
+<span class="line">131</span>
+<span class="line">132</span>
+<span class="line">133</span>
+<span class="line">134</span>
+<span class="line">135</span>
+<span class="line">136</span>
+<span class="line">137</span>
+<span class="line">138</span>
+<span class="line">139</span>
+<span class="line">140</span>
+<span class="line">141</span>
+<span class="line">142</span>
+<span class="line">143</span>
+<span class="line">144</span>
+<span class="line">145</span>
+<span class="line">146</span>
+<span class="line">147</span>
+<span class="line">148</span>
+<span class="line">149</span>
+<span class="line">150</span>
+<span class="line">151</span>
+<span class="line">152</span>
+<span class="line">153</span>
+<span class="line">154</span>
+<span class="line">155</span>
+<span class="line">156</span>
+<span class="line">157</span>
+<span class="line">158</span>
+<span class="line">159</span>
+<span class="line">160</span>
+<span class="line">161</span>
+<span class="line">162</span>
+<span class="line">163</span>
+<span class="line">164</span>
+<span class="line">165</span>
+<span class="line">166</span>
+<span class="line">167</span>
+<span class="line">168</span>
+<span class="line">169</span>
+<span class="line">170</span>
+<span class="line">171</span>
+<span class="line">172</span>
+<span class="line">173</span>
+<span class="line">174</span>
+<span class="line">175</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">提供高性能易用数据类型和分析工具</span></span>
+<span class="line"><span class="string">1. Series       一维数据类型</span></span>
+<span class="line"><span class="string">2. DataFrame    二维到多维数据类型</span></span>
+<span class="line"><span class="string"></span></span>
+<span class="line"><span class="string">numpy   关注数据的结构表达</span></span>
+<span class="line"><span class="string">pandas  关注数据的应用表达</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">Series类型</span></span>
+<span class="line"><span class="string">由一组数据及与之相关的数据索引组成</span></span>
+<span class="line"><span class="string">可由标量值、python列表、python字典、ndarray、其他函数创建</span></span>
+<span class="line"><span class="string">1. 操作类似ndarray</span></span>
+<span class="line"><span class="string">自动索引与自定义索引并存，但不能同时使用</span></span>
+<span class="line"><span class="string">2. 操作类似Python字典</span></span>
+<span class="line"><span class="string">Python字典类型相似，可以使用in,get()  </span></span>
+<span class="line"><span class="string">in只能判断自定义索引</span></span>
+<span class="line"><span class="string">get(ind[,x])查找是否有索引ind，有则返回对应内容，没有返回x</span></span>
+<span class="line"><span class="string">3. Series类型的对齐操作</span></span>
+<span class="line"><span class="string">Series+Series   索引相同的值进行运算，索引不同的值不计算，为NaN</span></span>
+<span class="line"><span class="string">即，Series类型在运算中会自动对齐不同索引的数据</span></span>
+<span class="line"><span class="string">4. Series类型的name属性</span></span>
+<span class="line"><span class="string">Series对象和索引都可以有名字</span></span>
+<span class="line"><span class="string">5. Series类型的修改</span></span>
+<span class="line"><span class="string">Series对象可以随时修改并即刻生效</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = pd.Series([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>])     <span class="comment"># 自动索引</span></span>
+<span class="line">b = pd.Series([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])         <span class="comment"># 自定义索引</span></span>
+<span class="line"><span class="comment"># print b.index, b.values</span></span>
+<span class="line"><span class="comment"># print b['b'], b[1], '\n', b[['c', 'd']], '\n', b[['a', 0]]    # 自动索引与自定义索引并存，但不能同时使用</span></span>
+<span class="line"><span class="comment"># print b[:3], '\n', b[b &gt; b.median()], '\n', np.exp(b)</span></span>
+<span class="line"><span class="comment"># print b['b'], 'c' in b, 0 in b, b.get('f', 100)               # Python字典类型相似，可以使用in,get()  in只能判断自定义索引</span></span>
+<span class="line"></span>
+<span class="line">b.name = <span class="string">'Series对象'</span></span>
+<span class="line">b.index.name = <span class="string">'索引列'</span></span>
+<span class="line"><span class="keyword">print</span> b</span>
+<span class="line"></span>
+<span class="line">b[<span class="string">'a'</span>] = <span class="number">15</span></span>
+<span class="line">b[<span class="string">'b'</span>, <span class="string">'c'</span>] = <span class="number">20</span></span>
+<span class="line">b.name = <span class="string">"Series"</span></span>
+<span class="line"><span class="keyword">print</span> b</span>
+<span class="line"></span>
+<span class="line">c = pd.Series(<span class="number">25</span>, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>])    <span class="comment">#此时索引不可缺省</span></span>
+<span class="line"></span>
+<span class="line">d = pd.Series(&#123;<span class="string">'a'</span>:<span class="number">9</span>, <span class="string">'b'</span>:<span class="number">8</span>, <span class="string">'c'</span>:<span class="number">7</span>&#125;)</span>
+<span class="line">e = pd.Series(&#123;<span class="string">'a'</span>:<span class="number">9</span>, <span class="string">'b'</span>:<span class="number">8</span>, <span class="string">'c'</span>:<span class="number">7</span>&#125;, index=[<span class="string">'c'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'d'</span>])</span>
+<span class="line"></span>
+<span class="line">f = pd.Series(np.arange(<span class="number">5</span>))</span>
+<span class="line">g = pd.Series(np.arange(<span class="number">5</span>), index=np.arange(<span class="number">9</span>,<span class="number">4</span>,<span class="number">-1</span>))</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">DataFrame类型</span></span>
+<span class="line"><span class="string">由共用相同索引的一组列构成，每列类型可以不同</span></span>
+<span class="line"><span class="string">纵向  index   axis=0</span></span>
+<span class="line"><span class="string">横向  column  axis=1</span></span>
+<span class="line"><span class="string">可以由(1)二维ndarray(2)一维ndarray、列表、字典、元组或Series构成的字典(3)Series类型(4)其他的DataFrame类型来创建</span></span>
+<span class="line"><span class="string">1. 取值</span></span>
+<span class="line"><span class="string">d['col']          取d的某一列</span></span>
+<span class="line"><span class="string">d.ix['ind']       取d的某一行</span></span>
+<span class="line"><span class="string">d['col']['ind']   取d的某个值</span></span>
+<span class="line"><span class="string">2. 基本操作类似Serise</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">d = pd.DataFrame(np.arange(<span class="number">10</span>).reshape(<span class="number">2</span>, <span class="number">5</span>))</span>
+<span class="line"></span>
+<span class="line">dt = &#123;<span class="string">'one'</span>: pd.Series([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]),</span>
+<span class="line">      <span class="string">'two'</span>: pd.Series([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])&#125;</span>
+<span class="line">d = pd.DataFrame(dt)</span>
+<span class="line">d = pd.DataFrame(dt, index=[<span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>], columns=[<span class="string">'two'</span>, <span class="string">'three'</span>])</span>
+<span class="line"></span>
+<span class="line">dt = &#123;<span class="string">'one'</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], <span class="string">'two'</span>: [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>]&#125;</span>
+<span class="line">d = pd.DataFrame(dt, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">print</span> d.index, d.columns</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">数据类型操作</span></span>
+<span class="line"><span class="string">1. 增加或重排：重新索引  </span></span>
+<span class="line"><span class="string">.reindex(index, columns, fill_value, method, limit, copy)</span></span>
+<span class="line"><span class="string">(行, 列, 缺失值, 填充方法 ffill当前值向前填充 根据前一行值填充 bfill向后填充, 最大填充量, True 生成新的对象 False 新旧相等不复制)</span></span>
+<span class="line"><span class="string">2.Series和DataFrame的索引是Index类型</span></span>
+<span class="line"><span class="string">Index对象是不可修改类型</span></span>
+<span class="line"><span class="string">索引类型的常用方法有：</span></span>
+<span class="line"><span class="string">.append(idx)            连接另一个Index对象，产生新的Index对象</span></span>
+<span class="line"><span class="string">.diff(idx)              计算差集，产生新的Index对象</span></span>
+<span class="line"><span class="string">.intersection(idx)      计算交集</span></span>
+<span class="line"><span class="string">.union(idx)             计算并集</span></span>
+<span class="line"><span class="string">.delete(loc)            删除loc位置的元素</span></span>
+<span class="line"><span class="string">.insert(loc,e)          在loc位置添加一个元素e</span></span>
+<span class="line"><span class="string">3. 删除：drop</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 1. .reindex()</span></span>
+<span class="line">d.reindex([<span class="string">'d'</span>, <span class="string">'c'</span>, <span class="string">'b'</span>, <span class="string">'a'</span>])</span>
+<span class="line">d.reindex(columns = [<span class="string">'two'</span>, <span class="string">'one'</span>])</span>
+<span class="line"></span>
+<span class="line">newc = d.columns.insert(<span class="number">2</span>, <span class="string">'three'</span>)</span>
+<span class="line">newd = d.reindex(columns=newc, fill_value=<span class="number">10</span>)</span>
+<span class="line"><span class="keyword">print</span> newd</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 2. Index对象</span></span>
+<span class="line">dt = &#123;<span class="string">'one'</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], <span class="string">'two'</span>: [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>], <span class="string">'three'</span>: [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>]&#125;</span>
+<span class="line">d = pd.DataFrame(dt, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])</span>
+<span class="line"></span>
+<span class="line">nc = d.columns.delete(<span class="number">2</span>)</span>
+<span class="line">ni = d.index.insert(<span class="number">4</span>, <span class="string">'e'</span>)</span>
+<span class="line">nd = d.reindex(index=ni, columns=nc, method=<span class="string">'ffill'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 3. .drop()</span></span>
+<span class="line"><span class="comment"># 对于Series</span></span>
+<span class="line">a = pd.Series([<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>], index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])</span>
+<span class="line">a.drop([<span class="string">'b'</span>, <span class="string">'c'</span>])</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 对于DataFrame</span></span>
+<span class="line">dt = &#123;<span class="string">'one'</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], <span class="string">'two'</span>: [<span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>], <span class="string">'three'</span>: [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>]&#125;</span>
+<span class="line">d = pd.DataFrame(dt, index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])</span>
+<span class="line"></span>
+<span class="line">d.drop(<span class="string">'a'</span>)</span>
+<span class="line">d.drop(<span class="string">'one'</span>, axis=<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">使用Pandas库进行算术运算</span></span>
+<span class="line"><span class="string">1. 算术运算根据行列索引，补齐后进行运算，运算默认产生浮点数</span></span>
+<span class="line"><span class="string">2. 补齐时缺项填充NaN</span></span>
+<span class="line"><span class="string">3. 不同维度（二维与一维、一维与零维）进行运算时采用广播运算</span></span>
+<span class="line"><span class="string">低维的会作用到高维的每一个纬度上</span></span>
+<span class="line"><span class="string">对Series的运算默认发生在axis=1上</span></span>
+<span class="line"><span class="string">4. 采用+ - * /符号进行运算时产生新的对象</span></span>
+<span class="line"><span class="string">5. 方法形式的运算</span></span>
+<span class="line"><span class="string">.add(d, **argws)        类型间加法运算，可选参数</span></span>
+<span class="line"><span class="string">.sub(d, **argws)        减法</span></span>
+<span class="line"><span class="string">.mul(d, **argws)        乘法</span></span>
+<span class="line"><span class="string">.div(d, **argws)        除法    </span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = pd.DataFrame(np.arange(<span class="number">12</span>).reshape(<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">b = pd.DataFrame(np.arange(<span class="number">20</span>).reshape(<span class="number">4</span>, <span class="number">5</span>))</span>
+<span class="line">c = pd.Series(np.arange(<span class="number">4</span>))</span>
+<span class="line"></span>
+<span class="line">a + b</span>
+<span class="line">a * b</span>
+<span class="line"></span>
+<span class="line">b.add(a, fill_value = <span class="number">100</span>)    <span class="comment"># 将a,b中缺少的元素用100来补齐</span></span>
+<span class="line">a.add(b, fill_value = <span class="number">0</span>)</span>
+<span class="line"></span>
+<span class="line">c - <span class="number">10</span></span>
+<span class="line">b - c</span>
+<span class="line">b.sub(c)</span>
+<span class="line">b.sub(c, axis=<span class="number">0</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">使用Pandas库进行比较运算</span></span>
+<span class="line"><span class="string">1. 比较运算只能比较相同索引的元素，不进行补齐</span></span>
+<span class="line"><span class="string">即，同维度运算要求尺寸相同</span></span>
+<span class="line"><span class="string">2. 不同维度（二维与一维、一维与零维）进行运算时采用广播运算</span></span>
+<span class="line"><span class="string">默认在1轴</span></span>
+<span class="line"><span class="string">3. &gt;  &lt;  &gt;=  &lt;=  ==  !=</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"></span>
+<span class="line">a = pd.DataFrame(np.arange(<span class="number">12</span>).reshape(<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">b = pd.DataFrame(np.arange(<span class="number">12</span>, <span class="number">0</span>, <span class="number">-1</span>).reshape(<span class="number">3</span>, <span class="number">4</span>))</span>
+<span class="line">c = pd.Series(np.arange(<span class="number">4</span>))</span>
+<span class="line"></span>
+<span class="line">a &gt; b</span>
+<span class="line">a == b</span>
+<span class="line"></span>
+<span class="line">a &gt; c</span>
+<span class="line">c &gt; <span class="number">0</span></span>
+</pre></td></tr></table></figure></div><div class="tags"><a href="/tags/Panadas/">Panadas</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/05/04/Pandas2/" class="pre">【Python】通过代码学习Pandas 2</a><a href="/2017/05/02/Matplotlib3/" class="next">【Python】通过代码学习Matplotlib 3</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

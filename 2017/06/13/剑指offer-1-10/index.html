@@ -1,0 +1,699 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>剑指offer 1~10 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">剑指offer 1~10</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦～～～</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">剑指offer 1~10</h1><div class="post-meta"><a href="/2017/06/13/剑指offer-1-10/#comments" class="comment-count"></a><p><span class="date">Jun 13, 2017</span><span><a href="/categories/C-笔记/" class="category">C++笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>二维数组中的查找 替换空格 从尾到头打印链表  重建二叉树 用两个栈实现队列<br>旋转数组的最小数字 斐波那契数列 跳台阶 变态跳台阶 矩形覆盖</p>
+<a id="more"></a>
+<h1 id="二维数组中的查找"><a href="#二维数组中的查找" class="headerlink" title="二维数组中的查找"></a>二维数组中的查找</h1><p><strong>分类</strong><br>数组<br><strong>题目</strong><br>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。<br><strong>思路</strong><br>设置两个参数row、col，从第一行最后一列开始，通过比较大小来删去一定不满足条件的一行或一列，保证该位置代表剩余部分的第一行最后一列。如果target比该位置的数大，则该行所有的数都比target小，删去该行；如果target比该位置的数小，则该列所有的数都比target大，删去该列。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    bool Find(int target, vector&lt;vector&lt;int&gt; &gt; array) &#123;</span>
+<span class="line">        if(!array.empty()) &#123;</span>
+<span class="line">            int row = 0;</span>
+<span class="line">            int col = array[0].size() - 1;</span>
+<span class="line">            while (row &lt; array.size() &amp;&amp; col &gt;= 0) &#123;</span>
+<span class="line">                if (array[row][col] == target)</span>
+<span class="line">                    return true;</span>
+<span class="line">                else if (array[row][col] &lt; target)</span>
+<span class="line">                    row ++;</span>
+<span class="line">                else col --;</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return false;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="替换空格"><a href="#替换空格" class="headerlink" title="替换空格"></a>替换空格</h1><p><strong>分类</strong><br>字符串<br><strong>题目</strong><br>请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。<br><strong>思路</strong><br>先记录一共有多少个空格，然后从后向前充填字符串。<br><strong>TIPS</strong><br>c语言中，char<em> 代表 字符指针类型，当其指向一个字符串的第一个元素时，它就可以代表这个字符串了<br>对于char </em>str来说，它的第i位代表的字符为<code>str[i]</code>或者<code>*(str+i)</code><br><code>char *s1 = &quot;hello&quot;;</code> //字符指针<br><code>char s2[] = &quot;hello&quot;;</code>//字符数组</p>
+<p>【区别所在】<br>char *s1 的s1是指针，而指针是指向一块内存区域。它指向的内存区域的大小可以随时改变，而且当指针指向常量字符串时，它的内容是不可以被修改的，否则在运行时会报错。<br>char s2[]的s2 是数组对应着一块内存区域，其地址和容量在生命期里不会改变，只有数组的内容可以改变。</p>
+<p><code>s1 = s2;</code>//OK<br><code>s1[0] = &#39;g&#39;;</code>//ERROR 运行时会报错，原因在于企图改变s1的内容，由于s1指向的是常量字符串，其内容是不可修改的<br><code>s2 = s1;</code>//ERROR s2其地址和容量在生命期里不能改变<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+</pre></td><td class="code"><pre><span class="line">// wa</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    void replaceSpace(char *str,int length) &#123;</span>
+<span class="line">        char tmp[1000];</span>
+<span class="line">        for (int i = 0, j = 0; i &lt; length; i++) &#123;</span>
+<span class="line">            if (str[i] == &apos; &apos;) &#123;</span>
+<span class="line">                tmp[j++] = &apos;%&apos;;</span>
+<span class="line">                tmp[j++] = &apos;2&apos;;</span>
+<span class="line">                tmp[j++] = &apos;0&apos;;</span>
+<span class="line">            &#125; </span>
+<span class="line">            else tmp[j++] = str[i];</span>
+<span class="line">        &#125;</span>
+<span class="line">        str = tmp;</span>
+<span class="line">        return ;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+</pre></td><td class="code"><pre><span class="line">//ac</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    void replaceSpace(char *str,int length) &#123;</span>
+<span class="line">        int cnt = 0;</span>
+<span class="line">        for (int i = 0; i &lt; length; i++) &#123;</span>
+<span class="line">            if (str[i] == &apos; &apos;) cnt ++;</span>
+<span class="line">        &#125;</span>
+<span class="line">        for (int i = length - 1, j = length + cnt * 2 - 1; i &gt;= 0; i --) &#123;</span>
+<span class="line">            if (str[i] == &apos; &apos;) &#123;</span>
+<span class="line">                str[j--] = &apos;0&apos;;</span>
+<span class="line">                str[j--] = &apos;2&apos;;</span>
+<span class="line">                str[j--] = &apos;%&apos;;</span>
+<span class="line">            &#125;</span>
+<span class="line">            else str[j--] = str[i];</span>
+<span class="line">        &#125;</span>
+<span class="line">        return ;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="从尾到头打印链表"><a href="#从尾到头打印链表" class="headerlink" title="从尾到头打印链表"></a>从尾到头打印链表</h1><p><strong>分类</strong><br>链表<br><strong>题目</strong><br>输入一个链表，从尾到头打印链表每个节点的值。<br><strong>思路</strong><br>链表中数据压栈再弹栈。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+</pre></td><td class="code"><pre><span class="line">/**</span>
+<span class="line">*  struct ListNode &#123;</span>
+<span class="line">*        int val;</span>
+<span class="line">*        struct ListNode *next;</span>
+<span class="line">*        ListNode(int x) :</span>
+<span class="line">*              val(x), next(NULL) &#123;</span>
+<span class="line">*        &#125;</span>
+<span class="line">*  &#125;;</span>
+<span class="line">*/</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    vector&lt;int&gt; printListFromTailToHead(ListNode* head) &#123;</span>
+<span class="line">        stack&lt;int&gt; st;</span>
+<span class="line">        vector&lt;int&gt; v;</span>
+<span class="line">        while (head) &#123;</span>
+<span class="line">            st.push(head -&gt; val);</span>
+<span class="line">            head = head -&gt; next;</span>
+<span class="line">        &#125;</span>
+<span class="line">        while (!st.empty()) &#123;</span>
+<span class="line">            v.push_back(st.top());</span>
+<span class="line">            st.pop();</span>
+<span class="line">        &#125;</span>
+<span class="line">        return v;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="重建二叉树"><a href="#重建二叉树" class="headerlink" title="重建二叉树"></a>重建二叉树</h1><p><strong>分类</strong><br>二叉树<br><strong>题目</strong><br>输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。<br><strong>思路</strong><br>比较先序和中序遍历，确定根的位置，中序中根左侧为左子树，右侧为右子树，递归的处理左右子树。<br><strong>TIPS</strong><br>前序遍历，也叫先根遍历，遍历的顺序是:<strong>根，左子树，右子树</strong><br>中序遍历，也叫中根遍历，遍历的顺序是:<strong>左子树，根，右子树</strong><br>后序遍历，也叫后根遍历，遍历的顺序是:<strong>左子树，右子树，根</strong></p>
+<p>malloc 申请完空间之后不会对内存进行必要的初始化，而 new 可以。</p>
+<p><code>int* p = (int *) malloc (sizeof(int));</code><br>malloc()函数其实就在内存中找一片指定大小的空间，然后将这个空间的首地址范围给一个指针变量，这里的指针变量可以是一个单独的指针，也可以是一个数组的首地址，这要看malloc()函数中参数size的具体内容。我们这里malloc分配的内存空间在逻辑上连续的，而在物理上可以连续也可以不连续。</p>
+<p><code>int *p = new int;</code> //返回类型为int* 类型(整数型指针)，分配大小为 sizeof(int);</p>
+<p><code>int* parr = new int [100];</code> //返回类型为 int<em>类型(整数型指针)，分配大小为 sizeof(int) </em> 100;<br><a href="http://www.cnblogs.com/hazir/p/new_and_delete.html" target="_blank" rel="external">使用new申请内存</a><br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    TreeNode* reConstructBinaryTree(vector&lt;int&gt; pre,vector&lt;int&gt; vin) &#123;</span>
+<span class="line">        if (pre.size() == 0) return NULL;</span>
+<span class="line">        if (pre.size() == 1) return new TreeNode(pre[0]);</span>
+<span class="line">        </span>
+<span class="line">        bool flag = true;</span>
+<span class="line">        vector&lt;int&gt; v1, v2, v3, v4;</span>
+<span class="line">        for (vector&lt;int&gt;::iterator it1 = pre.begin() + 1, it2 = vin.begin(); it2 != vin.end(); it1 ++, it2 ++) &#123;</span>
+<span class="line">            if (*it2 == pre[0]) &#123;</span>
+<span class="line">                flag = false;</span>
+<span class="line">                it1 --;</span>
+<span class="line">                continue;</span>
+<span class="line">            &#125;</span>
+<span class="line">            if (flag) &#123;</span>
+<span class="line">                v1.push_back(*it1);</span>
+<span class="line">                v2.push_back(*it2);</span>
+<span class="line">            &#125; else &#123;</span>
+<span class="line">                v3.push_back(*it1);</span>
+<span class="line">                v4.push_back(*it2);</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        TreeNode* root = new TreeNode(pre[0]);</span>
+<span class="line">        root -&gt; left = reConstructBinaryTree(v1, v2);</span>
+<span class="line">        root -&gt; right = reConstructBinaryTree(v3, v4);</span>
+<span class="line"> </span>
+<span class="line">        return root;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+</pre></td><td class="code"><pre><span class="line">// AC1 使用malloc()申请内存</span>
+<span class="line">/**</span>
+<span class="line"> * Definition for binary tree</span>
+<span class="line"> * struct TreeNode &#123;</span>
+<span class="line"> *     int val;</span>
+<span class="line"> *     TreeNode *left;</span>
+<span class="line"> *     TreeNode *right;</span>
+<span class="line"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span>
+<span class="line"> * &#125;;</span>
+<span class="line"> */</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    TreeNode* reConstructBinaryTree(vector&lt;int&gt; pre,vector&lt;int&gt; vin) &#123;</span>
+<span class="line">        TreeNode* root = (TreeNode*)malloc(sizeof(TreeNode));</span>
+<span class="line">        fun(root, pre, vin);</span>
+<span class="line">        return root;</span>
+<span class="line">    &#125;</span>
+<span class="line">    void fun(TreeNode* root, vector&lt;int&gt; pre, vector&lt;int&gt; vin) &#123;</span>
+<span class="line">        if (pre.size() == 0) return;</span>
+<span class="line">        root -&gt; val = pre[0];</span>
+<span class="line">        root -&gt; left = NULL;</span>
+<span class="line">        root -&gt; right = NULL;</span>
+<span class="line">        if (pre.size() == 1) return;</span>
+<span class="line">        </span>
+<span class="line">        bool flag = true;</span>
+<span class="line">        vector&lt;int&gt; v1, v2, v3, v4;</span>
+<span class="line">        for (vector&lt;int&gt;::iterator it1 = pre.begin() + 1, it2 = vin.begin(); it2 != vin.end(); it1 ++, it2 ++) &#123;</span>
+<span class="line">            if (*it2 == pre[0]) &#123;</span>
+<span class="line">                flag = false;</span>
+<span class="line">                it1 --;</span>
+<span class="line">                continue;</span>
+<span class="line">            &#125;</span>
+<span class="line">            if (flag) &#123;</span>
+<span class="line">                v1.push_back(*it1);</span>
+<span class="line">                v2.push_back(*it2);</span>
+<span class="line">            &#125; else &#123;</span>
+<span class="line">                v3.push_back(*it1);</span>
+<span class="line">                v4.push_back(*it2);</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (v1.size()) &#123;</span>
+<span class="line">            root -&gt; left = (TreeNode*)malloc(sizeof(TreeNode));</span>
+<span class="line">            fun(root -&gt; left, v1, v2);</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (v3.size()) &#123;</span>
+<span class="line">            root -&gt; right = (TreeNode*)malloc(sizeof(TreeNode));</span>
+<span class="line">            fun(root -&gt; right, v3, v4);</span>
+<span class="line">        &#125;</span>
+<span class="line">        </span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+</pre></td><td class="code"><pre><span class="line">// AC2使用new()申请内存</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    TreeNode* reConstructBinaryTree(vector&lt;int&gt; pre,vector&lt;int&gt; vin) &#123;</span>
+<span class="line">        if (pre.size() == 0) return NULL;</span>
+<span class="line">        TreeNode* root = new TreeNode(pre[0]);</span>
+<span class="line">        fun(root, pre, vin);</span>
+<span class="line">        return root;</span>
+<span class="line">    &#125;</span>
+<span class="line">    void fun(TreeNode* root, vector&lt;int&gt; pre, vector&lt;int&gt; vin) &#123;</span>
+<span class="line">        bool flag = true;</span>
+<span class="line">        vector&lt;int&gt; v1, v2, v3, v4;</span>
+<span class="line">        for (vector&lt;int&gt;::iterator it1 = pre.begin() + 1, it2 = vin.begin(); it2 != vin.end(); it1 ++, it2 ++) &#123;</span>
+<span class="line">            if (*it2 == pre[0]) &#123;</span>
+<span class="line">                flag = false;</span>
+<span class="line">                it1 --;</span>
+<span class="line">                continue;</span>
+<span class="line">            &#125;</span>
+<span class="line">            if (flag) &#123;</span>
+<span class="line">                v1.push_back(*it1);</span>
+<span class="line">                v2.push_back(*it2);</span>
+<span class="line">            &#125; else &#123;</span>
+<span class="line">                v3.push_back(*it1);</span>
+<span class="line">                v4.push_back(*it2);</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (v1.size()) &#123;</span>
+<span class="line">            root -&gt; left = new TreeNode(v1[0]);</span>
+<span class="line">            fun(root -&gt; left, v1, v2);</span>
+<span class="line">        &#125;</span>
+<span class="line">        if (v3.size()) &#123;</span>
+<span class="line">            root -&gt; right = new TreeNode(v3[0]);</span>
+<span class="line">            fun(root -&gt; right, v3, v4);</span>
+<span class="line">        &#125;</span>
+<span class="line">        </span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="用两个栈实现队列"><a href="#用两个栈实现队列" class="headerlink" title="用两个栈实现队列"></a>用两个栈实现队列</h1><p><strong>分类</strong><br>队列 栈<br><strong>题目</strong><br>用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。<br><strong>代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+</pre></td><td class="code"><pre><span class="line">// AC1</span>
+<span class="line">// 用stack1来保存所有内容</span>
+<span class="line">class Solution</span>
+<span class="line">&#123;</span>
+<span class="line">public:</span>
+<span class="line">    void push(int node) &#123;</span>
+<span class="line">        stack1.push(node);</span>
+<span class="line">    &#125;</span>
+<span class="line"></span>
+<span class="line">    int pop() &#123;</span>
+<span class="line">        while(!stack1.empty()) &#123;</span>
+<span class="line">            stack2.push(stack1.top());</span>
+<span class="line">            stack1.pop();</span>
+<span class="line">        &#125;</span>
+<span class="line">        int res = stack2.top();</span>
+<span class="line">        stack2.pop();</span>
+<span class="line">        while(!stack2.empty()) &#123;</span>
+<span class="line">            stack1.push(stack2.top());</span>
+<span class="line">            stack2.pop();</span>
+<span class="line">        &#125;</span>
+<span class="line">        return res;</span>
+<span class="line">    &#125;</span>
+<span class="line"></span>
+<span class="line">private:</span>
+<span class="line">    stack&lt;int&gt; stack1;</span>
+<span class="line">    stack&lt;int&gt; stack2;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+</pre></td><td class="code"><pre><span class="line">// AC2</span>
+<span class="line">// stack1表示入队的 stack2表示出队的 每次stack2中没有元素时将stack1压入stack2</span>
+<span class="line">class Solution</span>
+<span class="line">&#123;</span>
+<span class="line">public:</span>
+<span class="line">    void push(int node) &#123;</span>
+<span class="line">        stack1.push(node);</span>
+<span class="line">    &#125;</span>
+<span class="line"></span>
+<span class="line">    int pop() &#123;</span>
+<span class="line">        if (stack2.empty())&#123;</span>
+<span class="line">            while(!stack1.empty()) &#123;</span>
+<span class="line">                stack2.push(stack1.top());</span>
+<span class="line">                stack1.pop();</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        int res = stack2.top();</span>
+<span class="line">        stack2.pop();</span>
+<span class="line">        return res;</span>
+<span class="line">    &#125;</span>
+<span class="line"></span>
+<span class="line">private:</span>
+<span class="line">    stack&lt;int&gt; stack1;</span>
+<span class="line">    stack&lt;int&gt; stack2;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="旋转数组的最小数字"><a href="#旋转数组的最小数字" class="headerlink" title="旋转数组的最小数字"></a>旋转数组的最小数字</h1><p><strong>分类</strong><br>查找<br><strong>题目</strong><br>把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。 例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。<br><strong>思路</strong><br>因为数组是非递减排序的，数组可分为两部分，两部分都是非递减的，前一部分全都大于等于后一部分，找出相邻的两个元素a,b，a&gt;b，则b为最小元素。<br><strong>TIPS</strong><br>遍历的方法平均复杂度$T(n)=\frac n2$<br>二分查找的方法平均复杂度$T(n)=lg(n)$<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+</pre></td><td class="code"><pre><span class="line">// AC1 遍历</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int minNumberInRotateArray(vector&lt;int&gt; rotateArray) &#123;</span>
+<span class="line">        for (int i = 0; i &lt; rotateArray.size() - 1; i ++) &#123;</span>
+<span class="line">            if (rotateArray[i] &gt; rotateArray[i+1])</span>
+<span class="line">                return rotateArray[i+1];</span>
+<span class="line">        &#125;</span>
+<span class="line">        return 0;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+</pre></td><td class="code"><pre><span class="line">// AC2 二分</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int minNumberInRotateArray(vector&lt;int&gt; rotateArray) &#123;</span>
+<span class="line">        int left = 0, right = rotateArray.size() - 1, mid = (left + right) / 2;</span>
+<span class="line">        while (right - left &gt; 0) &#123;</span>
+<span class="line">            if (left == right) return rotateArray[left];</span>
+<span class="line">            if (rotateArray[mid] &gt; rotateArray[mid + 1]) return rotateArray[mid + 1];</span>
+<span class="line">            if (rotateArray[mid] &lt; rotateArray[right]) &#123;//最小值一定在前半部分</span>
+<span class="line">                right = mid,  mid = (left + right) / 2;</span>
+<span class="line">            &#125; else if (rotateArray[mid] &gt; rotateArray[left]) &#123;//最小值一定在后半部分</span>
+<span class="line">                left = mid,  mid = (left + right) / 2;</span>
+<span class="line">            &#125; else &#123;//1,1,0,1,1,1</span>
+<span class="line">                for (int i = left; i &lt; right; i++)</span>
+<span class="line">                    if (rotateArray[i] &gt; rotateArray[i + 1]) return rotateArray[mid + 1];</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return 0;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h1><p><strong>分类</strong><br>递归和循环<br><strong>题目</strong><br>大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。<br>n&lt;=39<br><strong>思路</strong><br>0,1,1,2,3,5…<br>数列要从0开始考虑。<br><strong>TIPS</strong><br>本题要使用动态规划的思想，不能使用递归，会超时。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int Fibonacci(int n) &#123;</span>
+<span class="line">        //if (n &lt;= 1) return n;</span>
+<span class="line">        //return Fibonacci(n-1) + Fibonacci(n-2);</span>
+<span class="line">        int x = 0, y = 1;</span>
+<span class="line">        while(n --) &#123;</span>
+<span class="line">            y += x;</span>
+<span class="line">            x = y - x;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return x;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="跳台阶"><a href="#跳台阶" class="headerlink" title="跳台阶"></a>跳台阶</h1><p><strong>分类</strong><br>递归和循环<br><strong>题目</strong><br>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。<br><strong>思路</strong><br>最后一下可以跳1级台阶，也可以跳2级，所以跳n级台阶总方法数=跳n-1级台阶方法数+跳n-2级台阶方法数。<br>有点类似斐波那契数列，但f(0)=1,f(1)=2.<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+</pre></td><td class="code"><pre><span class="line">// 递归</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int jumpFloor(int number) &#123;</span>
+<span class="line">        if (number == 1) return 1;</span>
+<span class="line">        if (number == 2) return 2;</span>
+<span class="line">        return jumpFloor(number-1) + jumpFloor(number-2);</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line">// 动态规划</span>
+<span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int jumpFloor(int number) &#123;</span>
+<span class="line">        int x = 1, y = 2;</span>
+<span class="line">        while(-- number) &#123;</span>
+<span class="line">            y += x;</span>
+<span class="line">            x = y - x;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return x;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="变态跳台阶"><a href="#变态跳台阶" class="headerlink" title="变态跳台阶"></a>变态跳台阶</h1><p><strong>分类</strong><br>递归和循环<br><strong>题目</strong><br>一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。<br><strong>思路</strong><br>类似上一题，跳n级台阶总方法数=跳n-1级台阶方法数+跳n-2级台阶方法数+…+跳1级台阶方法数。<br>所以有：f(0)=1,f(1)=1,f(2)=2,f(3)=4,f(4)=8,f(5)=16,…<br>所以，$f(n)=2^{n-1}$<br><strong>TIPS</strong><br>位运算<br>左移运算：<code>x &lt;&lt; y</code>。将x左移y位，将x最左边的y位丢弃，在右边补y个0。<br>右移运算：<code>x &gt;&gt; y</code>。将x右移y位，这需要区分x是有符号数还是无符号数。在x是无符号数时，只需将x的最右边的y位丢弃，在左边补上y个0。在x是有符号数时，又分为x是正数还是负数。正数时，同无符号数的处理相同；负数时，将将x的最右边的y位丢弃，在左边补上y个1。<br><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int jumpFloorII(int number) &#123;</span>
+<span class="line">        return (1&lt;&lt;(number-1));</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩形覆盖"><a href="#矩形覆盖" class="headerlink" title="矩形覆盖"></a>矩形覆盖</h1><p><strong>分类</strong><br>递归和循环<br><strong>题目</strong><br>我们可以用<code>2*1</code>的小矩形横着或者竖着去覆盖更大的矩形。请问用n个<code>2*1</code>的小矩形无重叠地覆盖一个<code>2*n</code>的大矩形，总共有多少种方法？<br><strong>思路</strong><br>划分后的大矩形只包含两种子矩形：<code>2*1</code> ，由一个小矩形竖放；<code>2*2</code>，由两个小矩形横放。与跳台阶类似，又是斐波那契数列，f(1)=1,f(2)=2,…<br>注意，本题中f(0)=0.<br><strong>代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line">class Solution &#123;</span>
+<span class="line">public:</span>
+<span class="line">    int rectCover(int number) &#123;</span>
+<span class="line">        if(number == 0) return 0;</span>
+<span class="line">        </span>
+<span class="line">        int x = 1, y = 2;</span>
+<span class="line">        while(-- number) &#123;</span>
+<span class="line">            y += x;</span>
+<span class="line">            x = y - x;</span>
+<span class="line">        &#125;</span>
+<span class="line">        return x;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;;</span>
+</pre></td></tr></table></figure>
+</div><div class="tags"><a href="/tags/字符串/">字符串</a><a href="/tags/数组/">数组</a><a href="/tags/链表/">链表</a><a href="/tags/递归和循环/">递归和循环</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/06/16/剑指offer-11-20/" class="pre">剑指offer 11~20</a><a href="/2017/06/12/NN-and-DL-2/" class="next">《神经网络和机器学习》阅读笔记2</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#二维数组中的查找"><span class="toc-text">二维数组中的查找</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#替换空格"><span class="toc-text">替换空格</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从尾到头打印链表"><span class="toc-text">从尾到头打印链表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重建二叉树"><span class="toc-text">重建二叉树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用两个栈实现队列"><span class="toc-text">用两个栈实现队列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#旋转数组的最小数字"><span class="toc-text">旋转数组的最小数字</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#斐波那契数列"><span class="toc-text">斐波那契数列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#跳台阶"><span class="toc-text">跳台阶</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变态跳台阶"><span class="toc-text">变态跳台阶</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#矩形覆盖"><span class="toc-text">矩形覆盖</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/二维数组/">【C++】二维数组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/char字符串/">【C++】char型字符串的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/One-Hot-Coding/">独热编码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/heap/">堆</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
