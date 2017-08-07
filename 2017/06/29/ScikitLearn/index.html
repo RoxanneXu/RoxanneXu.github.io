@@ -1,0 +1,742 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="换了一个主题之后Letax全都渲染不出来了，口亨！"><title>【机器学习】通过代码学习scikit-learn | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【机器学习】通过代码学习scikit-learn</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦~~~</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【机器学习】通过代码学习scikit-learn</h1><div class="post-meta"><a href="/2017/06/29/ScikitLearn/#comments" class="comment-count"></a><p><span class="date">Jun 29, 2017</span><span><a href="/categories/机器学习笔记/" class="category">机器学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>以代码的形式对scikit-learn做一个基本功能的总结</p>
+<a id="more"></a>
+<h1 id="Sklearn-简介"><a href="#Sklearn-简介" class="headerlink" title="Sklearn 简介"></a>Sklearn 简介</h1><p><a href="http://scikit-learn.org/stable/" target="_blank" rel="external">Scikit-Learn</a></p>
+<p>Scikit learn 也简称 sklearn, 是机器学习领域当中最知名的 python 模块之一.</p>
+<p>Sklearn 包含了很多种机器学习的方式:</p>
+<ul>
+<li>Classification 分类</li>
+<li>Regression 回归</li>
+<li>Clustering 非监督分类</li>
+<li>Dimensionality reduction 数据降维</li>
+<li>Model Selection 模型选择</li>
+<li>Preprocessing 数据预处理</li>
+</ul>
+<p>我们总能够从这些方法中挑选出一个适合于自己问题的, 然后解决自己的问题.</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Mac + Pycharm + Anaconda<br>Anaconda库中集成了sklean，无需单独安装，在Pycharm中新建工程的时候选择Anaconda中的Python就可以了。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-081601.jpg" alt=""></p>
+<hr>
+<h1 id="一般使用"><a href="#一般使用" class="headerlink" title="一般使用"></a>一般使用</h1><h2 id="选择学习方法"><a href="#选择学习方法" class="headerlink" title="选择学习方法"></a>选择学习方法</h2><p>Sklearn 官网提供了一个流程图，蓝色圆圈内是判断条件，绿色方框内是可以选择的算法：<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-080341.jpg" alt=""><br>从 START 开始，首先看数据的样本是否 <code>&gt;50</code>，小于则需要收集更多的数据。</p>
+<p>由图中，可以看到算法有四类，<strong>分类，回归，聚类，降维</strong>。</p>
+<p>其中 <strong>分类和回归</strong>是监督式学习，即每个数据对应一个 label。 <strong>聚类</strong> 是非监督式学习，即没有 label。 另外一类是 <strong>降维</strong>，当数据集有很多很多属性的时候，可以通过 降维 算法把属性归纳起来。例如 20 个属性只变成 2 个，注意，这不是挑出 2 个，而是压缩成为 2 个，它们集合了 20 个属性的所有特征，相当于把重要的信息提取的更好，不重要的信息就不要了。</p>
+<p>然后看问题属于哪一类问题，是分类还是回归，还是聚类，就选择相应的算法。 当然还要考虑数据的大小，例如 <code>100K</code> 是一个阈值。</p>
+<p>可以发现有些方法是既可以作为分类，也可以作为回归，例如 <code>SGD</code>。</p>
+<hr>
+<h1 id="通用学习模式"><a href="#通用学习模式" class="headerlink" title="通用学习模式"></a>通用学习模式</h1><p>Sklearn 把所有机器学习的模式整合统一起来了，学会了一个模式就可以通吃其他不同类型的学习模式。</p>
+<p>例如，分类器，</p>
+<p>Sklearn 本身就有很多数据库，可以用来练习。 以 Iris 的数据为例，这种花有四个属性，花瓣的长宽，茎的长宽，根据这些属性把花分为三类。</p>
+<p>我们要用 分类器 去把四种类型的花分开。</p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-084349.jpg" alt="Iris"></p>
+<p>今天用 KNN classifier，就是选择几个临近点，综合它们做个平均来作为预测值。</p>
+<figure class="highlight python"><figcaption><span>iris</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*-coding:utf-8-*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span>
+<span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span>
+<span class="line"></span>
+<span class="line">iris = datasets.load_iris()</span>
+<span class="line">iris_X = iris.data</span>
+<span class="line">iris_y = iris.target</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># print iris_X[:2, :]</span></span>
+<span class="line"><span class="comment"># print iris_y</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 随机选取70%为训练集，剩余为测试集</span></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(iris_X, iris_y, test_size=<span class="number">0.3</span>)</span>
+<span class="line"></span>
+<span class="line">knn = KNeighborsClassifier()</span>
+<span class="line">knn.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 预测值和真实值的比较</span></span>
+<span class="line"><span class="keyword">print</span> knn.predict(X_test)</span>
+<span class="line"><span class="keyword">print</span> y_test</span>
+</pre></td></tr></table></figure>
+<h2 id="sklearn-强大数据库"><a href="#sklearn-强大数据库" class="headerlink" title="sklearn 强大数据库"></a>sklearn 强大数据库</h2><p><a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.datasets" target="_blank" rel="external">sklearn.datasets: Datasets</a></p>
+<figure class="highlight python"><figcaption><span>datasets</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">1. 导入模块</span></span>
+<span class="line"><span class="string">导入 datasets 包，以 Linear Regression 为例。</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span>
+<span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">2. 导入数据</span></span>
+<span class="line"><span class="string">datasets.load_xxx()     加载数据集</span></span>
+<span class="line"><span class="string">datasets.make_xxx()     创建数据集</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line">loaded_data = datasets.load_boston()</span>
+<span class="line">data_X = loaded_data.data</span>
+<span class="line">data_y = loaded_data.target</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">3. 训练模型</span></span>
+<span class="line"><span class="string">可以直接用默认值去建立 model，默认值也不错，也可以自己改变参数使模型更好。 然后用 training data 去训练模型。</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line">model = LinearRegression()</span>
+<span class="line">model.fit(data_X, data_y)</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">4. 预测</span></span>
+<span class="line"><span class="string">再打印出预测值，这里用 X 的前 4 个来预测，同时打印真实值，作为对比，可以看到是有些误差的。</span></span>
+<span class="line"><span class="string">为了提高准确度，可以通过尝试不同的 model，不同的参数，不同的预处理等方法，入门的话可以直接用默认值。</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">print</span> model.predict(data_X[:<span class="number">4</span>, :])</span>
+<span class="line"><span class="keyword">print</span> data_y[:<span class="number">4</span>]</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">5. 创建虚拟数据及可视化</span></span>
+<span class="line"><span class="string">下面是创造数据的例子。</span></span>
+<span class="line"><span class="string">用函数来建立 100 个 sample，有一个 feature，和一个 target，这样比较方便可视化。</span></span>
+<span class="line"><span class="string">noise 越大的话，点就会越来越离散，例如 noise 由 10 变为 50.</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line">X1, y1 = datasets.make_regression(n_samples=<span class="number">100</span>, n_features=<span class="number">1</span>, n_targets=<span class="number">1</span>, noise=<span class="number">10</span>)</span>
+<span class="line">X2, y2 = datasets.make_regression(n_samples=<span class="number">100</span>, n_features=<span class="number">1</span>, n_targets=<span class="number">1</span>, noise=<span class="number">50</span>)</span>
+<span class="line">plt.subplot(<span class="number">121</span>)</span>
+<span class="line">plt.scatter(X1, y1)</span>
+<span class="line">plt.subplot(<span class="number">122</span>)</span>
+<span class="line">plt.scatter(X2, y2)</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-093532.jpg" alt="创建数据 noise=10(左) noise=50(右)"></p>
+<h2 id="sklearn-常用属性与功能"><a href="#sklearn-常用属性与功能" class="headerlink" title="sklearn 常用属性与功能"></a>sklearn 常用属性与功能</h2><figure class="highlight python"><figcaption><span>模型属性及功能</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span>
+<span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span>
+<span class="line"></span>
+<span class="line">loaded_data = datasets.load_boston()</span>
+<span class="line">data_X = loaded_data.data</span>
+<span class="line">data_y = loaded_data.target</span>
+<span class="line"></span>
+<span class="line">model = LinearRegression()</span>
+<span class="line">model.fit(data_X, data_y)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 预测</span></span>
+<span class="line"><span class="keyword">print</span> model.predict(data_X[:<span class="number">4</span>, :])</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">y = ax + b</span></span>
+<span class="line"><span class="string">.coef_          为关于x的参数     a</span></span>
+<span class="line"><span class="string">.intercept_     为与y轴的交点     b</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">print</span> model.coef_</span>
+<span class="line"><span class="keyword">print</span> model.intercept_</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># .get_params() 也是功能，它可以取出之前定义的参数。</span></span>
+<span class="line"><span class="keyword">print</span> model.get_params()</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">.score(data_X, data_y) </span></span>
+<span class="line"><span class="string">用data_X做预测，预测结果与data_y做对比，输出百分之多少是吻合的</span></span>
+<span class="line"><span class="string">它可以对 Model 用 R^2 的方式进行打分，输出精确度</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">print</span> model.score(data_X, data_y)</span>
+</pre></td></tr></table></figure>
+<hr>
+<h1 id="高级使用"><a href="#高级使用" class="headerlink" title="高级使用"></a>高级使用</h1><h2 id="正规化-Normalization"><a href="#正规化-Normalization" class="headerlink" title="正规化 Normalization"></a>正规化 Normalization</h2><figure class="highlight python"><figcaption><span>数据标准化</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing <span class="comment">#标准化数据模块</span></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment">#建立Array</span></span>
+<span class="line">a = np.array([[<span class="number">10</span>, <span class="number">2.7</span>, <span class="number">3.6</span>],</span>
+<span class="line">              [<span class="number">-100</span>, <span class="number">5</span>, <span class="number">-2</span>],</span>
+<span class="line">              [<span class="number">120</span>, <span class="number">20</span>, <span class="number">40</span>]], dtype=np.float64)</span>
+<span class="line"></span>
+<span class="line"><span class="comment">#将normalized后的a打印出</span></span>
+<span class="line"><span class="keyword">print</span> preprocessing.scale(a)</span>
+<span class="line"><span class="comment"># [[ 0.         -0.85170713 -0.55138018]</span></span>
+<span class="line"><span class="comment">#  [-1.22474487 -0.55187146 -0.852133  ]</span></span>
+<span class="line"><span class="comment">#  [ 1.22474487  1.40357859  1.40351318]]</span></span>
+</pre></td></tr></table></figure>
+<figure class="highlight python"><figcaption><span>数据标准化对机器学习成效的影响</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="comment"># 标准化数据模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 将资料分割成train与test的模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 生成适合做classification资料的模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets.samples_generator <span class="keyword">import</span> make_classification</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Support Vector Machine中的Support Vector Classifier</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 可视化数据的模块</span></span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 生成具有2种属性的300笔数据</span></span>
+<span class="line"><span class="comment"># 设置randon_state：随机产生数据，但每次运行程序产生一样的数据</span></span>
+<span class="line">X, y = make_classification(</span>
+<span class="line">    n_samples=<span class="number">300</span>, n_features=<span class="number">2</span>,</span>
+<span class="line">    n_redundant=<span class="number">0</span>, n_informative=<span class="number">2</span>,</span>
+<span class="line">    random_state=<span class="number">22</span>, n_clusters_per_class=<span class="number">1</span>,</span>
+<span class="line">    scale=<span class="number">100</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 可视化数据</span></span>
+<span class="line">plt.scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>], c=y)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>)</span>
+<span class="line">clf = SVC()</span>
+<span class="line">clf.fit(X_train, y_train)</span>
+<span class="line"><span class="keyword">print</span> clf.score(X_test, y_test)</span>
+<span class="line"><span class="comment"># 0.511111111111</span></span>
+<span class="line"></span>
+<span class="line">X = preprocessing.scale(X)</span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>)</span>
+<span class="line">clf = SVC()</span>
+<span class="line">clf.fit(X_train, y_train)</span>
+<span class="line"><span class="keyword">print</span> clf.score(X_test, y_test)</span>
+<span class="line"><span class="comment"># 0.944444444444</span></span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-141635.jpg" alt="数据标准化对机器学习成效的影响"></p>
+<h2 id="交叉验证-1-Cross-validation"><a href="#交叉验证-1-Cross-validation" class="headerlink" title="交叉验证 1 Cross-validation"></a>交叉验证 1 Cross-validation</h2><p>Sklearn 中的 Cross Validation (交叉验证)对于我们选择正确的 Model 和 Model 的参数是非常有帮助的， 有了他的帮助，我们能直观的看出不同 Model 或者参数对结构准确度的影响。<br><figure class="highlight python"><figcaption><span>如何正确的选择Model</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris <span class="comment"># iris数据集</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split <span class="comment"># 分割数据模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier <span class="comment"># K最近邻(kNN，k-NearestNeighbor)分类算法</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 加载iris数据集</span></span>
+<span class="line">iris = load_iris()</span>
+<span class="line">X = iris.data</span>
+<span class="line">y = iris.target</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">基础验证法</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="comment"># 分割数据集</span></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=<span class="number">4</span>)</span>
+<span class="line"><span class="comment"># 建立模型</span></span>
+<span class="line">knn = KNeighborsClassifier(n_neighbors=<span class="number">5</span>)</span>
+<span class="line"><span class="comment"># 训练模型</span></span>
+<span class="line">knn.fit(X_train, y_train)</span>
+<span class="line"><span class="comment"># 将准确率打印出</span></span>
+<span class="line">print(knn.score(X_test, y_test))</span>
+<span class="line"><span class="comment"># 0.973684210526</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">交叉验证法(Cross Validation)</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score <span class="comment"># K折交叉验证模块</span></span>
+<span class="line"><span class="comment"># 使用K折交叉验证模块</span></span>
+<span class="line">scores = cross_val_score(knn, X, y, cv=<span class="number">5</span>, scoring=<span class="string">'accuracy'</span>)</span>
+<span class="line"><span class="comment"># 将5次的预测准确率打印出</span></span>
+<span class="line">print(scores)</span>
+<span class="line"><span class="comment"># [ 0.96666667  1.          0.93333333  0.96666667  1.        ]</span></span>
+<span class="line"><span class="comment"># 将5次的预测准确平均率打印出</span></span>
+<span class="line">print(scores.mean())</span>
+<span class="line"><span class="comment"># 0.973333333333</span></span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight python"><figcaption><span>如何选择模型参数</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris <span class="comment"># iris数据集</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score <span class="comment"># K折交叉验证模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier <span class="comment"># K最近邻(kNN，k-NearestNeighbor)分类算法</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 加载iris数据集</span></span>
+<span class="line">iris = load_iris()</span>
+<span class="line">X = iris.data</span>
+<span class="line">y = iris.target</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">以准确率(accuracy)判断</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt <span class="comment">#可视化模块</span></span>
+<span class="line"><span class="comment"># 建立测试参数集</span></span>
+<span class="line">k_range = range(<span class="number">1</span>, <span class="number">31</span>)</span>
+<span class="line">k_scores = []</span>
+<span class="line"><span class="comment"># 由迭代的方式来计算不同参数对模型的影响，并返回交叉验证后的平均准确率</span></span>
+<span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> k_range:</span>
+<span class="line">    knn = KNeighborsClassifier(n_neighbors=k)</span>
+<span class="line">    scores = cross_val_score(knn, X, y, cv=<span class="number">10</span>, scoring=<span class="string">'accuracy'</span>)</span>
+<span class="line">    k_scores.append(scores.mean())</span>
+<span class="line"><span class="comment"># 可视化数据</span></span>
+<span class="line">plt.subplot(<span class="number">211</span>)</span>
+<span class="line">plt.plot(k_range, k_scores)</span>
+<span class="line">plt.xlabel(<span class="string">'Value of K for KNN'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Cross-Validated Accuracy'</span>)</span>
+<span class="line"><span class="comment"># plt.show()</span></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">以平均方差(Mean squared error)判断</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line">k_range = range(<span class="number">1</span>, <span class="number">31</span>)</span>
+<span class="line">k_scores = []</span>
+<span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> k_range:</span>
+<span class="line">    knn = KNeighborsClassifier(n_neighbors=k)</span>
+<span class="line">    loss = -cross_val_score(knn, X, y, cv=<span class="number">10</span>, scoring=<span class="string">'neg_mean_squared_error'</span>)</span>
+<span class="line">    k_scores.append(loss.mean())</span>
+<span class="line">plt.subplot(<span class="number">212</span>)</span>
+<span class="line">plt.plot(k_range, k_scores)</span>
+<span class="line">plt.xlabel(<span class="string">'Value of K for KNN'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Cross-Validated MSE'</span>)</span>
+<span class="line">plt.tight_layout()</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-144704.jpg" alt="如何选择模型参数"><br>对于不同的model，替换掉<code>cross_val_score()</code>中的<code>knn</code>就可以。</p>
+<h2 id="交叉验证-2-Cross-validation"><a href="#交叉验证-2-Cross-validation" class="headerlink" title="交叉验证 2 Cross-validation"></a>交叉验证 2 Cross-validation</h2><p><code>sklearn.model_selection</code> 中的 <code>learning curve</code> 可以很直观的看出我们的 model 学习的进度, 对比发现有没有 overfitting 的问题. 然后我们可以对我们的 model 进行调整, 克服 overfitting 的问题.<br><figure class="highlight python"><figcaption><span>Machine Learning中的overfitting</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> learning_curve <span class="comment">#学习曲线模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits <span class="comment">#digits数据集</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC <span class="comment">#Support Vector Classifier</span></span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt <span class="comment">#可视化模块</span></span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line">digits = load_digits()</span>
+<span class="line">X = digits.data</span>
+<span class="line">y = digits.target</span>
+<span class="line"></span>
+<span class="line">train_sizes, train_loss, test_loss = learning_curve(</span>
+<span class="line">    SVC(gamma=<span class="number">0.001</span>), X, y, cv=<span class="number">10</span>, scoring=<span class="string">'neg_mean_squared_error'</span>,</span>
+<span class="line">    train_sizes=[<span class="number">0.1</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>])</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 平均每一轮所得到的平均方差(共5轮，分别选取样本的10%、25%、50%、75%、100%用作训练)</span></span>
+<span class="line">train_loss_mean = -np.mean(train_loss, axis=<span class="number">1</span>)</span>
+<span class="line">test_loss_mean = -np.mean(test_loss, axis=<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line">plt.plot(train_sizes, train_loss_mean, <span class="string">'o-'</span>, color=<span class="string">"r"</span>,</span>
+<span class="line">         label=<span class="string">"Training"</span>)</span>
+<span class="line">plt.plot(train_sizes, test_loss_mean, <span class="string">'o-'</span>, color=<span class="string">"g"</span>,</span>
+<span class="line">        label=<span class="string">"Cross-validation"</span>)</span>
+<span class="line"></span>
+<span class="line">plt.xlabel(<span class="string">"Training examples"</span>)</span>
+<span class="line">plt.ylabel(<span class="string">"Loss"</span>)</span>
+<span class="line">plt.title(<span class="string">"gamma = 0.001"</span>)</span>
+<span class="line">plt.legend(loc=<span class="string">"best"</span>)</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure></p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-151443.jpg" alt="Machine Learning中的overfitting"></p>
+<h2 id="交叉验证-3-Cross-validation"><a href="#交叉验证-3-Cross-validation" class="headerlink" title="交叉验证 3 Cross-validation"></a>交叉验证 3 Cross-validation</h2><p>我们用到了<code>sklearn.model_selection</code>当中的另外一种, 叫做<code>validation_curve</code>,用这一种曲线我们就能更加直观看出改变模型中的参数的时候有没有过拟合(overfitting)的问题了. 这也是可以让我们更好的选择参数的方法.<br><figure class="highlight python"><figcaption><span>选择参数避免overfitting</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> validation_curve <span class="comment">#validation_curve模块</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_digits</span>
+<span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># digits数据集</span></span>
+<span class="line">digits = load_digits()</span>
+<span class="line">X = digits.data</span>
+<span class="line">y = digits.target</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 建立参数测试集</span></span>
+<span class="line"><span class="comment"># 在-6~-2.3之间取五个点</span></span>
+<span class="line">param_range = np.logspace(<span class="number">-6</span>, <span class="number">-2.3</span>, <span class="number">5</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 使用validation_curve快速找出参数对模型的影响</span></span>
+<span class="line"><span class="comment"># param_name    定义我们要改变SVC()中哪个参数的值</span></span>
+<span class="line"><span class="comment"># param_range   参数的范围</span></span>
+<span class="line">train_loss, test_loss = validation_curve(</span>
+<span class="line">    SVC(), X, y, param_name=<span class="string">'gamma'</span>, param_range=param_range, cv=<span class="number">10</span>, scoring=<span class="string">'neg_mean_squared_error'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 平均每一轮的平均方差</span></span>
+<span class="line">train_loss_mean = -np.mean(train_loss, axis=<span class="number">1</span>)</span>
+<span class="line">test_loss_mean = -np.mean(test_loss, axis=<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 可视化图形</span></span>
+<span class="line">plt.plot(param_range, train_loss_mean, <span class="string">'o-'</span>, color=<span class="string">"r"</span>,</span>
+<span class="line">         label=<span class="string">"Training"</span>)</span>
+<span class="line">plt.plot(param_range, test_loss_mean, <span class="string">'o-'</span>, color=<span class="string">"g"</span>,</span>
+<span class="line">        label=<span class="string">"Cross-validation"</span>)</span>
+<span class="line"></span>
+<span class="line">plt.xlabel(<span class="string">"gamma"</span>)</span>
+<span class="line">plt.ylabel(<span class="string">"Loss"</span>)</span>
+<span class="line">plt.legend(loc=<span class="string">"best"</span>)</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure></p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-06-153849.jpg" alt="选择参数避免overfitting"></p>
+<h2 id="保存模型"><a href="#保存模型" class="headerlink" title="保存模型"></a>保存模型</h2><p>主要介绍两种保存Model的模块<code>pickle</code>与<code>joblib</code>。<br><figure class="highlight python"><figcaption><span>model的保存</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span>
+<span class="line"></span>
+<span class="line">clf = svm.SVC()</span>
+<span class="line">iris = datasets.load_iris()</span>
+<span class="line">X, y = iris.data, iris.target</span>
+<span class="line">clf.fit(X,y)</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">使用pickle来保存与读取训练好的Model</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">import</span> pickle <span class="comment">#pickle模块</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 保存Model(注:Model文件夹要预先建立，否则会报错)</span></span>
+<span class="line"><span class="keyword">with</span> open(<span class="string">'../Model/clf.pickle'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span>
+<span class="line">    pickle.dump(clf, f)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 读取Model</span></span>
+<span class="line"><span class="keyword">with</span> open(<span class="string">'../Model/clf.pickle'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span>
+<span class="line">    clf2 = pickle.load(f)</span>
+<span class="line">    <span class="comment"># 测试读取后的Model</span></span>
+<span class="line">    print(clf2.predict(X[<span class="number">0</span>:<span class="number">1</span>]))</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># [0]</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">使用joblib来保存与读取训练好的Model</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib <span class="comment">#jbolib模块</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 保存Model(注:save文件夹要预先建立，否则会报错)</span></span>
+<span class="line">joblib.dump(clf, <span class="string">'../Model/clf.pkl'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 读取Model</span></span>
+<span class="line">clf3 = joblib.load(<span class="string">'../Model/clf.pkl'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 测试读取后的Model</span></span>
+<span class="line">print(clf3.predict(X[<span class="number">0</span>:<span class="number">1</span>]))</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># [0]</span></span>
+</pre></td></tr></table></figure></p>
+<p><code>joblib</code>在使用上比较容易，读取速度也相对<code>pickle</code>快。</p>
+<hr>
+<p><strong>参考资料</strong><br><a href="https://morvanzhou.github.io/tutorials/" target="_blank" rel="external">莫烦Python</a><br><a href="https://morvanzhou.github.io/tutorials/machine-learning/sklearn/" target="_blank" rel="external">机器学习：Scikit-learn</a></p>
+</div><div class="tags"><a href="/tags/sklearn/">sklearn</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/07/01/Tensorflow/" class="pre">【神经网络】通过代码学习Tensorflow1</a><a href="/2017/06/23/指针初步/" class="next">【C++】指针初步</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sklearn-简介"><span class="toc-text">Sklearn 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境"><span class="toc-text">环境</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一般使用"><span class="toc-text">一般使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#选择学习方法"><span class="toc-text">选择学习方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通用学习模式"><span class="toc-text">通用学习模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sklearn-强大数据库"><span class="toc-text">sklearn 强大数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sklearn-常用属性与功能"><span class="toc-text">sklearn 常用属性与功能</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高级使用"><span class="toc-text">高级使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#正规化-Normalization"><span class="toc-text">正规化 Normalization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证-1-Cross-validation"><span class="toc-text">交叉验证 1 Cross-validation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证-2-Cross-validation"><span class="toc-text">交叉验证 2 Cross-validation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证-3-Cross-validation"><span class="toc-text">交叉验证 3 Cross-validation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#保存模型"><span class="toc-text">保存模型</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/08/Tensorflow2/">【神经网络】通过代码学习Tensorflow2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/05/test/">机器学习1：有趣的机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Tensorflow/">【神经网络】通过代码学习Tensorflow1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/29/ScikitLearn/">【机器学习】通过代码学习scikit-learn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/tensorflow/" style="font-size: 15px;">tensorflow</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/sklearn/" style="font-size: 15px;">sklearn</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

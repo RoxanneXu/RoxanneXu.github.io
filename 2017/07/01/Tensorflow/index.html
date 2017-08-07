@@ -1,0 +1,380 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="换了一个主题之后Letax全都渲染不出来了，口亨！"><title>【神经网络】通过代码学习Tensorflow1 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【神经网络】通过代码学习Tensorflow1</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦~~~</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【神经网络】通过代码学习Tensorflow1</h1><div class="post-meta"><a href="/2017/07/01/Tensorflow/#comments" class="comment-count"></a><p><span class="date">Jul 01, 2017</span><span><a href="/categories/机器学习笔记/" class="category">机器学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>通过代码初步认识 Tensorflow<br><a id="more"></a></p>
+<h1 id="Tensorflow-简介"><a href="#Tensorflow-简介" class="headerlink" title="Tensorflow 简介"></a>Tensorflow 简介</h1><p><a href="https://www.tensorflow.org" target="_blank" rel="external">Tensorflow官网</a><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-120353.jpg" alt=""></p>
+<h2 id="什么是TensorFlow"><a href="#什么是TensorFlow" class="headerlink" title="什么是TensorFlow?"></a>什么是TensorFlow?</h2><p>TensorFlow是Google开发的一款神经网络的Python外部的结构包, 也是一个采用数据流图来进行数值计算的开源软件库.TensorFlow 让我们可以先绘制计算结构图, 也可以称是一系列可人机交互的计算操作, 然后把编辑好的Python文件 转换成 更高效的C++, 并在后端进行计算.</p>
+<h2 id="为什么要使用TensorFlow"><a href="#为什么要使用TensorFlow" class="headerlink" title="为什么要使用TensorFlow?"></a>为什么要使用TensorFlow?</h2><p>TensorFlow 无可厚非地能被认定为 神经网络中最好用的库之一. 它擅长的任务就是训练深度神经网络.通过使用TensorFlow我们就可以快速的入门神经网络, 大大降低了深度学习（也就是深度神经网络）的开发成本和开发难度. TensorFlow 的开源性, 让所有人都能使用并且维护, 巩固它. 使它能迅速更新, 提升.</p>
+<p>分布式机器学习系统 Tensorflow既是一个实现机器学习算法的接口，同时也是执行机器学习算法的框架。</p>
+<p>前端支持Python,C++,Go,Java等多种开发语言 后端由C++,CUDA等写成</p>
+<p>Tensorflow除了可以执行深度学习算法，还可以用来实现很多其他算法：线性回归，随机森林，支持向量机等。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><strong>环境：</strong><br>Mac + Pycharm + Anaconda + Python2.7</p>
+<p>我的电脑Anaconda直接装装不上，只能使用终端安装，一共三句话：<br><figure class="highlight cmd"><figcaption><span>我要为Anaconda中的Python安装，所以加了这么一句。如果为系统默认的Python安装则不需要这句。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span>
+</pre></td></tr></table></figure></p>
+<p><strong>敲黑板</strong> 关于Python版本的选择、切换详情可以戳这里<a href="http://xxxsss.me/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/" target="_blank" rel="external">系统中多版本Python的切换与Python第三方库的安装</a><br><figure class="highlight cmd"><figcaption><span>先选择你要安装的版本</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line"># Mac OS X, CPU only, Python <span class="number">2</span>.<span class="number">7</span>:</span>
+<span class="line"># $ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-<span class="number">0</span>.<span class="number">12</span>.<span class="number">0</span>rc0-py2-none-any.whl</span>
+<span class="line">$ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-<span class="number">1</span>.<span class="number">2</span>.<span class="number">1</span>-py2-none-any.whl</span>
+<span class="line"></span>
+<span class="line"># Mac OS X, GPU enabled, Python <span class="number">2</span>.<span class="number">7</span>:</span>
+<span class="line">$ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/gpu/tensorflow_gpu-<span class="number">0</span>.<span class="number">12</span>.<span class="number">0</span>rc0-py2-none-any.whl</span>
+<span class="line"></span>
+<span class="line"># Mac OS X, CPU only, Python <span class="number">3</span>.<span class="number">4</span> or <span class="number">3</span>.<span class="number">5</span>:</span>
+<span class="line">$ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-<span class="number">0</span>.<span class="number">12</span>.<span class="number">0</span>rc0-py3-none-any.whl</span>
+<span class="line"></span>
+<span class="line"># Mac OS X, GPU enabled, Python <span class="number">3</span>.<span class="number">4</span> or <span class="number">3</span>.<span class="number">5</span>:</span>
+<span class="line">$ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/gpu/tensorflow_gpu-<span class="number">0</span>.<span class="number">12</span>.<span class="number">0</span>rc0-py3-none-any.whl</span>
+</pre></td></tr></table></figure></p>
+<figure class="highlight cmd"><figcaption><span>最后, 根据自己的 python 版本, 在 terminal 中执行以下语句:</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line"># 如果你是 Python <span class="number">2</span>, 请复制下面</span>
+<span class="line">$ sudo pip install --upgrade $TF_BINARY_URL</span>
+<span class="line"></span>
+<span class="line"># 如果你是 Python <span class="number">3</span>, 请复制下面</span>
+<span class="line">$ sudo pip3 install --upgrade $TF_BINARY_URL</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-115329.jpg" alt=""><br>上面列出的版本比较低，我就修改了CPU版本Python2.7的tensorflow版本。其他版本你依然可以按照上是方法下载，然后更新一下就好了<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">$ sudo pip install --upgrade tensorflow</span>
+</pre></td></tr></table></figure></p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-115338.jpg" alt=""><br>或者直接去官网上查找一下现在版本的url<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-132544.jpg" alt=""><br>修改一下export那条语句，就可以直接安装最新版本了。</p>
+<p>最后，可以检查一下你安装的版本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line">print(tf.__version__)</span>
+</pre></td></tr></table></figure></p>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-120717.jpg" alt=""><br>虽然简单但还是鼓捣了好久，这个要重启一下Pycharm才能运行。<br><strong>总之 如果Anaconda自己不能直接安装我的内心就已经开始崩溃了◡ ヽ(`Д´)ﾉ ┻━┻</strong></p>
+<hr>
+<h1 id="Tensorflow-基础构架"><a href="#Tensorflow-基础构架" class="headerlink" title="Tensorflow 基础构架"></a>Tensorflow 基础构架</h1><h2 id="处理结构"><a href="#处理结构" class="headerlink" title="处理结构"></a>处理结构</h2><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-102412.jpg" alt=""><br><a href="https://www.tensorflow.org/images/tensors_flowing.gif" target="_blank" rel="external"></a><br>因为TensorFlow是采用数据流图（data　flow　graphs）来计算, 所以首先我们得创建一个数据流流图, 然后再将我们的数据（数据以张量(tensor)的形式存在）放在数据流图中计算. 节点（Nodes）在图中表示数学操作,图中的线（edges）则表示在节点间相互联系的多维数据数组, 即张量（tensor). 训练模型时tensor会不断的从数据流图中的一个节点flow到另一节点, 这就是TensorFlow名字的由来.</p>
+<p>Tensorflow 是非常重视结构的, 我们得建立好了神经网络的结构, 才能将数字放进去, 运行这个结构.</p>
+<p>下面这个例子简单的阐述了 tensorflow 当中如何用代码来运行我们搭建的结构.<br><figure class="highlight python"><figcaption><span>tensorflow 当中如何用代码来运行我们搭建的结构</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># create data</span></span>
+<span class="line">x_data = np.random.rand(<span class="number">100</span>).astype(np.float32)</span>
+<span class="line">y_data = x_data*<span class="number">0.1</span> + <span class="number">0.3</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">### create tensorflow structure start ###</span></span>
+<span class="line">Weights = tf.Variable(tf.random_uniform([<span class="number">1</span>], <span class="number">-1.0</span>, <span class="number">1.0</span>))</span>
+<span class="line">biases = tf.Variable(tf.zeros([<span class="number">1</span>]))</span>
+<span class="line"></span>
+<span class="line">y = Weights*x_data + biases</span>
+<span class="line"></span>
+<span class="line">loss = tf.reduce_mean(tf.square(y-y_data))</span>
+<span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)  <span class="comment"># 优化器 设置一个&lt;1的学习效率</span></span>
+<span class="line">train = optimizer.minimize(loss)</span>
+<span class="line"></span>
+<span class="line">init = tf.global_variables_initializer()</span>
+<span class="line"><span class="comment">### create tensorflow structure end ###</span></span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()     <span class="comment"># Session() 会话控制</span></span>
+<span class="line">sess.run(init)          <span class="comment"># 激活init</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">201</span>):</span>
+<span class="line">    sess.run(train)     <span class="comment"># 激活train</span></span>
+<span class="line">    <span class="keyword">if</span> step % <span class="number">20</span> == <span class="number">0</span>:</span>
+<span class="line">        print(step, sess.run(Weights), sess.run(biases))</span>
+</pre></td></tr></table></figure></p>
+<p>由于 <code>tf</code> 需要先在底层搭建一个运算更快的结构，这个结构不是由Python搭建成的，所以整体结构显得比较复杂。</p>
+<p><strong>张量（tensor):</strong><br>张量有多种. </p>
+<ul>
+<li>零阶张量为 纯量或标量 (scalar) 也就是一个数值. 比如 `[1]``</li>
+<li>一阶张量为 向量 (vector), 比如 一维的 <code>[1, 2, 3]</code></li>
+<li>二阶张量为 矩阵 (matrix), 比如 二维的 <code>[[1, 2, 3],[4, 5, 6],[7, 8, 9]]</code></li>
+<li>以此类推, 还有 三阶 三维的 …</li>
+</ul>
+<h2 id="Session-会话控制"><a href="#Session-会话控制" class="headerlink" title="Session 会话控制"></a>Session 会话控制</h2><p><code>Session</code> 是 Tensorflow 为了控制,和输出文件的执行的语句. 运行 <code>session.run()</code> 可以获得你要得知的运算结果, 或者是你所要运算的部分.<br><figure class="highlight python"><figcaption><span>两种 Session 打开模式</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"></span>
+<span class="line">matrix1 = tf.constant([[<span class="number">3</span>, <span class="number">3</span>]])</span>
+<span class="line">matrix2 = tf.constant([[<span class="number">2</span>],</span>
+<span class="line">                       [<span class="number">2</span>]])</span>
+<span class="line">product = tf.matmul(matrix1, matrix2)</span>
+<span class="line"><span class="keyword">print</span> product           <span class="comment"># wrong! no result</span></span>
+<span class="line"><span class="comment"># Tensor("MatMul:0", shape=(1, 1), dtype=int32)</span></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">因为 product 不是直接计算的步骤, 所以我们会要使用 Session 来激活 product 并的到计算结果. </span></span>
+<span class="line"><span class="string">有两种形式使用会话控制 Session 。</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="comment"># method1 use session</span></span>
+<span class="line">sess = tf.Session()</span>
+<span class="line">result = sess.run(product)</span>
+<span class="line"><span class="keyword">print</span> result</span>
+<span class="line">sess.close()</span>
+<span class="line"><span class="comment"># [[12]]</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># method2 use session</span></span>
+<span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span>
+<span class="line">    result2 = sess.run(product)</span>
+<span class="line">    <span class="keyword">print</span> result2</span>
+<span class="line"><span class="comment"># [[12]]</span></span>
+</pre></td></tr></table></figure></p>
+<h2 id="Variable-变量"><a href="#Variable-变量" class="headerlink" title="Variable 变量"></a>Variable 变量</h2><figure class="highlight python"><figcaption><span>Tensorflow 中 Variable 的使用方法</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"></span>
+<span class="line">state = tf.Variable(<span class="number">0</span>, name=<span class="string">'counter'</span>)</span>
+<span class="line">one = tf.constant(<span class="number">1</span>)                    <span class="comment"># 定义常量 one</span></span>
+<span class="line">new_state = tf.add(state, one)          <span class="comment"># 定义加法步骤 (注: 此步并没有直接计算)</span></span>
+<span class="line">update = tf.assign(state, new_state)    <span class="comment"># 将 State 更新成 new_value</span></span>
+<span class="line"></span>
+<span class="line">init = tf.global_variables_initializer()<span class="comment"># 如果定义 Variable, 就一定要有这条语句</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span>
+<span class="line">    sess.run(init)</span>
+<span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">10</span>):</span>
+<span class="line">        sess.run(update)</span>
+<span class="line">        <span class="keyword">print</span> sess.run(state)           <span class="comment"># 注意：直接 print(state) 不起作用！！</span></span>
+<span class="line">                                        <span class="comment"># 一定要把 sess 的指针指向 state 再进行 print 才能得到想要的结果！</span></span>
+</pre></td></tr></table></figure>
+<h2 id="Placeholder-传入值"><a href="#Placeholder-传入值" class="headerlink" title="Placeholder 传入值"></a>Placeholder 传入值</h2><p><code>placeholder</code> 是 Tensorflow 中的占位符，暂时储存变量.</p>
+<p>Tensorflow 如果想要从外部传入data, 那就需要用到 <code>tf.placeholder()</code>, 然后以这种形式传输数据 <code>sess.run(***, feed_dict={input: **})</code>.</p>
+<figure class="highlight python"><figcaption><span>Tensorflow 中的 placeholder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 在 Tensorflow 中需要定义 placeholder 的 type ，一般为 float32 形式</span></span>
+<span class="line">x1 = tf.placeholder(dtype=tf.float32, shape=<span class="keyword">None</span>)</span>
+<span class="line">y1 = tf.placeholder(dtype=tf.float32, shape=<span class="keyword">None</span>)</span>
+<span class="line">z1 = tf.add(x1, y1)</span>
+<span class="line"><span class="comment"># z1 = x1 + y1</span></span>
+<span class="line"></span>
+<span class="line">x2 = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">1</span>])</span>
+<span class="line">y2 = tf.placeholder(dtype=tf.float32, shape=[<span class="number">1</span>, <span class="number">2</span>])</span>
+<span class="line">z2 = tf.matmul(x2, y2)</span>
+<span class="line"><span class="comment"># z2 = x2 * y2</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span>
+<span class="line">    <span class="comment"># when only one operation to run</span></span>
+<span class="line">    z1_value = sess.run(z1, feed_dict=&#123;x1: [<span class="number">1.</span>], y1: [<span class="number">2.</span>]&#125;)</span>
+<span class="line"></span>
+<span class="line">    <span class="comment"># when run multiple operations</span></span>
+<span class="line">    z1_value, z2_value = sess.run(</span>
+<span class="line">        [z1, z2],       <span class="comment"># run them together</span></span>
+<span class="line">        feed_dict=&#123;</span>
+<span class="line">            x1: <span class="number">1</span>, y1: <span class="number">2</span>,</span>
+<span class="line">            x2: [[<span class="number">2</span>], [<span class="number">2</span>]], y2: [[<span class="number">3</span>, <span class="number">3</span>]]</span>
+<span class="line">        &#125;)</span>
+<span class="line">    print(z1_value)</span>
+<span class="line">    print(z2_value)</span>
+<span class="line"><span class="comment"># 3.0</span></span>
+<span class="line"><span class="comment"># [[ 6.  6.]</span></span>
+<span class="line"><span class="comment">#  [ 6.  6.]]</span></span>
+</pre></td></tr></table></figure>
+<h2 id="激励函数-Activation-Function"><a href="#激励函数-Activation-Function" class="headerlink" title="激励函数 Activation Function"></a>激励函数 Activation Function</h2><p>激励函数运行时激活神经网络中某一部分神经元，将激活信息向后传入下一层的神经系统。激励函数的实质是非线性方程。 Tensorflow 的神经网络 里面处理较为复杂的问题时都会需要运用激励函数 <code>activation function</code> 。 </p>
+<p>常用的激励函数</p>
+<ul>
+<li><code>tf.nn.relu</code></li>
+<li><code>tf.nn.relu6</code></li>
+<li><code>tf.nn.crelu</code></li>
+<li><code>tf.nn.elu</code></li>
+<li><code>tf.nn.softplus</code></li>
+<li><code>tf.nn.softsign</code></li>
+<li><code>tf.nn.dropout</code></li>
+<li><code>tf.nn.bias_add</code></li>
+<li><code>tf.sigmoid</code></li>
+<li><code>tf.tanh</code><br><a href="https://www.tensorflow.org/api_guides/python/nn" target="_blank" rel="external">Tensorflow 官方文档</a><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-160651.jpg" alt=""><br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-161202.jpg" alt=""></li>
+</ul>
+<figure class="highlight python"><figcaption><span>Tensorflow 中的 activation function</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 创建数据集</span></span>
+<span class="line">x = np.linspace(<span class="number">-5</span>, <span class="number">5</span>, <span class="number">200</span>)     <span class="comment"># x data, shape=(100, 1)</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 几种常用的激励函数</span></span>
+<span class="line">y_relu = tf.nn.relu(x)</span>
+<span class="line">y_sigmoid = tf.nn.sigmoid(x)</span>
+<span class="line">y_tanh = tf.nn.tanh(x)</span>
+<span class="line">y_softplus = tf.nn.softplus(x)</span>
+<span class="line"><span class="comment"># y_softmax = tf.nn.softmax(x)  softmax is a special kind of activation function, it is about probability</span></span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()</span>
+<span class="line">y_relu, y_sigmoid, y_tanh, y_softplus = sess.run([y_relu, y_sigmoid, y_tanh, y_softplus])</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 可视化</span></span>
+<span class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</span>
+<span class="line">plt.subplot(<span class="number">221</span>)</span>
+<span class="line">plt.plot(x, y_relu, c=<span class="string">'red'</span>, label=<span class="string">'relu'</span>)</span>
+<span class="line">plt.ylim((<span class="number">-1</span>, <span class="number">5</span>))</span>
+<span class="line">plt.legend(loc=<span class="string">'best'</span>)</span>
+<span class="line"></span>
+<span class="line">plt.subplot(<span class="number">222</span>)</span>
+<span class="line">plt.plot(x, y_sigmoid, c=<span class="string">'red'</span>, label=<span class="string">'sigmoid'</span>)</span>
+<span class="line">plt.ylim((<span class="number">-0.2</span>, <span class="number">1.2</span>))</span>
+<span class="line">plt.legend(loc=<span class="string">'best'</span>)</span>
+<span class="line"></span>
+<span class="line">plt.subplot(<span class="number">223</span>)</span>
+<span class="line">plt.plot(x, y_tanh, c=<span class="string">'red'</span>, label=<span class="string">'tanh'</span>)</span>
+<span class="line">plt.ylim((<span class="number">-1.2</span>, <span class="number">1.2</span>))</span>
+<span class="line">plt.legend(loc=<span class="string">'best'</span>)</span>
+<span class="line"></span>
+<span class="line">plt.subplot(<span class="number">224</span>)</span>
+<span class="line">plt.plot(x, y_softplus, c=<span class="string">'red'</span>, label=<span class="string">'softplus'</span>)</span>
+<span class="line">plt.ylim((<span class="number">-0.2</span>, <span class="number">6</span>))</span>
+<span class="line">plt.legend(loc=<span class="string">'best'</span>)</span>
+<span class="line"></span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-07-161333.jpg" alt=""></p>
+<hr>
+<p><strong>参考资料</strong><br><a href="https://morvanzhou.github.io/tutorials/" target="_blank" rel="external">莫烦Python</a><br><a href="https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/" target="_blank" rel="external">神经网络：Tensorflow</a></p>
+</div><div class="tags"><a href="/tags/神经网络/">神经网络</a><a href="/tags/tensorflow/">tensorflow</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/07/19/stringstream/" class="pre">【C++】stringstream的使用方法</a><a href="/2017/06/29/ScikitLearn/" class="next">【机器学习】通过代码学习scikit-learn</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tensorflow-简介"><span class="toc-text">Tensorflow 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是TensorFlow"><span class="toc-text">什么是TensorFlow?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要使用TensorFlow"><span class="toc-text">为什么要使用TensorFlow?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tensorflow-基础构架"><span class="toc-text">Tensorflow 基础构架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#处理结构"><span class="toc-text">处理结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Session-会话控制"><span class="toc-text">Session 会话控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Variable-变量"><span class="toc-text">Variable 变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Placeholder-传入值"><span class="toc-text">Placeholder 传入值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#激励函数-Activation-Function"><span class="toc-text">激励函数 Activation Function</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/08/Tensorflow2/">【神经网络】通过代码学习Tensorflow2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/05/test/">机器学习1：有趣的机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Tensorflow/">【神经网络】通过代码学习Tensorflow1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/29/ScikitLearn/">【机器学习】通过代码学习scikit-learn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/指针初步/">【C++】指针初步</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/tensorflow/" style="font-size: 15px;">tensorflow</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/sklearn/" style="font-size: 15px;">sklearn</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
