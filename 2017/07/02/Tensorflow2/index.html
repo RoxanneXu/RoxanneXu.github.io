@@ -1,0 +1,510 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="换了一个主题之后Letax全都渲染不出来了，口亨！"><title>【神经网络】通过代码学习Tensorflow2 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【神经网络】通过代码学习Tensorflow2</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦~~~</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【神经网络】通过代码学习Tensorflow2</h1><div class="post-meta"><a href="/2017/07/02/Tensorflow2/#comments" class="comment-count"></a><p><span class="date">Jul 02, 2017</span><span><a href="/categories/机器学习笔记/" class="category">机器学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>使用 Tensorflow 搭建简单的神经网络<br><a id="more"></a></p>
+<h1 id="建造我们第一个神经网络"><a href="#建造我们第一个神经网络" class="headerlink" title="建造我们第一个神经网络"></a>建造我们第一个神经网络</h1><h2 id="添加层-def-add-layer"><a href="#添加层-def-add-layer" class="headerlink" title="添加层 def add_layer()"></a>添加层 def add_layer()</h2><p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-08-030418.jpg" alt=""><br>在 Tensorflow 里定义一个添加层的函数可以很容易的添加神经层,为之后的添加省下不少时间.</p>
+<p>神经层里常见的参数通常有<code>weights</code>、<code>biases</code>和激励函数。</p>
+<figure class="highlight python"><figcaption><span>添加层</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_layer</span><span class="params">(inputs, in_size, out_size, activation_function=None)</span>:</span></span>
+<span class="line">    <span class="comment"># 在生成初始参数时，随机变量(normal distribution)会比全部为0要好很多，</span></span>
+<span class="line">    <span class="comment"># 所以我们这里的weights为一个in_size行, out_size列的随机变量矩阵。</span></span>
+<span class="line">    Weights = tf.Variable(tf.random_normal([in_size, out_size]))</span>
+<span class="line">    <span class="comment"># 在机器学习中，biases的推荐值不为0，所以我们这里是在0向量的基础上又加了0.1。</span></span>
+<span class="line">    biases = tf.Variable(tf.zeros([<span class="number">1</span>, out_size]) + <span class="number">0.1</span>)</span>
+<span class="line">    <span class="comment"># 神经网络未激活的值。</span></span>
+<span class="line">    Wx_plus_b = tf.matmul(inputs, Weights) + biases</span>
+<span class="line"></span>
+<span class="line">    <span class="comment"># 当activation_function——激励函数为None时，输出就是当前的预测值</span></span>
+<span class="line">    <span class="keyword">if</span> activation_function <span class="keyword">is</span> <span class="keyword">None</span>:</span>
+<span class="line">        outputs = Wx_plus_b</span>
+<span class="line">    <span class="comment"># 不为None时，就把Wx_plus_b传到activation_function()函数中得到输出。</span></span>
+<span class="line">    <span class="keyword">else</span>:</span>
+<span class="line">        outputs = activation_function(Wx_plus_b)</span>
+<span class="line">    <span class="keyword">return</span> outputs</span>
+</pre></td></tr></table></figure>
+<h2 id="建造神经网络"><a href="#建造神经网络" class="headerlink" title="建造神经网络"></a>建造神经网络</h2><figure class="highlight python"><figcaption><span>使用 Tensorflow 构建神经网络</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+<span class="line">52</span>
+<span class="line">53</span>
+<span class="line">54</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 构造添加一个神经层的函数。</span></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_layer</span><span class="params">(inputs, in_size, out_size, activation_function=None)</span>:</span></span>
+<span class="line">    Weights = tf.Variable(tf.random_normal([in_size, out_size]))</span>
+<span class="line">    biases = tf.Variable(tf.zeros([<span class="number">1</span>, out_size]) + <span class="number">0.1</span>)</span>
+<span class="line">    Wx_plus_b = tf.matmul(inputs, Weights) + biases</span>
+<span class="line"></span>
+<span class="line">    <span class="keyword">if</span> activation_function <span class="keyword">is</span> <span class="keyword">None</span>:</span>
+<span class="line">        outputs = Wx_plus_b</span>
+<span class="line">    <span class="keyword">else</span>:</span>
+<span class="line">        outputs = activation_function(Wx_plus_b)</span>
+<span class="line">    <span class="keyword">return</span> outputs</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 构建所需的数据</span></span>
+<span class="line">x_data = np.linspace(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">300</span>, dtype=np.float32)[:, np.newaxis]</span>
+<span class="line">noise = np.random.normal(<span class="number">0</span>, <span class="number">0.05</span>, x_data.shape).astype(np.float32)</span>
+<span class="line">y_data = np.square(x_data) - <span class="number">0.5</span> + noise</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 利用占位符定义我们所需的神经网络的输入。</span></span>
+<span class="line">xs = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">1</span>])      <span class="comment"># tf.placeholder()就是代表占位符</span></span>
+<span class="line">ys = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">1</span>])      <span class="comment"># 这里的None代表无论输入有多少都可以，因为输入只有一个特征，所以这里是1。</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 定义隐藏层、输出层</span></span>
+<span class="line">l1 = add_layer(xs, <span class="number">1</span>, <span class="number">10</span>, activation_function=tf.nn.relu)</span>
+<span class="line">prediction = add_layer(l1, <span class="number">10</span>, <span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 计算预测值prediction和真实值的误差，对二者差的平方求和再取平均。</span></span>
+<span class="line">loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), reduction_indices=[<span class="number">1</span>]))</span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">让机器学习提升它的准确率。</span></span>
+<span class="line"><span class="string">tf.train.GradientDescentOptimizer()中的值为学习率</span></span>
+<span class="line"><span class="string">通常都小于1，这里取的是0.1，代表以0.1的效率来最小化误差loss。</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span>
+<span class="line"></span>
+<span class="line">init = tf.global_variables_initializer()        <span class="comment"># 使用变量时，都要对它进行初始化，这是必不可少的。</span></span>
+<span class="line"></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">定义Session，并用 Session 来执行 init 初始化步骤。 （</span></span>
+<span class="line"><span class="string">注意：在tensorflow中，只有session.run()才会执行我们定义的运算。）</span></span>
+<span class="line"><span class="string">我们让机器学习1000次。</span></span>
+<span class="line"><span class="string">机器学习的内容是train_step, 用 Session 来 run 每一次 training 的数据，逐步提升神经网络的预测准确性。 </span></span>
+<span class="line"><span class="string">(注意：当运算要用到placeholder时，就需要feed_dict这个字典来指定输入。)</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span>
+<span class="line">    sess.run(init)</span>
+<span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1000</span>):</span>
+<span class="line">        sess.run(train_step, feed_dict=&#123;xs:x_data, ys:y_data&#125;)</span>
+<span class="line">        <span class="keyword">if</span> x % <span class="number">50</span> == <span class="number">0</span>:</span>
+<span class="line">            <span class="keyword">print</span> sess.run(loss, feed_dict=&#123;xs:x_data, ys:y_data&#125;)</span>
+</pre></td></tr></table></figure>
+<figure class="highlight python"><figcaption><span>输出结果</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+</pre></td><td class="code"><pre><span class="line"><span class="number">0.508058</span></span>
+<span class="line"><span class="number">0.0185469</span></span>
+<span class="line"><span class="number">0.0111847</span></span>
+<span class="line"><span class="number">0.00851666</span></span>
+<span class="line"><span class="number">0.00785816</span></span>
+<span class="line"><span class="number">0.00762037</span></span>
+<span class="line"><span class="number">0.00739961</span></span>
+<span class="line"><span class="number">0.00708925</span></span>
+<span class="line"><span class="number">0.00666079</span></span>
+<span class="line"><span class="number">0.00622531</span></span>
+<span class="line"><span class="number">0.00582258</span></span>
+<span class="line"><span class="number">0.00540193</span></span>
+<span class="line"><span class="number">0.00506343</span></span>
+<span class="line"><span class="number">0.00478817</span></span>
+<span class="line"><span class="number">0.00455215</span></span>
+<span class="line"><span class="number">0.00435679</span></span>
+<span class="line"><span class="number">0.00418906</span></span>
+<span class="line"><span class="number">0.00404026</span></span>
+<span class="line"><span class="number">0.00391801</span></span>
+<span class="line"><span class="number">0.00382442</span></span>
+<span class="line"><span class="comment"># 从输出结果可以看出，误差在逐渐减小，这说明机器学习是有积极的效果的。</span></span>
+</pre></td></tr></table></figure>
+<h2 id="结果可视化"><a href="#结果可视化" class="headerlink" title="结果可视化"></a>结果可视化</h2><p>通过图像<strong>动态</strong>的看分类问题是如何解决的。<br><figure class="highlight python"><figcaption><span>使用 Tensorflow 构建简单的神经网络（分类）</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line">tf.set_random_seed(<span class="number">1</span>)</span>
+<span class="line">np.random.seed(<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># fake data</span></span>
+<span class="line">n_data = np.ones((<span class="number">100</span>, <span class="number">2</span>))</span>
+<span class="line">x0 = np.random.normal(<span class="number">2</span>*n_data, <span class="number">1</span>)      <span class="comment"># class0 x shape=(100, 2)</span></span>
+<span class="line">y0 = np.zeros(<span class="number">100</span>)                      <span class="comment"># class0 y shape=(100, 1)</span></span>
+<span class="line">x1 = np.random.normal(<span class="number">-2</span>*n_data, <span class="number">1</span>)     <span class="comment"># class1 x shape=(100, 2)</span></span>
+<span class="line">y1 = np.ones(<span class="number">100</span>)                       <span class="comment"># class1 y shape=(100, 1)</span></span>
+<span class="line">x = np.vstack((x0, x1))  <span class="comment"># shape (200, 2) + some noise</span></span>
+<span class="line">y = np.hstack((y0, y1))  <span class="comment"># shape (200, )</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># plot data</span></span>
+<span class="line">plt.scatter(x[:, <span class="number">0</span>], x[:, <span class="number">1</span>], c=y, s=<span class="number">100</span>, lw=<span class="number">0</span>, cmap=<span class="string">'RdYlGn'</span>)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line">tf_x = tf.placeholder(tf.float32, x.shape)     <span class="comment"># input x</span></span>
+<span class="line">tf_y = tf.placeholder(tf.int32, y.shape)     <span class="comment"># input y</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># neural network layers</span></span>
+<span class="line">l1 = tf.layers.dense(tf_x, <span class="number">10</span>, tf.nn.relu)          <span class="comment"># hidden layer</span></span>
+<span class="line">output = tf.layers.dense(l1, <span class="number">2</span>)                     <span class="comment"># output layer</span></span>
+<span class="line"></span>
+<span class="line">loss = tf.losses.sparse_softmax_cross_entropy(labels=tf_y, logits=output)           <span class="comment"># compute cost</span></span>
+<span class="line">accuracy = tf.metrics.accuracy(          <span class="comment"># return (acc, update_op), and create 2 local variables</span></span>
+<span class="line">    labels=tf.squeeze(tf_y), predictions=tf.argmax(output, axis=<span class="number">1</span>),)[<span class="number">1</span>]</span>
+<span class="line">optimizer = tf.train.GradientDescentOptimizer(learning_rate=<span class="number">0.05</span>)</span>
+<span class="line">train_op = optimizer.minimize(loss)</span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()                                                                 <span class="comment"># control training and others</span></span>
+<span class="line">init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())</span>
+<span class="line">sess.run(init_op)     <span class="comment"># initialize var in graph</span></span>
+<span class="line"></span>
+<span class="line">plt.ion()   <span class="comment"># 交互绘图功能</span></span>
+<span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">100</span>):</span>
+<span class="line">    <span class="comment"># train and net output</span></span>
+<span class="line">    _, acc, pred = sess.run([train_op, accuracy, output], &#123;tf_x: x, tf_y: y&#125;)</span>
+<span class="line">    <span class="keyword">if</span> step % <span class="number">2</span> == <span class="number">0</span>:</span>
+<span class="line">        <span class="comment"># plot and show learning process</span></span>
+<span class="line">        plt.cla()   <span class="comment"># clear axis</span></span>
+<span class="line">        plt.scatter(x[:, <span class="number">0</span>], x[:, <span class="number">1</span>], c=pred.argmax(<span class="number">1</span>), s=<span class="number">100</span>, lw=<span class="number">0</span>, cmap=<span class="string">'RdYlGn'</span>)</span>
+<span class="line">        plt.text(<span class="number">1.5</span>, <span class="number">-4</span>, <span class="string">'Accuracy=%.2f'</span> % acc, fontdict=&#123;<span class="string">'size'</span>: <span class="number">20</span>, <span class="string">'color'</span>: <span class="string">'red'</span>&#125;)</span>
+<span class="line">        plt.pause(<span class="number">0.1</span>)</span>
+<span class="line"></span>
+<span class="line">plt.ioff()</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure></p>
+<h2 id="优化器-optimizer"><a href="#优化器-optimizer" class="headerlink" title="优化器 optimizer"></a>优化器 optimizer</h2><p>Tensorflow 为我们提供了七种优化器<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-08-064142.jpg" alt=""><br>其中最常用的是 <code>tf.train.MomentumOptimizer</code> 和 <code>tf.train.AdamOptimizer</code>。AlphaGo使用的是 <code>tf.train.RMSProOptimizer</code>。<br><a href="http://cs231n.github.io/neural-networks-3/" target="_blank" rel="external">各种 Optimizer 的对比</a></p>
+<figure class="highlight python"><figcaption><span>四种 Optimizer 对比     SGD  Momentum  RMSprop  Adam </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+<span class="line">52</span>
+<span class="line">53</span>
+<span class="line">54</span>
+<span class="line">55</span>
+<span class="line">56</span>
+<span class="line">57</span>
+<span class="line">58</span>
+<span class="line">59</span>
+<span class="line">60</span>
+<span class="line">61</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line">tf.set_random_seed(<span class="number">1</span>)</span>
+<span class="line">np.random.seed(<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line">LR = <span class="number">0.01</span></span>
+<span class="line">BATCH_SIZE = <span class="number">32</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># fake data</span></span>
+<span class="line">x = np.linspace(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">100</span>)[:, np.newaxis]          <span class="comment"># shape (100, 1)</span></span>
+<span class="line">noise = np.random.normal(<span class="number">0</span>, <span class="number">0.1</span>, size=x.shape)</span>
+<span class="line">y = np.power(x, <span class="number">2</span>) + noise                          <span class="comment"># shape (100, 1) + some noise</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># plot dataset</span></span>
+<span class="line">plt.scatter(x, y)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># default network</span></span>
+<span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span>:</span></span>
+<span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, opt, **kwargs)</span>:</span></span>
+<span class="line">        self.x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">1</span>])</span>
+<span class="line">        self.y = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">1</span>])</span>
+<span class="line">        l = tf.layers.dense(self.x, <span class="number">20</span>, tf.nn.relu)</span>
+<span class="line">        out = tf.layers.dense(l, <span class="number">1</span>)</span>
+<span class="line">        self.loss = tf.losses.mean_squared_error(self.y, out)</span>
+<span class="line">        self.train = opt(LR, **kwargs).minimize(self.loss)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># different nets</span></span>
+<span class="line">net_SGD         = Net(tf.train.GradientDescentOptimizer)</span>
+<span class="line">net_Momentum    = Net(tf.train.MomentumOptimizer, momentum=<span class="number">0.9</span>)</span>
+<span class="line">net_RMSprop     = Net(tf.train.RMSPropOptimizer)</span>
+<span class="line">net_Adam        = Net(tf.train.AdamOptimizer)</span>
+<span class="line">nets = [net_SGD, net_Momentum, net_RMSprop, net_Adam]</span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()</span>
+<span class="line">sess.run(tf.global_variables_initializer())</span>
+<span class="line"></span>
+<span class="line">losses_his = [[], [], [], []]   <span class="comment"># record loss</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># training</span></span>
+<span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">300</span>):          <span class="comment"># for each training step</span></span>
+<span class="line">    index = np.random.randint(<span class="number">0</span>, x.shape[<span class="number">0</span>], BATCH_SIZE)</span>
+<span class="line">    b_x = x[index]</span>
+<span class="line">    b_y = y[index]</span>
+<span class="line"></span>
+<span class="line">    <span class="keyword">for</span> net, l_his <span class="keyword">in</span> zip(nets, losses_his):</span>
+<span class="line">        _, l = sess.run([net.train, net.loss], &#123;net.x: b_x, net.y: b_y&#125;)</span>
+<span class="line">        l_his.append(l)     <span class="comment"># loss recoder</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># plot loss history</span></span>
+<span class="line">labels = [<span class="string">'SGD'</span>, <span class="string">'Momentum'</span>, <span class="string">'RMSprop'</span>, <span class="string">'Adam'</span>]</span>
+<span class="line"><span class="keyword">for</span> i, l_his <span class="keyword">in</span> enumerate(losses_his):</span>
+<span class="line">    plt.plot(l_his, label=labels[i])</span>
+<span class="line">plt.legend(loc=<span class="string">'best'</span>)</span>
+<span class="line">plt.xlabel(<span class="string">'Steps'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Loss'</span>)</span>
+<span class="line">plt.ylim((<span class="number">0</span>, <span class="number">0.2</span>))</span>
+<span class="line">plt.show()</span>
+</pre></td></tr></table></figure>
+<p><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-08-063920.jpg" alt=""></p>
+<hr>
+<h1 id="可视化好助手-Tensorboard"><a href="#可视化好助手-Tensorboard" class="headerlink" title="可视化好助手 Tensorboard"></a>可视化好助手 Tensorboard</h1><figure class="highlight python"><figcaption><span>使用 tensorboard 去可视化神经网络</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line">tf.set_random_seed(<span class="number">1</span>)</span>
+<span class="line">np.random.seed(<span class="number">1</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># fake data</span></span>
+<span class="line">x = np.linspace(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">100</span>)[:, np.newaxis]          <span class="comment"># shape (100, 1)</span></span>
+<span class="line">noise = np.random.normal(<span class="number">0</span>, <span class="number">0.1</span>, size=x.shape)</span>
+<span class="line">y = np.power(x, <span class="number">2</span>) + noise                          <span class="comment"># shape (100, 1) + some noise</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">'Inputs'</span>):</span>
+<span class="line">    tf_x = tf.placeholder(tf.float32, x.shape, name=<span class="string">'x'</span>)</span>
+<span class="line">    tf_y = tf.placeholder(tf.float32, y.shape, name=<span class="string">'y'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">'Net'</span>):</span>
+<span class="line">    l1 = tf.layers.dense(tf_x, <span class="number">10</span>, tf.nn.relu, name=<span class="string">'hidden_layer'</span>)</span>
+<span class="line">    output = tf.layers.dense(l1, <span class="number">1</span>, name=<span class="string">'output_layer'</span>)</span>
+<span class="line"></span>
+<span class="line">    <span class="comment"># add to histogram summary</span></span>
+<span class="line">    tf.summary.histogram(<span class="string">'h_out'</span>, l1)</span>
+<span class="line">    tf.summary.histogram(<span class="string">'pred'</span>, output)</span>
+<span class="line"></span>
+<span class="line">loss = tf.losses.mean_squared_error(tf_y, output, scope=<span class="string">'loss'</span>)</span>
+<span class="line">train_op = tf.train.GradientDescentOptimizer(learning_rate=<span class="number">0.5</span>).minimize(loss)</span>
+<span class="line">tf.summary.scalar(<span class="string">'loss'</span>, loss)     <span class="comment"># add loss to scalar summary</span></span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()</span>
+<span class="line">sess.run(tf.global_variables_initializer())</span>
+<span class="line"></span>
+<span class="line">writer = tf.summary.FileWriter(<span class="string">'../logs'</span>, sess.graph)     <span class="comment"># write to file</span></span>
+<span class="line">merge_op = tf.summary.merge_all()                       <span class="comment"># operation to merge all summary</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">100</span>):</span>
+<span class="line">    <span class="comment"># train and net output</span></span>
+<span class="line">    _, result = sess.run([train_op, merge_op],&#123;tf_x: x, tf_y: y&#125;)</span>
+<span class="line">    writer.add_summary(result, step)</span>
+</pre></td></tr></table></figure>
+<figure class="highlight cmd"><figcaption><span>然后再终端输入</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span>
+<span class="line">$ tensorboard --logdir='/Users/XuX/C-Code/P-Python/莫烦 机器学习/logs/'</span>
+<span class="line">Starting TensorBoard <span class="number">54</span> <span class="built_in">at</span> http://xushanshandeMBP.lan:<span class="number">6006</span></span>
+</pre></td></tr></table></figure>
+<p>在阅览器中打开<code>http://xushanshandeMBP.lan:6006</code>就可以了<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-08-083201.jpg" alt=""><br><strong>这里还一直显示不出来，以后弄好了再修改</strong></p>
+<hr>
+<p><strong>参考资料</strong><br><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a><br><a href="https://morvanzhou.github.io/tutorials/" target="_blank" rel="external">莫烦Python</a><br><a href="https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/" target="_blank" rel="external">神经网络：Tensorflow</a></p>
+</div><div class="tags"><a href="/tags/神经网络/">神经网络</a><a href="/tags/tensorflow/">tensorflow</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/07/19/stringstream/" class="pre">【C++】stringstream的使用方法</a><a href="/2017/07/01/Tensorflow/" class="next">【神经网络】通过代码学习Tensorflow1</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#建造我们第一个神经网络"><span class="toc-text">建造我们第一个神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#添加层-def-add-layer"><span class="toc-text">添加层 def add_layer()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建造神经网络"><span class="toc-text">建造神经网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结果可视化"><span class="toc-text">结果可视化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化器-optimizer"><span class="toc-text">优化器 optimizer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#可视化好助手-Tensorboard"><span class="toc-text">可视化好助手 Tensorboard</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/08/Tensorflow3/">【神经网络】通过代码学习Tensorflow3</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/05/test/">机器学习1：有趣的机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Tensorflow2/">【神经网络】通过代码学习Tensorflow2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Tensorflow/">【神经网络】通过代码学习Tensorflow1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/29/ScikitLearn/">【机器学习】通过代码学习scikit-learn</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/tensorflow/" style="font-size: 15px;">tensorflow</a> <a href="/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/tags/RNN/" style="font-size: 15px;">RNN</a> <a href="/tags/Autoencoder/" style="font-size: 15px;">Autoencoder</a> <a href="/tags/sklearn/" style="font-size: 15px;">sklearn</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
