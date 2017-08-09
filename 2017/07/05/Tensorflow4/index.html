@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="换了一个主题之后Letax全都渲染不出来了，口亨！"><title>【神经网络】通过代码学习Tensorflow4 | XxxSssSss</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【神经网络】通过代码学习Tensorflow4</h1><a id="logo" href="/.">XxxSssSss</a><p class="description">啦啦啦~~~</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">【神经网络】通过代码学习Tensorflow4</h1><div class="post-meta"><a href="/2017/07/05/Tensorflow4/#comments" class="comment-count"></a><p><span class="date">Jul 05, 2017</span><span><a href="/categories/机器学习笔记/" class="category">机器学习笔记</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>Tensorflow 高阶内容<br>使用 Tensorflow 搭建卷积神经网络(CNN)<br><a id="more"></a></p>
+<h1 id="CNN-的简单介绍"><a href="#CNN-的简单介绍" class="headerlink" title="CNN 的简单介绍"></a>CNN 的简单介绍</h1><p>一般的神经网络在理解图片信息的时候还是有不足之处, 这时卷积神经网络就是计算机处理图片的助推器. Convolutional Neural Networks (CNN) 是神经网络处理图片信息的一大利器. 有了它, 我们给计算机看图片,计算机理解起来就更准确.<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-09-051842.jpg" alt=""><br>卷积神经网络包含输入层、隐藏层和输出层，隐藏层又包含<code>卷积层</code>和<code>pooling</code>层，图像输入到卷积神经网络后通过卷积来不断的提取特征，每提取一个特征就会增加一个<code>feature map</code>，所以会看到立方体不断的增加厚度，那么为什么厚度增加了但是却越来越瘦了呢？<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-09-051951.jpg" alt=""><br>这就是pooling层的作用，pooling层也就是下采样，通常采用的是<code>最大值pooling</code>和<code>平均值pooling</code>，因为参数太多，所以通过pooling来稀疏参数，使我们的网络不至于太复杂。<br><img src="http://onk12tr6m.bkt.clouddn.com/2017-08-09-052016.jpg" alt=""><br>比较流行的一种搭建结构是这样, 从下到上的顺序, 首先是输入的图片(image), 经过一层<code>卷积层 (convolution)</code>, 然后在用池化(pooling)方式处理卷积的信息, 这里使用的是 <code>max pooling</code> 的方式. 然后在经过一次同样的处理, 把得到的第二次处理的信息传入两层<code>全连接的神经层 (fully connected)</code>,这也是一般的两层神经网络层,最后在接上一个<code>分类器(classifier)</code>进行分类预测. </p>
+<p><strong>TIPS</strong><br>使用神经网络训练数据时，可以先采用一般的神经网络来训练，如果结果已经比较好了就没有必要使用CNN、RNN之类的复杂结构了，如果效果不过好，再实验更复杂的神经网络。</p>
+<h1 id="一个基于MNIST数据集的例子"><a href="#一个基于MNIST数据集的例子" class="headerlink" title="一个基于MNIST数据集的例子"></a>一个基于MNIST数据集的例子</h1><p><strong>CNN 结构：</strong></p>
+<ol>
+<li>convolutional layer1 + max pooling;</li>
+<li>convolutional layer2 + max pooling;</li>
+<li>fully connected layer1 + dropout;</li>
+<li>fully connected layer2 to prediction.</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+<span class="line">45</span>
+<span class="line">46</span>
+<span class="line">47</span>
+<span class="line">48</span>
+<span class="line">49</span>
+<span class="line">50</span>
+<span class="line">51</span>
+<span class="line">52</span>
+<span class="line">53</span>
+<span class="line">54</span>
+<span class="line">55</span>
+<span class="line">56</span>
+<span class="line">57</span>
+<span class="line">58</span>
+<span class="line">59</span>
+<span class="line">60</span>
+<span class="line">61</span>
+<span class="line">62</span>
+<span class="line">63</span>
+<span class="line">64</span>
+<span class="line">65</span>
+<span class="line">66</span>
+<span class="line">67</span>
+<span class="line">68</span>
+<span class="line">69</span>
+<span class="line">70</span>
+<span class="line">71</span>
+<span class="line">72</span>
+<span class="line">73</span>
+<span class="line">74</span>
+<span class="line">75</span>
+<span class="line">76</span>
+<span class="line">77</span>
+<span class="line">78</span>
+<span class="line">79</span>
+<span class="line">80</span>
+<span class="line">81</span>
+<span class="line">82</span>
+<span class="line">83</span>
+<span class="line">84</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="string">使用 TensorFlow 搭建 CNN</span></span>
+<span class="line"><span class="string">'''</span></span>
+<span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span>
+<span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span>
+<span class="line"><span class="comment"># number 1 to 10 data</span></span>
+<span class="line">mnist = input_data.read_data_sets(<span class="string">'MNIST_data'</span>, one_hot=<span class="keyword">True</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_accuracy</span><span class="params">(v_xs, v_ys)</span>:</span></span>
+<span class="line">    <span class="keyword">global</span> prediction</span>
+<span class="line">    y_pre = sess.run(prediction, feed_dict=&#123;xs: v_xs, keep_prob: <span class="number">1</span>&#125;)</span>
+<span class="line">    correct_prediction = tf.equal(tf.argmax(y_pre,<span class="number">1</span>), tf.argmax(v_ys,<span class="number">1</span>))</span>
+<span class="line">    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span>
+<span class="line">    result = sess.run(accuracy, feed_dict=&#123;xs: v_xs, ys: v_ys, keep_prob: <span class="number">1</span>&#125;)</span>
+<span class="line">    <span class="keyword">return</span> result</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weight_variable</span><span class="params">(shape)</span>:</span></span>
+<span class="line">    initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)</span>
+<span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span></span>
+<span class="line">    initial = tf.constant(<span class="number">0.1</span>, shape=shape)</span>
+<span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv2d</span><span class="params">(x, W)</span>:</span></span>
+<span class="line">    <span class="comment"># stride [1, x_movement, y_movement, 1]</span></span>
+<span class="line">    <span class="comment"># Must have strides[0] = strides[3] = 1</span></span>
+<span class="line">    <span class="keyword">return</span> tf.nn.conv2d(x, W, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_pool_2x2</span><span class="params">(x)</span>:</span></span>
+<span class="line">    <span class="comment"># stride [1, x_movement, y_movement, 1]</span></span>
+<span class="line">    <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>], strides=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># define placeholder for inputs to network</span></span>
+<span class="line">xs = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>])/<span class="number">255.</span>           <span class="comment"># 28x28</span></span>
+<span class="line">ys = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])</span>
+<span class="line">keep_prob = tf.placeholder(tf.float32)</span>
+<span class="line">x_image = tf.reshape(xs, [<span class="number">-1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])                   <span class="comment"># 最后一个1 黑白图像 高度为1</span></span>
+<span class="line"><span class="comment"># print(x_image.shape)  # [n_samples, 28,28,1]</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">## conv1 layer ##</span></span>
+<span class="line">W_conv1 = weight_variable([<span class="number">5</span>,<span class="number">5</span>, <span class="number">1</span>,<span class="number">32</span>])                      <span class="comment"># patch 5x5, in size 1(黑白图片 高度只有1), out size 32</span></span>
+<span class="line">                                                            <span class="comment"># 卷积核尺寸是5 x 5，但是有32种，所以输出32个特征图</span></span>
+<span class="line">b_conv1 = bias_variable([<span class="number">32</span>])</span>
+<span class="line">h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)    <span class="comment"># output size 28x28x32</span></span>
+<span class="line">h_pool1 = max_pool_2x2(h_conv1)                             <span class="comment"># output size 14x14x32</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">## conv2 layer ##</span></span>
+<span class="line">W_conv2 = weight_variable([<span class="number">5</span>,<span class="number">5</span>, <span class="number">32</span>, <span class="number">64</span>])                    <span class="comment"># patch 5x5, in size 32, out size 64</span></span>
+<span class="line">b_conv2 = bias_variable([<span class="number">64</span>])</span>
+<span class="line">h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)    <span class="comment"># output size 14x14x64</span></span>
+<span class="line">h_pool2 = max_pool_2x2(h_conv2)                             <span class="comment"># output size 7x7x64</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">## fc1 layer ##</span></span>
+<span class="line">W_fc1 = weight_variable([<span class="number">7</span>*<span class="number">7</span>*<span class="number">64</span>, <span class="number">1024</span>])</span>
+<span class="line">b_fc1 = bias_variable([<span class="number">1024</span>])</span>
+<span class="line"><span class="comment"># [n_samples, 7, 7, 64] -&gt;&gt; [n_samples, 7*7*64]</span></span>
+<span class="line">h_pool2_flat = tf.reshape(h_pool2, [<span class="number">-1</span>, <span class="number">7</span>*<span class="number">7</span>*<span class="number">64</span>])</span>
+<span class="line">h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)</span>
+<span class="line">h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)</span>
+<span class="line"></span>
+<span class="line"><span class="comment">## fc2 layer ##</span></span>
+<span class="line">W_fc2 = weight_variable([<span class="number">1024</span>, <span class="number">10</span>])</span>
+<span class="line">b_fc2 = bias_variable([<span class="number">10</span>])</span>
+<span class="line">prediction = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># the error between prediction and real data</span></span>
+<span class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),</span>
+<span class="line">                                              reduction_indices=[<span class="number">1</span>]))       <span class="comment"># loss</span></span>
+<span class="line">train_step = tf.train.AdamOptimizer(<span class="number">1e-4</span>).minimize(cross_entropy)</span>
+<span class="line"></span>
+<span class="line">sess = tf.Session()</span>
+<span class="line"><span class="comment"># important step</span></span>
+<span class="line">init = tf.global_variables_initializer()</span>
+<span class="line">sess.run(init)</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span>
+<span class="line">    batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span>
+<span class="line">    sess.run(train_step, feed_dict=&#123;xs: batch_xs, ys: batch_ys, keep_prob: <span class="number">0.5</span>&#125;)</span>
+<span class="line">    <span class="keyword">if</span> i % <span class="number">50</span> == <span class="number">0</span>:</span>
+<span class="line">        print(compute_accuracy(</span>
+<span class="line">            mnist.test.images[:<span class="number">1000</span>], mnist.test.labels[:<span class="number">1000</span>]))</span>
+</pre></td></tr></table></figure>
+<figure class="highlight cmd"><figcaption><span>输出结果</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+</pre></td><td class="code"><pre><span class="line">Extracting MNIST_data/train-images-idx3-ubyte.gz</span>
+<span class="line">Extracting MNIST_data/train-labels-idx1-ubyte.gz</span>
+<span class="line">Extracting MNIST_data/t10k-images-idx3-ubyte.gz</span>
+<span class="line">Extracting MNIST_data/t10k-labels-idx1-ubyte.gz</span>
+<span class="line"><span class="number">0</span>.<span class="number">121</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">761</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">848</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">876</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">899</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">911</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">915</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">921</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">929</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">941</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">943</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">946</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">94</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">953</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">958</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">961</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">956</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">96</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">962</span></span>
+<span class="line"><span class="number">0</span>.<span class="number">966</span></span>
+</pre></td></tr></table></figure>
+<p>从结果可以看出比上一节中的普通NN(最终accuracy为0.8821)有了明显提升。<br>但运行起来非常占CPU，这个程序我电脑跑了大概四五分钟。</p>
+<hr>
+<p><strong>参考资料</strong><br><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a><br><a href="https://morvanzhou.github.io/tutorials/" target="_blank" rel="external">莫烦Python</a><br><a href="https://morvanzhou.github.io/tutorials/machine-learning/tensorflow/" target="_blank" rel="external">神经网络：Tensorflow</a></p>
+</div><div class="tags"><a href="/tags/神经网络/">神经网络</a><a href="/tags/tensorflow/">tensorflow</a><a href="/tags/CNN/">CNN</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/07/19/stringstream/" class="pre">【C++】stringstream的使用方法</a><a href="/2017/07/04/Tensorflow3/" class="next">【神经网络】通过代码学习Tensorflow3</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CNN-的简单介绍"><span class="toc-text">CNN 的简单介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一个基于MNIST数据集的例子"><span class="toc-text">一个基于MNIST数据集的例子</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/09/Tensorflow5/">【神经网络】通过代码学习Tensorflow5</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/05/test/">机器学习1：有趣的机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/系统中多版本Python的切换与Python第三方库的安装/">系统中多版本Python的切换与Python第三方库的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/22/位运算/">位运算</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/剑指offer-31-40/">剑指offer 31~40</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/21/vector的初始化/">【C++】vector介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/stringstream/">【C++】stringstream的使用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Tensorflow4/">【神经网络】通过代码学习Tensorflow4</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Tensorflow3/">【神经网络】通过代码学习Tensorflow3</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Tensorflow2/">【神经网络】通过代码学习Tensorflow2</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-笔记/">C++笔记</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术文档/">技术文档</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习笔记/">机器学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/杂记/">杂记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/深度学习笔记/">深度学习笔记</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法学习笔记/">算法学习笔记</a><span class="category-list-count">12</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/Panadas/" style="font-size: 15px;">Panadas</a> <a href="/tags/近似算法/" style="font-size: 15px;">近似算法</a> <a href="/tags/Graham-s-Scan/" style="font-size: 15px;">Graham's Scan</a> <a href="/tags/基本概念/" style="font-size: 15px;">基本概念</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/概率论/" style="font-size: 15px;">概率论</a> <a href="/tags/线性代数/" style="font-size: 15px;">线性代数</a> <a href="/tags/数值计算/" style="font-size: 15px;">数值计算</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/权值衰减/" style="font-size: 15px;">权值衰减</a> <a href="/tags/范数/" style="font-size: 15px;">范数</a> <a href="/tags/分治算法/" style="font-size: 15px;">分治算法</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/贪心/" style="font-size: 15px;">贪心</a> <a href="/tags/数学基础/" style="font-size: 15px;">数学基础</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a> <a href="/tags/MathJax/" style="font-size: 15px;">MathJax</a> <a href="/tags/LaTex/" style="font-size: 15px;">LaTex</a> <a href="/tags/Matplotlib/" style="font-size: 15px;">Matplotlib</a> <a href="/tags/感知机/" style="font-size: 15px;">感知机</a> <a href="/tags/sigmoid神经元/" style="font-size: 15px;">sigmoid神经元</a> <a href="/tags/神经网络/" style="font-size: 15px;">神经网络</a> <a href="/tags/梯度下降/" style="font-size: 15px;">梯度下降</a> <a href="/tags/Numpy/" style="font-size: 15px;">Numpy</a> <a href="/tags/数据处理/" style="font-size: 15px;">数据处理</a> <a href="/tags/凸包/" style="font-size: 15px;">凸包</a> <a href="/tags/信息学/" style="font-size: 15px;">信息学</a> <a href="/tags/随机算法/" style="font-size: 15px;">随机算法</a> <a href="/tags/tensorflow/" style="font-size: 15px;">tensorflow</a> <a href="/tags/dropout/" style="font-size: 15px;">dropout</a> <a href="/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/tags/sklearn/" style="font-size: 15px;">sklearn</a> <a href="/tags/tensorboard/" style="font-size: 15px;">tensorboard</a> <a href="/tags/搜索/" style="font-size: 15px;">搜索</a> <a href="/tags/VC维/" style="font-size: 15px;">VC维</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/字符串/" style="font-size: 15px;">字符串</a> <a href="/tags/堆/" style="font-size: 15px;">堆</a> <a href="/tags/STL/" style="font-size: 15px;">STL</a> <a href="/tags/vector/" style="font-size: 15px;">vector</a> <a href="/tags/位运算/" style="font-size: 15px;">位运算</a> <a href="/tags/数组/" style="font-size: 15px;">数组</a> <a href="/tags/链表/" style="font-size: 15px;">链表</a> <a href="/tags/递归和循环/" style="font-size: 15px;">递归和循环</a> <a href="/tags/代码的完整性/" style="font-size: 15px;">代码的完整性</a> <a href="/tags/代码的鲁棒性/" style="font-size: 15px;">代码的鲁棒性</a> <a href="/tags/抽象具体化/" style="font-size: 15px;">抽象具体化</a> <a href="/tags/举例让抽象具体化/" style="font-size: 15px;">举例让抽象具体化</a> <a href="/tags/分解让复杂问题简单/" style="font-size: 15px;">分解让复杂问题简单</a> <a href="/tags/时间效率/" style="font-size: 15px;">时间效率</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/RNN/" style="font-size: 15px;">RNN</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Xu Shanshan.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
